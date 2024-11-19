@@ -1,5 +1,7 @@
 using Service;
 
+namespace API.Misc;
+
 public class ErrorHandlingMiddleware(RequestDelegate next, ILogger<ErrorHandlingMiddleware> logger)
 {
     private readonly RequestDelegate next = next;

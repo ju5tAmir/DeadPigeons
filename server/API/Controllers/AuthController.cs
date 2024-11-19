@@ -1,12 +1,12 @@
 using DataAccess.Entities;
 using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-// using Microsoft.AspNetCore.Identity.Data;
-// using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Service;
 using Service.Auth.Dto;
+using Service.Security;
 
 
 namespace API.Controllers;
@@ -19,6 +19,7 @@ public class AuthController: ControllerBase
 
     [HttpPost]
     [Route("register")]
+    [AllowAnonymous]
     public async Task<RegisterResponse> Register(
         IOptions<AppOptions> options,
         [FromServices] UserManager<User> userManager,
@@ -42,9 +43,11 @@ public class AuthController: ControllerBase
     
     [HttpPost]
     [Route("login")]
+    [AllowAnonymous]
     public async Task<LoginResponse> Login(
         [FromServices] SignInManager<User> signInManager,
         [FromServices] IValidator<LoginRequest> validator,
+        [FromServices] ITokenClaimsService tokenClaimsService,
         [FromBody] LoginRequest data
     )
     {
@@ -64,11 +67,16 @@ public class AuthController: ControllerBase
         );
         if (!result.Succeeded)
             throw new AuthenticationError();
-        return new LoginResponse(Username: user.UserName);
+        
+        var token = await tokenClaimsService.GetTokenAsync(user.UserName);
+
+        
+        return new LoginResponse(Jwt: token);
     }
 
     [HttpPost]
     [Route("logout")]
+    [AuthorizeAllRoles]
     public async Task<IResult> Logout([FromServices] SignInManager<User> signInManager)
     {
         await signInManager.SignOutAsync();
@@ -77,16 +85,15 @@ public class AuthController: ControllerBase
 
     [HttpGet]
     [Route("userinfo")]
+    
     public async Task<AuthUserInfo> UserInfo([FromServices] UserManager<User> userManager)
     {
-        // Validate the user identity
         var username = HttpContext.User.Identity?.Name;
         if (string.IsNullOrEmpty(username))
         {
             throw new AuthenticationError();
         }
-
-        // Find the user by username
+        
         var user = await userManager.FindByNameAsync(username);
         if (user == null)
         {
@@ -107,5 +114,13 @@ public class AuthController: ControllerBase
             IsAutoplay: user.IsAutoPlay,
             RegisterationDate: user.RegistrationDate 
             );
+    }
+    
+    public class AuthorizeAllRoles : AuthorizeAttribute
+    {
+        public AuthorizeAllRoles()
+        {
+            Roles = Role.AllRoles;
+        }
     }
 }

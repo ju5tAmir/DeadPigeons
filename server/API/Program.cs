@@ -1,6 +1,8 @@
+using API.Misc;
 using DataAccess;
 using DataAccess.Entities;
 using FluentValidation;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -16,11 +18,15 @@ public class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
-        
+
         #region Configuration
+        builder
+            .Services.AddOptionsWithValidateOnStart<AppOptions>()
+            .Bind(builder.Configuration.GetSection(nameof(AppOptions)))
+            .ValidateDataAnnotations();
         builder.Services.AddSingleton(_ => TimeProvider.System);
         #endregion
-        
+
         #region Data Access
         var connectionString = builder.Configuration.GetConnectionString("AppDb");
         builder.Services.AddDbContext<AppDbContext>(options =>
@@ -31,19 +37,40 @@ public class Program
         builder.Services.AddScoped<DbSeeder>();
         builder.Services.AddScoped<IRepository<User>, UserRepository>();
         #endregion
-        
+
         #region Security
         builder
             .Services.AddIdentityApiEndpoints<User>()
             .AddRoles<IdentityRole>()
             .AddEntityFrameworkStores<AppDbContext>();
         builder.Services.AddSingleton<IPasswordHasher<User>, Argon2IdPasswordHasher<User>>();
+        var options = builder.Configuration.GetSection(nameof(AppOptions)).Get<AppOptions>()!;
+        builder
+            .Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultSignInScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(o =>
+            {
+                o.TokenValidationParameters = JwtTokenClaimService.ValidationParameters(options);
+            });
+        builder.Services.AddAuthorization(options =>
+        {
+            options.FallbackPolicy = new AuthorizationPolicyBuilder()
+                // Globally require users to be authenticated
+                .RequireAuthenticatedUser()
+                .Build();
+        });
+        builder.Services.AddScoped<ITokenClaimsService, JwtTokenClaimService>();
         #endregion
-        
+
         #region Services
         builder.Services.AddValidatorsFromAssemblyContaining<ServiceAssembly>();
         #endregion
-        
+
         #region Swagger
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
@@ -81,7 +108,7 @@ public class Program
             );
         });
         #endregion
-        
+
         builder.Services.AddControllers();
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
@@ -113,6 +140,8 @@ public class Program
 
         app.UseHttpsRedirection();
 
+        app.UseAuthentication();
+        app.UseAuthorization();
         app.MapControllers();
 
         app.Run();
