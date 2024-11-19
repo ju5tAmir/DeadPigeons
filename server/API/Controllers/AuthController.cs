@@ -28,7 +28,7 @@ public class AuthController: ControllerBase
     {
         await validator.ValidateAndThrowAsync(data);
 
-        var user = new User { UserName = data.Username, PhoneNumber = data.PhoneNumber, Email = data.Email };
+        var user = new User {FirstName = data.FirsName, LastName = data.LastName, UserName = data.Username, PhoneNumber = data.PhoneNumber, Email = data.Email};
         var result = await userManager.CreateAsync(user, data.Password);
         if (!result.Succeeded)
         {
@@ -37,7 +37,7 @@ public class AuthController: ControllerBase
             );
         }
         await userManager.AddToRoleAsync(user, Role.Player);
-        return new RegisterResponse(Username: user.UserName, Email: user.Email);
+        return new RegisterResponse(UserId:user.Id);
     }
     
     [HttpPost]

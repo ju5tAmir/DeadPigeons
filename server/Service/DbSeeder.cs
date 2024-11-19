@@ -30,9 +30,9 @@ public class DbSeeder
         await context.Database.EnsureCreatedAsync();
 
         await CreateRoles(Role.Admin, Role.Player);
-        await CreateUser(email: "admin@example.com", username: "admin", password: "S3cret!", role: Role.Admin, phone: "");
-        await CreateUser(email: "player1@example.com", username: "player1", password: "S3cret!", role: Role.Player, phone: "1234");
-        await CreateUser(email: "player2@example.com", username: "player2", password: "S3cret!", role: Role.Player, phone: "5678");
+        await CreateUser(firstName: "John", lastName: "Doe", email: "admin@example.com", username: "admin", password: "S3cret!", role: Role.Admin, phone: "123", isActive:true, isAutoplay:false, registrationDate:DateTime.UtcNow);
+        await CreateUser(firstName: "Neo", lastName: "Liza", email: "player1@example.com", username: "player1", password: "S3cret!", role: Role.Player, phone: "1234", isActive:true, isAutoplay:false, registrationDate:DateTime.UtcNow);
+        await CreateUser(firstName: "Mads", lastName: "Christian", email: "player2@example.com", username: "player2", password: "S3cret!", role: Role.Player, phone: "5678", isActive:true, isAutoplay:false, registrationDate:DateTime.UtcNow);
         
         await context.SaveChangesAsync();
     }
@@ -45,16 +45,21 @@ public class DbSeeder
         }
     }
 
-    async Task CreateUser(string email, string username, string? phone, string password, string role)
+    async Task CreateUser(string firstName, string lastName, string email, string username, string? phone, string password, string role, bool isActive, bool isAutoplay, DateTime registrationDate)
     {
         if (await userManager.FindByNameAsync(username) != null) return;
         var user = new User
         {
+            FirstName = firstName,
+            LastName = lastName,
             UserName = username,
             Email = email,
             EmailConfirmed = true,
             PhoneNumber = phone,
             PhoneNumberConfirmed = false,
+            IsActive = isActive,
+            IsAutoPlay = isActive,
+            RegistrationDate = registrationDate
         };
         var result = await userManager.CreateAsync(user, password);
         if (!result.Succeeded)

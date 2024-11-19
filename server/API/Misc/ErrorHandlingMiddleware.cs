@@ -13,16 +13,25 @@ public class ErrorHandlingMiddleware(RequestDelegate next, ILogger<ErrorHandling
         }
         catch (Exception ex)
         {
-            logger.LogError(ex.ToString(), ex);
-            if (ex is FluentValidation.ValidationException error)
+            logger.LogError(ex, "An error occurred while processing the request.");
+
+            if (ex is FluentValidation.ValidationException validationException)
             {
-                var propertyErrors = error.Errors.ToDictionary(
-                    (key) => key.PropertyName.ToLower(),
-                    (value) => value.ErrorMessage
-                );
-                ctx.Response.StatusCode = 400;
+                // Use a dictionary where the property name is the key and a list of error messages is the value
+                var propertyErrors = validationException.Errors
+                    .GroupBy(e => e.PropertyName.ToLower())  // Group by the property name
+                    .ToDictionary(
+                        group => group.Key, 
+                        group => group.Select(e => e.ErrorMessage).ToArray()  // Concatenate all error messages for a property
+                    );
+
+                ctx.Response.StatusCode = 400;  // Bad Request
                 await ctx.Response.WriteAsJsonAsync(
-                    new { message = error.Message, errors = propertyErrors }
+                    new
+                    {
+                        message = validationException.Message,  // General error message
+                        errors = propertyErrors  // Detailed property validation errors
+                    }
                 );
             }
             else if (ex is AppError apiError)

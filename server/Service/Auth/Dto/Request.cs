@@ -2,20 +2,28 @@ using FluentValidation;
 
 namespace Service.Auth.Dto;
 
-public record RegisterRequest(string Name, string Username, string Email, string PhoneNumber, string Password);
+public record RegisterRequest(string FirsName, string LastName, string Username, string Email, string PhoneNumber, string Password);
 
 public class RegisterRequestValidator : AbstractValidator<RegisterRequest>
 {
     public RegisterRequestValidator()
     {
-        RuleFor(x => x.Name)
+        RuleFor(x => x.FirsName)
             .NotEmpty()
-            .WithMessage("Name is required.")
+            .WithMessage("FirstName is required.")
             .MinimumLength(2)
-            .WithMessage("Name must be at least 2 characters long.")
+            .WithMessage("FirstName must be at least 2 characters long.")
             .MaximumLength(64)
-            .WithMessage("Name cannot exceed 64 characters.");
+            .WithMessage("FirstName cannot exceed 64 characters.");
 
+        RuleFor(x => x.LastName)
+            .NotEmpty()
+            .WithMessage("LastName is required.")
+            .MinimumLength(2)
+            .WithMessage("LastName must be at least 2 characters long.")
+            .MaximumLength(64)
+            .WithMessage("LastName cannot exceed 64 characters.");
+        
         RuleFor(x => x.Username)
             .NotEmpty()
             .WithMessage("Username is required.")
