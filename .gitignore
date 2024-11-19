@@ -483,5 +483,8 @@ $RECYCLE.BIN/
 # Vim temporary swap files
 *.swp
 
+# Migration cs files
+server/DataAccess/Migrations/*.cs
+
 # Internal notes
 *.[Nn]otes
