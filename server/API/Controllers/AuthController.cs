@@ -49,15 +49,22 @@ public class AuthController: ControllerBase
     )
     {
         await validator.ValidateAndThrowAsync(data);
+        
+        var user = await signInManager.UserManager.FindByEmailAsync(data.Email) ?? throw new AuthenticationError();
+        if (user.UserName == null)
+        {
+            throw new AuthenticationError();
+        }
+        
         var result = await signInManager.PasswordSignInAsync(
-            data.Email,
+            user.UserName,
             data.Password,
             false,
             true
         );
         if (!result.Succeeded)
             throw new AuthenticationError();
-        return new LoginResponse();
+        return new LoginResponse(Username: user.UserName);
     }
 
 }
