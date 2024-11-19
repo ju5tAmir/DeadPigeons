@@ -19,3 +19,17 @@ public class RegisterRequestValidator : AbstractValidator<RegisterRequest>
             .MinimumLength(8);
     }
 }
+
+public record LoginRequest(string Email, string Password);
+
+public class LoginRequestValidator : AbstractValidator<LoginRequest>
+{
+    public LoginRequestValidator()
+    {
+        RuleFor(x => x.Email)
+            .EmailAddress()
+            .NotEmpty();
+        RuleFor(x => x.Password)
+            .MinimumLength(8);
+    }
+}

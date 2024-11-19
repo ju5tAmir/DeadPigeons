@@ -39,5 +39,25 @@ public class AuthController: ControllerBase
         await userManager.AddToRoleAsync(user, Role.Player);
         return new RegisterResponse(Name: user.UserName, Email: user.Email);
     }
+    
+    [HttpPost]
+    [Route("login")]
+    public async Task<LoginResponse> Login(
+        [FromServices] SignInManager<User> signInManager,
+        [FromServices] IValidator<LoginRequest> validator,
+        [FromBody] LoginRequest data
+    )
+    {
+        await validator.ValidateAndThrowAsync(data);
+        var result = await signInManager.PasswordSignInAsync(
+            data.Email,
+            data.Password,
+            false,
+            true
+        );
+        if (!result.Succeeded)
+            throw new AuthenticationError();
+        return new LoginResponse();
+    }
 
 }
