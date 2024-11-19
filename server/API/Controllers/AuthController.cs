@@ -67,4 +67,45 @@ public class AuthController: ControllerBase
         return new LoginResponse(Username: user.UserName);
     }
 
+    [HttpPost]
+    [Route("logout")]
+    public async Task<IResult> Logout([FromServices] SignInManager<User> signInManager)
+    {
+        await signInManager.SignOutAsync();
+        return Results.Ok();
+    }
+
+    [HttpGet]
+    [Route("userinfo")]
+    public async Task<AuthUserInfo> UserInfo([FromServices] UserManager<User> userManager)
+    {
+        // Validate the user identity
+        var username = HttpContext.User.Identity?.Name;
+        if (string.IsNullOrEmpty(username))
+        {
+            throw new AuthenticationError();
+        }
+
+        // Find the user by username
+        var user = await userManager.FindByNameAsync(username);
+        if (user == null)
+        {
+            throw new AuthenticationError();
+        }
+
+        var role = (await userManager.GetRolesAsync(user)).First();
+
+        return new AuthUserInfo(
+            UserId: user.Id,
+            FirstName: user.FirstName,
+            LastName: user.LastName,
+            Username: user.UserName,
+            Email: user.Email,
+            PhoneNumber: user.PhoneNumber,
+            Role: role,
+            IsActive: user.IsActive,
+            IsAutoplay: user.IsAutoPlay,
+            RegisterationDate: user.RegistrationDate 
+            );
+    }
 }
