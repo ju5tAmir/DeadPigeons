@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Service;
 using Service.Repositories;
+using Service.Security;
 
 namespace Api;
 
@@ -36,6 +37,7 @@ public class Program
             .Services.AddIdentityApiEndpoints<User>()
             .AddRoles<IdentityRole>()
             .AddEntityFrameworkStores<AppDbContext>();
+        builder.Services.AddSingleton<IPasswordHasher<User>, Argon2IdPasswordHasher<User>>();
         #endregion
         
         #region Services

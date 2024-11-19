@@ -30,9 +30,9 @@ public class DbSeeder
         await context.Database.EnsureCreatedAsync();
 
         await CreateRoles(Role.Admin, Role.Player);
-        await CreateUser(username: "admin@example.com", password: "S3cret!", role: Role.Admin);
-        await CreateUser(username: "player1@example.com", password: "S3cret!", role: Role.Player);
-        await CreateUser(username: "player2@example.com", password: "S3cret!", role: Role.Player);
+        await CreateUser(email: "admin@example.com", username: "admin", password: "S3cret!", role: Role.Admin, phone: "");
+        await CreateUser(email: "player1@example.com", username: "player1", password: "S3cret!", role: Role.Player, phone: "1234");
+        await CreateUser(email: "player2@example.com", username: "player2", password: "S3cret!", role: Role.Player, phone: "5678");
         
         await context.SaveChangesAsync();
     }
@@ -45,14 +45,16 @@ public class DbSeeder
         }
     }
 
-    async Task CreateUser(string username, string password, string role)
+    async Task CreateUser(string email, string username, string? phone, string password, string role)
     {
         if (await userManager.FindByNameAsync(username) != null) return;
         var user = new User
         {
             UserName = username,
-            Email = username,
-            EmailConfirmed = true
+            Email = email,
+            EmailConfirmed = true,
+            PhoneNumber = phone,
+            PhoneNumberConfirmed = false,
         };
         var result = await userManager.CreateAsync(user, password);
         if (!result.Succeeded)
