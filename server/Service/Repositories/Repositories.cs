@@ -14,6 +14,11 @@ public class PreferenceRepository(AppDbContext context) : BaseRepository<DataAcc
     protected override DbSet<DataAccess.Entities.Preference> Set => Context.Preferences;
 }
 
+public class GameRepository(AppDbContext context) : BaseRepository<DataAccess.Entities.Game>(context)
+{
+    protected override DbSet<DataAccess.Entities.Game> Set => Context.Games;
+}
+
 public abstract class BaseRepository<T>(AppDbContext context) : IRepository<T> where T : class
 {
     protected AppDbContext Context => context;

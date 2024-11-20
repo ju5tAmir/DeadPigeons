@@ -10,6 +10,7 @@ public class AppDbContext : IdentityDbContext<User>
         : base(options) { }
 
     public virtual DbSet<Preference> Preferences { get; set; }
+    public virtual DbSet<Game> Games { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<User>(entity =>
@@ -50,6 +51,23 @@ public class AppDbContext : IdentityDbContext<User>
 
             entity.HasOne(d => d.User).WithOne(p => p.Preference).HasConstraintName("Preferences_UserId_fkey");
         });
+        
+        modelBuilder.Entity<Game>(entity =>
+        {
+            entity.HasKey(e => e.GameId).HasName("Games_pkey");
+        });
+
+        modelBuilder.Entity<Preference>(entity =>
+        {
+            entity.HasKey(e => e.UserSettingsId).HasName("Preferences_pkey");
+
+            entity.Property(e => e.IfBalanceIsNegative).HasDefaultValue(true);
+            entity.Property(e => e.IfPlayerWon).HasDefaultValue(true);
+            entity.Property(e => e.NotificationType).HasDefaultValueSql("'Email'::character varying");
+
+            entity.HasOne(d => d.User).WithOne(p => p.Preference).HasConstraintName("Preferences_UserId_fkey");
+        });
+        
         
         base.OnModelCreating(modelBuilder);
     }

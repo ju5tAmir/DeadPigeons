@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Service;
 using Service.Authorization;
+using Service.Game;
 using Service.Preference;
 using Service.Repositories;
 using Service.Security;
@@ -39,6 +40,7 @@ public class Program
         builder.Services.AddScoped<DbSeeder>();
         builder.Services.AddScoped<IRepository<User>, UserRepository>();
         builder.Services.AddScoped<IRepository<Preference>, PreferenceRepository>();
+        builder.Services.AddScoped<IRepository<Game>, GameRepository>();
         #endregion
 
         #region Security
@@ -74,6 +76,7 @@ public class Program
         builder.Services.AddValidatorsFromAssemblyContaining<ServiceAssembly>();
         builder.Services.AddScoped<IPreferenceService, PreferenceService>();
         builder.Services.AddScoped<IAuthority, Authority>();
+        builder.Services.AddScoped<IGameService, GameService>();
         #endregion
 
         #region Swagger

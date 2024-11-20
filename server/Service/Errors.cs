@@ -14,6 +14,7 @@ public class UnauthorizedError(string type) : AppError($"Operation not authorize
 public class ForbiddenError() : AppError("Forbiddden!") { }
 
 public class AuthenticationError() : AppError("Unable to authenticate!") { }
+public class GameAlreadyStartedError() : AppError("This week's game has already started!") { }
 
 public class ValidationError(IDictionary<string, string[]> Errors) : AppError("Validation failed!")
 {
