@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Service;
+using Service.Authorization;
 using Service.Preference;
 using Service.Repositories;
 using Service.Security;
@@ -72,6 +73,7 @@ public class Program
         #region Services
         builder.Services.AddValidatorsFromAssemblyContaining<ServiceAssembly>();
         builder.Services.AddScoped<IPreferenceService, PreferenceService>();
+        builder.Services.AddScoped<IAuthority, Authority>();
         #endregion
 
         #region Swagger

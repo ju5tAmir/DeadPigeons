@@ -20,7 +20,11 @@ public class DraftFormDataValidator : AbstractValidator<PreferenceUpdateRequest>
             .WithMessage("The 'ifPlayerWon' field must be a valid boolean.");
 
         RuleFor(x => x.NotificationType)
-            .Must(value => value == NotificationType.Email || value == NotificationType.Phone)
-            .WithMessage("The 'NotificationType' field must be one of the following values: Email, Phone, All.");
+            .Must(value => value == NotificationType.Email || 
+                           value == NotificationType.Phone ||
+                           value == NotificationType.None ||
+                           value == NotificationType.All
+                           )
+            .WithMessage("The 'NotificationType' field must be one of the following values: 'All', 'Email', 'Phone', 'None'.");
     }
 }

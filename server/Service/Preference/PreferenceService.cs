@@ -5,31 +5,22 @@ using Microsoft.EntityFrameworkCore;
 using Service.Authorization;
 using Service.Preference.Dto;
 using Service.Repositories;
-using Service.Security;
 
 namespace Service.Preference
 {
-    public class PreferenceService : IPreferenceService
+    public class PreferenceService(
+        IRepository<DataAccess.Entities.Preference> preferenceRepository,
+        IValidator<PreferenceUpdateRequest> validator,
+        IAuthority authority
+        ) : IPreferenceService
     {
-        private readonly IRepository<User> _userRepository;
-        private readonly IRepository<DataAccess.Entities.Preference> _preferenceRepository;
         
-
-        public PreferenceService(
-            IRepository<User> userRepository,
-            IRepository<DataAccess.Entities.Preference> preferenceRepository
-            )
-        {
-            _userRepository = userRepository;
-            _preferenceRepository = preferenceRepository;
-        }
-
         public PreferenceResponse GetById(Guid userId, ClaimsPrincipal principal)
         {
           
-            AuthorizationService.AuthorizeAndThrow(principal, userId);
+            authority.AuthorizeAndThrow(principal, userId);
 
-            var preference = _preferenceRepository
+            var preference = preferenceRepository
                 .Query()
                 .Where(p => p.UserId == userId.ToString())
                 .Select(p => new PreferenceResponse(
@@ -47,9 +38,27 @@ namespace Service.Preference
             return preference;
         }
 
-        public Task Update(Guid preferenceId, Guid userId, ClaimsPrincipal principal, PreferenceUpdateRequest data)
-        {
-            throw new NotImplementedException();
+        public async Task<PreferenceResponse> Update(Guid userId, ClaimsPrincipal principal, PreferenceUpdateRequest data)
+        { 
+            await validator.ValidateAndThrowAsync(data);
+            authority.AuthorizeAndThrow(principal, userId);
+
+            var preference = await preferenceRepository
+                .Query()
+                .Where(p => p.UserId == userId.ToString())
+                .FirstOrDefaultAsync();
+
+            if (preference == null)
+            {
+                throw new NotFoundError(nameof(PreferenceUpdateRequest), new { Id = userId });
+            }
+
+            preference.IfBalanceIsNegative = data.ifBalanceIsNegative;
+            preference.IfPlayerWon = data.ifPlayerWon;
+            preference.NotificationType = data.NotificationType;
+            await preferenceRepository.Update(preference);
+
+            return new PreferenceResponse(preference.IfBalanceIsNegative, preference.IfPlayerWon, preference.NotificationType);
         }
     }
 }

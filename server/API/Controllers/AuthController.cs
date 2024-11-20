@@ -8,9 +8,7 @@ using Service;
 using Service.Auth.Dto;
 using Service.Security;
 
-
 namespace API.Controllers;
-
 
 [ApiController]
 [Route("/api/auth")]
@@ -74,9 +72,8 @@ public class AuthController: ControllerBase
         return new LoginResponse(Jwt: token);
     }
 
-    [HttpPost]
+    [HttpGet]
     [Route("logout")]
-    [AuthorizeAllRoles]
     public async Task<IResult> Logout([FromServices] SignInManager<User> signInManager)
     {
         await signInManager.SignOutAsync();
@@ -85,7 +82,6 @@ public class AuthController: ControllerBase
 
     [HttpGet]
     [Route("userinfo")]
-    
     public async Task<AuthUserInfo> UserInfo([FromServices] UserManager<User> userManager)
     {
         var username = HttpContext.User.Identity?.Name;
@@ -114,13 +110,5 @@ public class AuthController: ControllerBase
             IsAutoplay: user.IsAutoPlay,
             RegisterationDate: user.RegistrationDate 
             );
-    }
-    
-    public class AuthorizeAllRoles : AuthorizeAttribute
-    {
-        public AuthorizeAllRoles()
-        {
-            Roles = Role.AllRoles;
-        }
     }
 }
