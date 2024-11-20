@@ -1,4 +1,4 @@
-using DataAccess.Entities;
+﻿using DataAccess.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,6 +9,7 @@ public class AppDbContext : IdentityDbContext<User>
     public AppDbContext(DbContextOptions<AppDbContext> options)
         : base(options) { }
 
+    public virtual DbSet<Preference> Preferences { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<User>(entity =>
@@ -37,8 +38,22 @@ public class AppDbContext : IdentityDbContext<User>
                 .HasColumnType("boolean")
                 .HasDefaultValue(false);
         });
+        
 
+        modelBuilder.Entity<Preference>(entity =>
+        {
+            entity.HasKey(e => e.UserSettingsId).HasName("Preferences_pkey");
+
+            entity.Property(e => e.IfBalanceIsNegative).HasDefaultValue(true);
+            entity.Property(e => e.IfPlayerWon).HasDefaultValue(true);
+            entity.Property(e => e.NotificationType).HasDefaultValueSql("'Email'::character varying");
+
+            entity.HasOne(d => d.User).WithOne(p => p.Preference).HasConstraintName("Preferences_UserId_fkey");
+        });
+        
         base.OnModelCreating(modelBuilder);
     }
+
+    // public virtual DbSet<Preference> Preferences { get; set; }
 
 }

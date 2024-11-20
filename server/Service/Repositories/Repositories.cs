@@ -9,6 +9,11 @@ public class UserRepository(AppDbContext context) : BaseRepository<User>(context
     protected override DbSet<User> Set => Context.Users;
 }
 
+public class PreferenceRepository(AppDbContext context) : BaseRepository<DataAccess.Entities.Preference>(context)
+{
+    protected override DbSet<DataAccess.Entities.Preference> Set => Context.Preferences;
+}
+
 public abstract class BaseRepository<T>(AppDbContext context) : IRepository<T> where T : class
 {
     protected AppDbContext Context => context;

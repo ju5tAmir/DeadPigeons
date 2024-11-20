@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Service;
+using Service.Preference;
 using Service.Repositories;
 using Service.Security;
 
@@ -36,6 +37,7 @@ public class Program
         );
         builder.Services.AddScoped<DbSeeder>();
         builder.Services.AddScoped<IRepository<User>, UserRepository>();
+        builder.Services.AddScoped<IRepository<Preference>, PreferenceRepository>();
         #endregion
 
         #region Security
@@ -69,6 +71,7 @@ public class Program
 
         #region Services
         builder.Services.AddValidatorsFromAssemblyContaining<ServiceAssembly>();
+        builder.Services.AddScoped<IPreferenceService, PreferenceService>();
         #endregion
 
         #region Swagger

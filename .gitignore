@@ -271,6 +271,7 @@ ServiceFabricBackup/
 *.mdf
 *.ldf
 *.ndf
+*.sql
 
 # Business Intelligence projects
 *.rdl.data
@@ -488,3 +489,8 @@ server/DataAccess/Migrations/*.cs
 
 # Internal notes
 *.[Nn]otes
+
+# Generated models
+server/DataAccess/Models/*
+
+server/DataAccess/Scaffold.sh
