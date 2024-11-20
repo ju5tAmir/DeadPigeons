@@ -15,6 +15,7 @@ public class ForbiddenError() : AppError("Forbiddden!") { }
 
 public class AuthenticationError() : AppError("Unable to authenticate!") { }
 public class GameAlreadyStartedError() : AppError("This week's game has already started!") { }
+public class GameNotStartedError() : AppError("This week's game has not started yet!") { }
 
 public class ValidationError(IDictionary<string, string[]> Errors) : AppError("Validation failed!")
 {

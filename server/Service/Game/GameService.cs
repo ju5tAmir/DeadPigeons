@@ -25,7 +25,7 @@ public class GameService(
         // Create a new game with UTC timestamps
         var game = new DataAccess.Entities.Game
         {
-            GameId = Guid.NewGuid(),  // Make sure to generate a unique GameId
+            GameId = Guid.NewGuid(),
             WeekNumber = TimeUtils.GetCurrentWeekNumber(),
             ValidFromDate = TimeUtils.GetCurrentWeekStartDate(),
             ValidUntilDate = TimeUtils.GetCurrentWeekEndDate(),
@@ -37,9 +37,42 @@ public class GameService(
         // Add the game to the repository
         await gameRepository.Add(game);
 
-        // Output GameId for reference
-        Console.WriteLine($"Game created with ID: {game.GameId}");
+        var gameResponse = new CreateGameResponse(
+            game.GameId,
+            game.WeekNumber,
+            game.ValidFromDate,
+            game.ValidUntilDate,
+            game.Status,
+            game.WinningSequence,
+            game.FinishedAt
+        );
+        
+        return gameResponse;
+    }
 
-        return new CreateGameResponse(game.GameId);
+    public async Task<CreateGameResponse> GetCurrentGame()
+    {
+        // Check if the week game is already started
+        var game = await gameRepository
+            .Query()
+            .Where(g => g.WeekNumber == TimeUtils.GetCurrentWeekNumber())
+            .FirstOrDefaultAsync();
+
+        if (game == null)
+        {
+            throw new GameNotStartedError();  
+        }
+
+        var gameResponse = new CreateGameResponse(
+            game.GameId,
+            game.WeekNumber,
+            game.ValidFromDate,
+            game.ValidUntilDate,
+            game.Status,
+            game.WinningSequence,
+            game.FinishedAt
+        );
+        
+        return gameResponse;
     }
 }
