@@ -69,6 +69,9 @@ public partial class AspNetUser
     [InverseProperty("User")]
     public virtual ICollection<AspNetUserToken> AspNetUserTokens { get; set; } = new List<AspNetUserToken>();
 
+    [InverseProperty("Player")]
+    public virtual ICollection<Board> Boards { get; set; } = new List<Board>();
+
     [InverseProperty("User")]
     public virtual Preference? Preference { get; set; }
 

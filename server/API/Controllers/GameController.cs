@@ -14,7 +14,7 @@ public class GameController(IGameService service): ControllerBase
        [HttpGet]
        [Route("")]
        [AllowAnonymous]
-       public async Task<CreateGameResponse> GetCurrentGame()
+       public async Task<GameResponse> GetCurrentGame()
        {
               return await service.GetCurrentGame();
        }
@@ -22,8 +22,17 @@ public class GameController(IGameService service): ControllerBase
        [HttpGet]
        [Route("start")]
        [Authorize(Roles = Role.Admin)]
-       public async Task<CreateGameResponse> CreateGame()
+       public async Task<GameResponse> CreateGame()
        {
-              return await service.CreateGame();
+              return await service.StartGame();
+       }
+       
+       [HttpPost]
+       [Route("finish")]
+       [AllowAnonymous] // NOTE: Change
+       // [Authorize(Roles = Role.Admin)]
+       public async Task<GameResponse> FinishGame([FromBody] FinishGameRequest data)
+       {
+              return await service.FinishGame(data);
        }
 }

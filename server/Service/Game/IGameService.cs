@@ -4,6 +4,7 @@ namespace Service.Game;
 
 public interface IGameService
 {
-    Task<CreateGameResponse> CreateGame();
-    Task<CreateGameResponse> GetCurrentGame();
+    Task<GameResponse> GetCurrentGame();
+    Task<GameResponse> StartGame();
+    Task<GameResponse> FinishGame(FinishGameRequest data);
 }
