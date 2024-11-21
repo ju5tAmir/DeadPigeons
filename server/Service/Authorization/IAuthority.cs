@@ -5,4 +5,5 @@ namespace Service.Authorization;
 public interface IAuthority
 {
     public void AuthorizeAndThrow(ClaimsPrincipal principal, Guid userId);
+    public Task AuthorizeAndThrowAsync(ClaimsPrincipal principal);
 }

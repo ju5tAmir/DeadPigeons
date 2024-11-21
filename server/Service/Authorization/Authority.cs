@@ -13,4 +13,13 @@ public class Authority: IAuthority
         if (principal.IsInRole(Role.Admin)) return;
         if (principal.GetUserId() != userId.ToString()) throw new ForbiddenError();
     }
+    
+
+    public async Task AuthorizeAndThrowAsync(ClaimsPrincipal principal)
+    {
+        if (principal?.Identity == null || !principal.Identity.IsAuthenticated)
+        {
+            throw new AuthenticationError();
+        }
+    }
 }

@@ -9,13 +9,13 @@ public class DbSeeder
 {
     private readonly ILogger<DbSeeder> logger;
     private readonly AppDbContext context;
-    private readonly UserManager<User> userManager;
+    private readonly UserManager<DataAccess.Entities.User> userManager;
     private readonly RoleManager<IdentityRole> roleManager;
 
     public DbSeeder(
         ILogger<DbSeeder> logger,
         AppDbContext context,
-        UserManager<User> userManager,
+        UserManager<DataAccess.Entities.User> userManager,
         RoleManager<IdentityRole> roleManager
     )
     {
@@ -48,7 +48,7 @@ public class DbSeeder
     async Task CreateUser(string firstName, string lastName, string email, string username, string? phone, string password, string role, bool isActive, bool isAutoplay, DateTime registrationDate)
     {
         if (await userManager.FindByNameAsync(username) != null) return;
-        var user = new User
+        var user = new DataAccess.Entities.User
         {
             FirstName = firstName,
             LastName = lastName,
