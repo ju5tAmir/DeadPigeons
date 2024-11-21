@@ -29,5 +29,22 @@ public class PackageService(IRepository<DataAccess.Entities.Package> repository)
 
         return PackageMapper.ToResponse(package);
     }
-    
+
+    public async Task<bool> DeletePackageById(Guid packageId)
+    {
+        var package = await repository
+            .Query()
+            .Where(p => p.PackageId == packageId)
+            .FirstOrDefaultAsync();
+
+        if (package == null)
+        {
+            throw new NotFoundError(nameof(Package), new { Id = packageId });
+        }
+
+        await repository
+            .Delete(package);
+
+        return true;
+    }
 }

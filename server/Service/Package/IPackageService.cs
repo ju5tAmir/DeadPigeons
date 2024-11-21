@@ -7,4 +7,5 @@ public interface IPackageService
 {
     Task<List<PackageResponse>> GetAllPackages();
     Task<PackageResponse> GetPackageById(Guid packageId);
+    Task<bool> DeletePackageById(Guid packageId);
 }

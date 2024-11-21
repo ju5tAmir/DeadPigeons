@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Service;
 using Service.Package;
 using Service.Package.Dto;
 
@@ -24,6 +25,14 @@ public class PackageController(IPackageService service)
     public async Task<PackageResponse> Get(Guid id)
     {
         return await service.GetPackageById(id);
+    }
+    
+    [HttpDelete]
+    [Route("{id}")]
+    [Authorize(Roles = Role.Admin)]
+    public async Task<bool> Delete(Guid id)
+    {
+        return await service.DeletePackageById(id);
     }
    
 }
