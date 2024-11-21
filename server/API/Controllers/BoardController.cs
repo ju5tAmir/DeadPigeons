@@ -19,6 +19,16 @@ public class BoardController(IBoardService service): ControllerBase
         return await service.Get(HttpContext.User, id);
     }
     
+    [HttpGet]
+    [Route("all")]
+    [AllowAnonymous]
+    // [Authorize(Roles = Role.Player)]
+    public async Task<List<BoardResponse>> GetAllBoards()
+    {
+        return await service.GetAll(HttpContext.User);
+    }
+
+    
     [HttpPost]
     [Route("play")]
     [AllowAnonymous]

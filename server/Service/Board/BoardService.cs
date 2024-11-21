@@ -60,6 +60,25 @@ public class BoardService(
         return BoardMapper.ToResponse(board, game, package);
     }
 
+    public async Task<List<BoardResponse>> GetAll(ClaimsPrincipal principal)
+    {
+        await authority.AuthorizeAndThrowAsync(principal);
+        List<BoardResponse> boardResponses = new List<BoardResponse>();
+
+        // Get the boards
+        var boardsList = await boardRepository
+            .Query()
+            .Where(b => b.PlayerId == principal.GetUserId())
+            .ToListAsync();
+        
+        foreach (var board in boardsList)
+        {
+            boardResponses.Add(await Get(principal, board.BoardId));
+        }
+
+        return boardResponses;
+    }
+
     public async Task<PlayBoardResponse> Play(ClaimsPrincipal principal, PlayBoardRequest data)
     {
         await validator.ValidateAndThrowAsync(data);
