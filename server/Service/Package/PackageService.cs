@@ -1,3 +1,4 @@
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Service.Package.Dto;
 using Service.Package.Utils;
@@ -5,7 +6,10 @@ using Service.Repositories;
 
 namespace Service.Package;
 
-public class PackageService(IRepository<DataAccess.Entities.Package> repository): IPackageService
+public class PackageService(
+    IRepository<DataAccess.Entities.Package> repository,
+    IValidator<PackageRequest> validator
+    ): IPackageService
 {
     public async Task<List<PackageResponse>> GetAllPackages()
     {
@@ -27,6 +31,23 @@ public class PackageService(IRepository<DataAccess.Entities.Package> repository)
             throw new NotFoundError(nameof(Package), new { Id = packageId });
         }
 
+        return PackageMapper.ToResponse(package);
+    }
+
+    public async Task<PackageResponse> CreatePackage(PackageRequest data)
+    {
+        await validator.ValidateAndThrowAsync(data);
+
+        var package = new DataAccess.Entities.Package
+        {
+            PackageId = Guid.NewGuid(),
+            Price = data.Price,
+            NumberOfFields = data.NumberOfFields
+        };
+
+        await repository
+            .Add(package);
+        
         return PackageMapper.ToResponse(package);
     }
 

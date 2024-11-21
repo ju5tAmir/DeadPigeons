@@ -27,6 +27,14 @@ public class PackageController(IPackageService service)
         return await service.GetPackageById(id);
     }
     
+    [HttpPost]
+    [Route("")]
+    [Authorize(Roles = Role.Admin)]
+    public async Task<PackageResponse> Get([FromBody] PackageRequest data)
+    {
+        return await service.CreatePackage(data);
+    }
+    
     [HttpDelete]
     [Route("{id}")]
     [Authorize(Roles = Role.Admin)]
