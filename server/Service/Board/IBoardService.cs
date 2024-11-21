@@ -6,5 +6,5 @@ namespace Service.Board;
 public interface IBoardService
 {
     Task<PlayBoardResponse> Play(ClaimsPrincipal principal, PlayBoardRequest data);
-    // Task<bool> Delete(ClaimsPrincipal principal, Guid boardId);
+    Task<bool> Delete(ClaimsPrincipal principal, Guid boardId);
 }

@@ -21,7 +21,7 @@ public class BoardService(
     public async Task<PlayBoardResponse> Play(ClaimsPrincipal principal, PlayBoardRequest data)
     {
         await validator.ValidateAndThrowAsync(data);
-        // await authority.AuthorizeAndThrowAsync(principal);
+        await authority.AuthorizeAndThrowAsync(principal);
 
         // Get the Game
         var game = await gameRepository
@@ -67,6 +67,13 @@ public class BoardService(
             throw new NotFoundError(nameof(Package), new { Id = data.PackageId });
         }
         
+        // If the number of choices matches the number of fields in package
+        if (package.NumberOfFields != data.PlaySequence.Count)
+        {
+            throw new IllegalMove(package.NumberOfFields);
+        }
+
+        
         // Check balance
         if (package.Price > user.Balance)
         {
@@ -75,11 +82,6 @@ public class BoardService(
 
         user.Balance -= package.Price;
         
-        // If the number of choices matches the number of fields in package
-        if (package.NumberOfFields != data.PlaySequence.Count)
-        {
-            throw new IllegalMove(package.NumberOfFields);
-        }
 
         var board = new DataAccess.Entities.Board()
         {
@@ -98,5 +100,26 @@ public class BoardService(
             .Update(user);
         
         return new PlayBoardResponse(board.BoardId);
+    }
+
+    public async Task<bool> Delete(ClaimsPrincipal principal, Guid boardId)
+    {
+        await authority.AuthorizeAndThrowAsync(principal);
+
+        var board = await boardRepository
+            .Query()
+            .Where(b => b.PlayerId == principal.GetUserId())
+            .Where(b => b.BoardId == boardId)
+            .FirstOrDefaultAsync();
+
+        if (board == null)
+        {
+            throw new NotFoundError(nameof(Board), new { Id = boardId });
+        }
+
+        await boardRepository
+            .Delete(board);
+
+        return true;
     }
 }

@@ -19,4 +19,11 @@ public class BoardController(IBoardService service): ControllerBase
         return await service.Play(HttpContext.User, data);
     }
     
+    [HttpDelete]
+    [Route("{id}")]
+    [AllowAnonymous]
+    public async Task<bool> DeleteBoard(Guid id)
+    {
+        return await service.Delete(HttpContext.User, id);
+    }
 }
