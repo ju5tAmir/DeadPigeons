@@ -2,13 +2,13 @@ using FluentValidation;
 
 namespace Service.Board.Dto;
 
-public record PlayBoardRequest(
+public record BoardRequest(
     Guid GameId,
     Guid PackageId,
     HashSet<int> PlaySequence // Use HashSet<int> for uniqueness
 );
 
-public class PlayBoardRequestValidator : AbstractValidator<PlayBoardRequest>
+public class PlayBoardRequestValidator : AbstractValidator<BoardRequest>
 {
     public PlayBoardRequestValidator()
     {
