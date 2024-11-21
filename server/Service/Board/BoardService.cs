@@ -189,7 +189,6 @@ public class BoardService(
 
         var board = await boardRepository
             .Query()
-            .Where(b => b.PlayerId == principal.GetUserId())
             .Where(b => b.BoardId == boardId)
             .FirstOrDefaultAsync();
 
@@ -198,12 +197,65 @@ public class BoardService(
             throw new NotFoundError(nameof(Board), new { Id = boardId });
         }
         
-        // If game is over, can't delete.
-        // Return money to the account 
+        if (board.PlayerId != principal.GetUserId())
+        {
+            throw new ForbiddenError();
+        }
+        
+        // Get the Game
+        var game = await gameRepository
+            .Query()
+            .Where(g => g.GameId == board.GameId)
+            .FirstOrDefaultAsync();
 
+        if (game == null)
+        {
+            throw new  NotFoundError(nameof(DataAccess.Entities.Game), new { Id = board.GameId });
+        }
+
+        if (game.Status != GameStatus.Active)
+        {
+            throw new GameHasFinished();
+        }
+        
+        // Get the user
+        var user = await userRepository
+            .Query()
+            .Where(u => u.Id == principal.GetUserId())
+            .FirstOrDefaultAsync();
+
+        if (user == null)
+        {
+            throw new  NotFoundError(nameof(DataAccess.Entities.User), new { Id = principal.GetUserId() });
+        }
+
+        // If the user is disabled 
+        if (!user.IsActive)
+        {
+            throw new UserDisabled();
+        }
+        
+        // Get the old ass package
+        var package = await boardRepository
+            .Query()
+            .Where(b => b.BoardId == boardId)
+            .Include(b => b.Package)
+            .Select(b => b.Package)
+            .FirstOrDefaultAsync();
+        
+        if (package == null)
+        {
+            throw new NotFoundError(nameof(Package), new { Id = board.PackageId });
+        }
+
+        // Return the money to the user's acc
+        user.Balance += package.Price;  
+        
         await boardRepository
             .Delete(board);
-
+        await userRepository
+            .Update(user);
+        
         return true;
     }
 
@@ -296,18 +348,17 @@ public class BoardService(
             throw new IllegalMove(newPackage.NumberOfFields);
         }
         
+        // Return the user's previous money to his account otherwise it would be HARAM
+        user.Balance += oldPackage.Price;
+        user.Balance -= newPackage.Price;
+
         // Check balance
         if (newPackage.Price > user.Balance)
         {
             throw new InsufficientBalance();
         }
-        // Return the user's previous money to his account otherwise it would be HARAM
-        Console.WriteLine("User Balance: " + user.Balance);
-        user.Balance += oldPackage.Price;
-        Console.WriteLine("Old Pack: " + oldPackage.Price);
-        user.Balance -= newPackage.Price;
-        Console.WriteLine("New Pack:" + newPackage.Price);
-
+        
+        // Update the board with new package and moves
         board.PackageId = newPackage.PackageId;
         board.PlaySequence = string.Join(", ", data.PlaySequence);
 
