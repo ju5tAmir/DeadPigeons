@@ -7,6 +7,14 @@ namespace Service.Package;
 
 public class PackageService(IRepository<DataAccess.Entities.Package> repository): IPackageService
 {
+    public async Task<List<PackageResponse>> GetAllPackages()
+    {
+        return await repository
+            .Query()
+            .Select(p => PackageMapper.ToResponse(p))
+            .ToListAsync();
+    }
+
     public async Task<PackageResponse> GetPackageById(Guid packageId)
     {
         var package = await repository
@@ -21,4 +29,5 @@ public class PackageService(IRepository<DataAccess.Entities.Package> repository)
 
         return PackageMapper.ToResponse(package);
     }
+    
 }
