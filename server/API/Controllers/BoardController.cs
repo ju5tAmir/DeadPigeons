@@ -10,6 +10,15 @@ namespace API.Controllers;
 [Route("/api/board/")]
 public class BoardController(IBoardService service): ControllerBase
 {
+    [HttpGet]
+    [Route("{id}")]
+    [AllowAnonymous]
+    // [Authorize(Roles = Role.Player)]
+    public async Task<BoardResponse> GetBoard(Guid id)
+    {
+        return await service.Get(HttpContext.User, id);
+    }
+    
     [HttpPost]
     [Route("play")]
     [AllowAnonymous]

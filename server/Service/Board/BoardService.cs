@@ -3,6 +3,7 @@ using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Service.Authorization;
 using Service.Board.Dto;
+using Service.Board.Utils;
 using Service.Game;
 using Service.Repositories;
 using Service.Security;
@@ -18,6 +19,47 @@ public class BoardService(
     IValidator<PlayBoardRequest> validator
     ): IBoardService
 {
+    public async Task<BoardResponse> Get(ClaimsPrincipal principal, Guid boardId)
+    {
+        await authority.AuthorizeAndThrowAsync(principal);
+
+        // Get the board
+        var board = await boardRepository
+            .Query()
+            .Where(b => b.PlayerId == principal.GetUserId())
+            .Where(b => b.BoardId == boardId)
+            .FirstOrDefaultAsync();
+
+        if (board == null)
+        {
+            throw new NotFoundError(nameof(Board), new { Id = boardId });
+        }
+        
+        // Get the Game
+        var game = await gameRepository
+            .Query()
+            .Where(g => g.GameId == board.GameId)
+            .FirstOrDefaultAsync();
+
+        if (game == null)
+        {
+            throw new  NotFoundError(nameof(DataAccess.Entities.Game), new { Id = board.GameId });
+        }
+        
+        // Get the package
+        var package = await packageRepository
+            .Query()
+            .Where(p => p.PackageId == board.PackageId)
+            .FirstOrDefaultAsync();
+
+        if (package == null)
+        {
+            throw new NotFoundError(nameof(Package), new { Id = board.PackageId });
+        }
+
+        return BoardMapper.ToResponse(board, game, package);
+    }
+
     public async Task<PlayBoardResponse> Play(ClaimsPrincipal principal, PlayBoardRequest data)
     {
         await validator.ValidateAndThrowAsync(data);

@@ -19,6 +19,6 @@ public class PackageService(IRepository<DataAccess.Entities.Package> repository)
             throw new NotFoundError(nameof(Package), new { Id = packageId });
         }
 
-        return PackageMapper.ToPackageResponse(package);
+        return PackageMapper.ToResponse(package);
     }
 }

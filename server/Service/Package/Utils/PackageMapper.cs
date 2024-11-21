@@ -4,7 +4,7 @@ namespace Service.Package.Utils;
 
 public class PackageMapper
 {
-    public static PackageResponse ToPackageResponse(DataAccess.Entities.Package package)
+    public static PackageResponse ToResponse(DataAccess.Entities.Package package)
     {
         return new PackageResponse(
             package.PackageId,
