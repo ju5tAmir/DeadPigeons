@@ -23,4 +23,7 @@ public partial class Game
     public List<int>? WinningSequence { get; set; }
 
     public DateTime? FinishedAt { get; set; }
+
+    [InverseProperty("Game")]
+    public virtual ICollection<Board> Boards { get; set; } = new List<Board>();
 }

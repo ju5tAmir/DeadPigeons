@@ -17,10 +17,13 @@ public partial class Board
 
     public string PlayerId { get; set; } = null!;
 
-    [StringLength(100)]
-    public string? PlaySequence { get; set; }
+    public List<int>? PlaySequence { get; set; }
 
     public DateTime? PlayDate { get; set; }
+
+    [ForeignKey("GameId")]
+    [InverseProperty("Boards")]
+    public virtual Game Game { get; set; } = null!;
 
     [ForeignKey("PackageId")]
     [InverseProperty("Boards")]
