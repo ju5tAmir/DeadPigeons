@@ -28,3 +28,5 @@ public class ValidationError(IDictionary<string, string[]> Errors) : AppError("V
 {
     public IDictionary<string, string[]> Errors { get; } = Errors;
 }
+
+public class DuplicateEmail() : AppError("Email address already exists!");

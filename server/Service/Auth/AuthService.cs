@@ -21,6 +21,14 @@ public class AuthService(
     {
         await validator.ValidateAndThrowAsync(data);
 
+        // Fixing Security Issue: Duplicate email registration. #2 https://github.com/ju5tAmir/DeadPigeons/issues/2
+        var normalizedEmail = userManager.NormalizeEmail(data.Email);
+        if (await userManager.FindByEmailAsync(normalizedEmail) != null)
+        {
+            throw new DuplicateEmail();
+        }
+        
+        
         var user = new User {FirstName = data.FirsName, LastName = data.LastName, UserName = data.Username, PhoneNumber = data.PhoneNumber, Email = data.Email};
         var result = await userManager.CreateAsync(user, data.Password);
         if (!result.Succeeded)
