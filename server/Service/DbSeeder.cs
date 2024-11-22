@@ -3,6 +3,7 @@ using DataAccess.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Service.Preference.Utils;
 
 namespace Service;
 
@@ -83,14 +84,7 @@ public class DbSeeder
                 .AnyAsync(p => p.UserId == user.Id)) 
             return;
 
-        var preference = new DataAccess.Entities.Preference
-        {
-            UserSettingsId = Guid.NewGuid().ToString(),
-            UserId = user.Id,
-            IfBalanceIsNegative = true,
-            IfPlayerWon = true,
-            NotificationType = "Email"
-        };
+        var preference = PreferenceMapper.GetDefaultPreferences(user);
 
         Console.WriteLine("Reached Pref");
         await context.Preferences.AddAsync(preference);

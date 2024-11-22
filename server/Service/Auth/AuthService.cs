@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Service.Auth.Dto;
 using Service.Auth.Utils;
+using Service.Preference.Utils;
 using Service.Repositories;
 using Service.Security;
 
@@ -29,6 +30,12 @@ public class AuthService(
             );
         }
         await userManager.AddToRoleAsync(user, Role.Player);
+
+        var preferences = PreferenceMapper.GetDefaultPreferences(user);
+
+        await preferenceRepository
+            .Add(preferences);
+        
         return new RegisterResponse(UserId:user.Id);
     }
 

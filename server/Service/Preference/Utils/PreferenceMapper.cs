@@ -1,3 +1,4 @@
+using DataAccess.Entities;
 using Service.Preference.Dto;
 
 namespace Service.Preference.Utils;
@@ -11,5 +12,17 @@ public class PreferenceMapper
             preference.IfPlayerWon,
             preference.NotificationType
         );
+    }
+
+    public static DataAccess.Entities.Preference GetDefaultPreferences(User user)
+    {
+        return new DataAccess.Entities.Preference()
+        {
+            UserSettingsId = Guid.NewGuid().ToString(),
+            UserId = user.Id,
+            IfBalanceIsNegative = true,
+            IfPlayerWon = true,
+            NotificationType = "Email"
+        };
     }
 }
