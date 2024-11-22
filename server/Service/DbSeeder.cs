@@ -1,6 +1,7 @@
 using DataAccess;
 using DataAccess.Entities;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace Service;
@@ -48,7 +49,7 @@ public class DbSeeder
     async Task CreateUser(string firstName, string lastName, string email, string username, string? phone, string password, string role, bool isActive, bool isAutoplay, DateTime registrationDate)
     {
         if (await userManager.FindByNameAsync(username) != null) return;
-        var user = new DataAccess.Entities.User
+        var user = new User
         {
             FirstName = firstName,
             LastName = lastName,
@@ -61,6 +62,7 @@ public class DbSeeder
             IsAutoPlay = isActive,
             RegistrationDate = registrationDate
         };
+
         var result = await userManager.CreateAsync(user, password);
         if (!result.Succeeded)
         {
@@ -70,6 +72,28 @@ public class DbSeeder
             }
         }
         await userManager.AddToRoleAsync(user!, role!);
+        
+        await CreatePreferences(user);
+    }
+
+    private async Task CreatePreferences(User user)
+    {
+        if (await context
+                .Preferences
+                .AnyAsync(p => p.UserId == user.Id)) 
+            return;
+
+        var preference = new DataAccess.Entities.Preference
+        {
+            UserSettingsId = Guid.NewGuid().ToString(),
+            UserId = user.Id,
+            IfBalanceIsNegative = true,
+            IfPlayerWon = true,
+            NotificationType = "Email"
+        };
+
+        Console.WriteLine("Reached Pref");
+        await context.Preferences.AddAsync(preference);
     }
 
 }
