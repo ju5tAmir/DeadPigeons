@@ -54,8 +54,7 @@ public class AuthController(IAuthService service): ControllerBase
     [Route("logout")]
     public async Task<IResult> Logout([FromServices] SignInManager<User> signInManager)
     {
-        await signInManager.SignOutAsync();
-        return Results.Ok();
+        return await service.Logout(signInManager);
     }
 
     [HttpGet]

@@ -1,5 +1,6 @@
 using DataAccess.Entities;
 using FluentValidation;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Service.Auth.Dto;
@@ -52,5 +53,11 @@ public class AuthService: IAuthService
 
         
         return new LoginResponse(Jwt: token);
+    }
+
+    public async Task<IResult> Logout(SignInManager<User> signInManager)
+    {
+        await signInManager.SignOutAsync();
+        return Results.Ok();
     }
 }
