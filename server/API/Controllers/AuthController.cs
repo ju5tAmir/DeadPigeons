@@ -59,7 +59,7 @@ public class AuthController(IAuthService service): ControllerBase
 
     [HttpGet]
     [Route("userinfo")]
-    public async Task<AuthUserInfo> UserInfo([FromServices] UserManager<User> userManager)
+    public async Task<UserInfoResponse> UserInfo([FromServices] UserManager<User> userManager)
     {
         return await service.UserInfo(userManager, HttpContext.User);
     }

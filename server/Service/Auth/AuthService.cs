@@ -3,13 +3,18 @@ using DataAccess.Entities;
 using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Service.Auth.Dto;
+using Service.Auth.Utils;
+using Service.Repositories;
 using Service.Security;
 
 namespace Service.Auth;
 
-public class AuthService: IAuthService
+public class AuthService(
+    IRepository<DataAccess.Entities.Preference> preferenceRepository
+    ): IAuthService
 {
     public async Task<RegisterResponse> Register(IOptions<AppOptions> options, UserManager<User> userManager, IValidator<RegisterRequest> validator, RegisterRequest data)
     {
@@ -62,7 +67,7 @@ public class AuthService: IAuthService
         return Results.Ok();
     }
 
-    public async Task<AuthUserInfo> UserInfo(UserManager<User> userManager, ClaimsPrincipal principal)
+    public async Task<UserInfoResponse> UserInfo(UserManager<User> userManager, ClaimsPrincipal principal)
     {
         var username = principal.Identity?.Name;
         if (string.IsNullOrEmpty(username))
@@ -78,17 +83,17 @@ public class AuthService: IAuthService
 
         var role = (await userManager.GetRolesAsync(user)).First();
 
-        return new AuthUserInfo(
-            UserId: user.Id,
-            FirstName: user.FirstName,
-            LastName: user.LastName,
-            Username: user.UserName,
-            Email: user.Email,
-            PhoneNumber: user.PhoneNumber,
-            Role: role,
-            IsActive: user.IsActive,
-            IsAutoplay: user.IsAutoPlay,
-            RegisterationDate: user.RegistrationDate 
-        );
+        var preference = (await preferenceRepository
+                .Query()
+                .Where(p => p.UserId == user.Id)
+                .FirstOrDefaultAsync()
+            );
+
+        if (preference == null)
+        {
+            throw new NotFoundError(nameof(Preference), new { Id = "" });
+        }
+
+        return UserInfoMapper.ToResponse(user, role, preference);
     }
 }
