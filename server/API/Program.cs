@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Service;
+using Service.Auth;
 using Service.Authorization;
 using Service.Board;
 using Service.Game;
@@ -83,6 +84,7 @@ public class Program
         builder.Services.AddScoped<IGameService, GameService>();
         builder.Services.AddScoped<IBoardService, BoardService>();
         builder.Services.AddScoped<IPackageService, PackageService>();
+        builder.Services.AddScoped<IAuthService, AuthService>();
         #endregion
 
         #region Swagger
