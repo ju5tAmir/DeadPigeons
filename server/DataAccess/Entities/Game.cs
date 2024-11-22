@@ -20,11 +20,7 @@ public partial class Game
     [StringLength(32)]
     public string? Status { get; set; }
 
-    [StringLength(100)]
-    public string? WinningSequence { get; set; }
+    public List<int>? WinningSequence { get; set; }
 
     public DateTime? FinishedAt { get; set; }
-
-    [InverseProperty("Game")]
-    public virtual ICollection<Board> Boards { get; set; } = new List<Board>();
 }

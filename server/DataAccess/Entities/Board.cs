@@ -22,10 +22,6 @@ public partial class Board
 
     public DateTime? PlayDate { get; set; }
 
-    [ForeignKey("GameId")]
-    [InverseProperty("Boards")]
-    public virtual Game Game { get; set; } = null!;
-
     [ForeignKey("PackageId")]
     [InverseProperty("Boards")]
     public virtual Package Package { get; set; } = null!;

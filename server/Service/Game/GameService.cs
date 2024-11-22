@@ -38,18 +38,8 @@ public class GameService(
 
         // Add the game to the repository
         await gameRepository.Add(game);
-
-        var gameResponse = new GameResponse(
-            game.GameId,
-            game.WeekNumber,
-            game.ValidFromDate,
-            game.ValidUntilDate,
-            game.Status,
-            game.WinningSequence,
-            game.FinishedAt
-        );
         
-        return gameResponse;
+        return GameMapper.ToResponse(game);
     }
 
     public async Task<GameResponse> FinishGame(FinishGameRequest data)
@@ -69,12 +59,12 @@ public class GameService(
         {
             throw new GameHasFinished();
         }
-        game.WinningSequence = string.Join(", ", new[] 
+        game.WinningSequence = new List<int>
         {
-            data.WinningSequence.Number1,
-            data.WinningSequence.Number2,
-            data.WinningSequence.Number3
-        });
+            data.WinningSequence.ElementAt(0), 
+            data.WinningSequence.ElementAt(1), 
+            data.WinningSequence.ElementAt(2)  
+        };
 
         // NOTE: Winners 
         
@@ -100,17 +90,7 @@ public class GameService(
             
             throw new GameNotStartedError();  
         }
-
-        var gameResponse = new GameResponse(
-            game.GameId,
-            game.WeekNumber,
-            game.ValidFromDate,
-            game.ValidUntilDate,
-            game.Status,
-            game.WinningSequence,
-            game.FinishedAt
-        );
         
-        return gameResponse;
+        return GameMapper.ToResponse(game);
     }
 }
