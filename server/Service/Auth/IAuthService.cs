@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using DataAccess.Entities;
 using FluentValidation;
 using Microsoft.AspNetCore.Http;
@@ -26,4 +27,6 @@ public interface IAuthService
         );
 
     Task<IResult> Logout(SignInManager<User> signInManager);
+
+    Task<AuthUserInfo> UserInfo(UserManager<User> userManager, ClaimsPrincipal principal);
 }

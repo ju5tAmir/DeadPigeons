@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using DataAccess.Entities;
 using FluentValidation;
 using Microsoft.AspNetCore.Http;
@@ -59,5 +60,35 @@ public class AuthService: IAuthService
     {
         await signInManager.SignOutAsync();
         return Results.Ok();
+    }
+
+    public async Task<AuthUserInfo> UserInfo(UserManager<User> userManager, ClaimsPrincipal principal)
+    {
+        var username = principal.Identity?.Name;
+        if (string.IsNullOrEmpty(username))
+        {
+            throw new AuthenticationError();
+        }
+        
+        var user = await userManager.FindByNameAsync(username);
+        if (user == null)
+        {
+            throw new AuthenticationError();
+        }
+
+        var role = (await userManager.GetRolesAsync(user)).First();
+
+        return new AuthUserInfo(
+            UserId: user.Id,
+            FirstName: user.FirstName,
+            LastName: user.LastName,
+            Username: user.UserName,
+            Email: user.Email,
+            PhoneNumber: user.PhoneNumber,
+            Role: role,
+            IsActive: user.IsActive,
+            IsAutoplay: user.IsAutoPlay,
+            RegisterationDate: user.RegistrationDate 
+        );
     }
 }

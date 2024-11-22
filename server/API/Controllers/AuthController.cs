@@ -61,31 +61,6 @@ public class AuthController(IAuthService service): ControllerBase
     [Route("userinfo")]
     public async Task<AuthUserInfo> UserInfo([FromServices] UserManager<User> userManager)
     {
-        var username = HttpContext.User.Identity?.Name;
-        if (string.IsNullOrEmpty(username))
-        {
-            throw new AuthenticationError();
-        }
-        
-        var user = await userManager.FindByNameAsync(username);
-        if (user == null)
-        {
-            throw new AuthenticationError();
-        }
-
-        var role = (await userManager.GetRolesAsync(user)).First();
-
-        return new AuthUserInfo(
-            UserId: user.Id,
-            FirstName: user.FirstName,
-            LastName: user.LastName,
-            Username: user.UserName,
-            Email: user.Email,
-            PhoneNumber: user.PhoneNumber,
-            Role: role,
-            IsActive: user.IsActive,
-            IsAutoplay: user.IsAutoPlay,
-            RegisterationDate: user.RegistrationDate 
-            );
+        return await service.UserInfo(userManager, HttpContext.User);
     }
 }
