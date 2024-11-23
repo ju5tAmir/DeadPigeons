@@ -33,6 +33,11 @@ public class WinnerRepository(AppDbContext context) : BaseRepository<DataAccess.
     protected override DbSet<DataAccess.Entities.Winner> Set => Context.Winners;
 }
 
+public class TransactionRepository(AppDbContext context) : BaseRepository<DataAccess.Entities.Transaction>(context)
+{
+    protected override DbSet<DataAccess.Entities.Transaction> Set => Context.Transactions;
+}
+
 public abstract class BaseRepository<T>(AppDbContext context) : IRepository<T> where T : class
 {
     protected AppDbContext Context => context;

@@ -16,6 +16,7 @@ using Service.Package;
 using Service.Preference;
 using Service.Repositories;
 using Service.Security;
+using Service.Transactions;
 using Service.Winner;
 
 namespace Api;
@@ -48,6 +49,7 @@ public class Program
         builder.Services.AddScoped<IRepository<Board>, BoardRepository>();
         builder.Services.AddScoped<IRepository<Package>, PackageRepository>();
         builder.Services.AddScoped<IRepository<Winner>, WinnerRepository>();
+        builder.Services.AddScoped<IRepository<Transaction>, TransactionRepository>();
         #endregion
 
         #region Security
@@ -88,6 +90,7 @@ public class Program
         builder.Services.AddScoped<IPackageService, PackageService>();
         builder.Services.AddScoped<IAuthService, AuthService>();
         builder.Services.AddScoped<IWinnerService, WinnerService>();
+        builder.Services.AddScoped<ITransactionService, TransactionService>();
         #endregion
 
         #region Swagger

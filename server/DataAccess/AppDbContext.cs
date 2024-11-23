@@ -14,6 +14,8 @@ public class AppDbContext : IdentityDbContext<User>
     public virtual DbSet<Board> Boards { get; set; }
     public virtual DbSet<Package> Packages { get; set; }
     public virtual DbSet<Winner> Winners { get; set; }
+    public virtual DbSet<Transaction> Transactions { get; set; }
+
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -95,6 +97,16 @@ public class AppDbContext : IdentityDbContext<User>
             entity.HasOne(d => d.Game).WithMany(p => p.Winners).HasConstraintName("Winners_GameId_fkey");
 
             entity.HasOne(d => d.Player).WithMany(p => p.Winners).HasConstraintName("Winners_PlayerId_fkey");
+        });
+        
+        modelBuilder.Entity<Transaction>(entity =>
+        {
+            entity.HasKey(e => e.TransactionId).HasName("Transactions_pkey");
+
+            entity.Property(e => e.TransactionId).ValueGeneratedNever();
+            entity.Property(e => e.TransactionDate).HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+            entity.HasOne(d => d.User).WithMany(p => p.Transactions).HasConstraintName("Transactions_UserId_fkey");
         });
         
         base.OnModelCreating(modelBuilder);
