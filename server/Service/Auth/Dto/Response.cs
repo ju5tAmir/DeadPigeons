@@ -12,3 +12,6 @@ public record UserInfoResponse(
     PreferenceResponse UserPreference
     );
 
+public record UserPiiResponse( // Personal Identifiable Information
+    string UserId, string FirstName, string LastName, string Username
+);

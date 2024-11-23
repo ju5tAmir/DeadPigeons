@@ -11,6 +11,21 @@ public class GameService(
     IValidator<FinishGameRequest> validator
     ): IGameService
 {
+    public async Task<GameResponse> GetGameById(Guid gameId)
+    {
+        var game = await gameRepository
+            .Query()
+            .Where(g => g.GameId == gameId)
+            .FirstOrDefaultAsync();
+
+        if (game == null)
+        {
+            throw new NotFoundError(nameof(Game), new { Id = gameId });
+        }
+
+        return GameMapper.ToResponse(game);
+    }
+
     public async Task<GameResponse> StartGame()
     {
         // Check if the week game is already started

@@ -25,4 +25,16 @@ public class UserInfoMapper
 
         return new UserInfoResponse(userInfo, preferenceResponse);
     }
+
+    public static UserPiiResponse ToPiiResponse(User user)
+    {
+        var userInfo = new UserPiiResponse(
+            user.Id,
+            user.FirstName,
+            user.LastName,
+            user.UserName
+        );
+
+        return userInfo;
+    }
 }

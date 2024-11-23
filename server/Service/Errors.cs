@@ -19,6 +19,7 @@ public class AuthenticationError() : AppError("Unable to authenticate!") { }
 public class GameAlreadyStartedError() : AppError("This week's game has already started!") { }
 public class GameNotStartedError() : AppError("This week's game has not yet started!") { }
 public class GameHasFinished() : AppError("This week's game has already been finished.") { }
+public class GameIsNotFinished() : AppError("The game is still active and not finished.") { }
 public class InsufficientBalance() : AppError("Insufficient balance.") { }
 public class IllegalMove(int allowedNumber) : AppError($"Illegal move. Number of allowed moves is {allowedNumber} for this package.") { }
 public class UpdateError() : AppError($"Update failed because the new item and old one is the same.") { }

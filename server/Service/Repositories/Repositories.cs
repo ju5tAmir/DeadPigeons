@@ -27,6 +27,12 @@ public class PackageRepository(AppDbContext context) : BaseRepository<DataAccess
 {
     protected override DbSet<DataAccess.Entities.Package> Set => Context.Packages;
 }
+
+public class WinnerRepository(AppDbContext context) : BaseRepository<DataAccess.Entities.Winner>(context)
+{
+    protected override DbSet<DataAccess.Entities.Winner> Set => Context.Winners;
+}
+
 public abstract class BaseRepository<T>(AppDbContext context) : IRepository<T> where T : class
 {
     protected AppDbContext Context => context;
