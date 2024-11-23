@@ -13,6 +13,15 @@ namespace API.Controllers;
 public class WinnersController(IWinnerService service)
     : ControllerBase
 {
+    
+    [HttpGet]
+    [Route("{id}")]
+    public async Task<WinnersResponse> GetWinnersByGameId(Guid id)
+    {
+        return await service.GetGameWinnersByGameId(id);
+    }
+    
+    
     [HttpPost]
     [Route("")]
     public async Task<WinnersResponse> GetGameWinners([FromBody] WinnersRequest data)

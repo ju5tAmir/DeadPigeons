@@ -8,6 +8,7 @@ using Service.Winner.Utils;
 
 namespace Service.Winner;
 
+// Note: Still have to implement non-winner weekends prize
 public class WinnerService( // Question: At this point IDK if I should go with repositories or service classes for these entities
     IRepository<DataAccess.Entities.Winner> winnersRepository,
     IRepository<DataAccess.Entities.Board> boardRepository,
@@ -15,6 +16,21 @@ public class WinnerService( // Question: At this point IDK if I should go with r
     IRepository<DataAccess.Entities.Game> gameRepository
         ): IWinnerService
 {
+    public async Task<WinnersResponse> GetGameWinnersByGameId(Guid gameId)
+    {
+        // Fetch the game and validate
+        var game = await gameRepository
+            .Query()
+            .FirstOrDefaultAsync(g => g.GameId == gameId);
+
+        if (game == null)
+        {
+            throw new NotFoundError(nameof(Game), new { Id = gameId });
+        }
+
+        return await GetGameWinnersBySequence(new WinnersRequest(gameId, game.WinningSequence.ToHashSet()));
+    }
+
     public async Task<WinnersResponse> GetGameWinnersBySequence(WinnersRequest data)
     {
         // Initialize the winners list
