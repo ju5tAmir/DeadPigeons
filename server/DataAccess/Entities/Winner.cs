@@ -6,33 +6,29 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess.Entities;
 
-public partial class Board
+public partial class Winner
 {
     [Key]
-    public Guid BoardId { get; set; }
+    public Guid WinningRecordId { get; set; }
 
     public Guid GameId { get; set; }
 
-    public Guid PackageId { get; set; }
+    public Guid BoardId { get; set; }
 
     public string PlayerId { get; set; } = null!;
 
-    public List<int>? PlaySequence { get; set; }
+    [Precision(10, 2)]
+    public decimal? Prize { get; set; }
 
-    public DateTime? PlayDate { get; set; }
+    [ForeignKey("BoardId")]
+    [InverseProperty("Winners")]
+    public virtual Board Board { get; set; } = null!;
 
     [ForeignKey("GameId")]
-    [InverseProperty("Boards")]
+    [InverseProperty("Winners")]
     public virtual Game Game { get; set; } = null!;
 
-    [ForeignKey("PackageId")]
-    [InverseProperty("Boards")]
-    public virtual Package Package { get; set; } = null!;
-
     [ForeignKey("PlayerId")]
-    [InverseProperty("Boards")]
+    [InverseProperty("Winners")]
     public virtual AspNetUser Player { get; set; } = null!;
-
-    [InverseProperty("Board")]
-    public virtual ICollection<Winner> Winners { get; set; } = new List<Winner>();
 }

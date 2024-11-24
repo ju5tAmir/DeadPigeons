@@ -15,10 +15,7 @@ public class BoardMapper
             board.BoardId,
             GameMapper.ToResponse(game),
             PackageMapper.ToResponse(package),
-            board.PlaySequence
-                .Split(", ")
-                .Select(int.Parse)
-                .ToHashSet() ,
+            board.PlaySequence.ToHashSet(),
             board.PlayDate
             
         );

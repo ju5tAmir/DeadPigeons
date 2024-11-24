@@ -27,6 +27,21 @@ public class PackageRepository(AppDbContext context) : BaseRepository<DataAccess
 {
     protected override DbSet<DataAccess.Entities.Package> Set => Context.Packages;
 }
+
+public class WinnerRepository(AppDbContext context) : BaseRepository<DataAccess.Entities.Winner>(context)
+{
+    protected override DbSet<DataAccess.Entities.Winner> Set => Context.Winners;
+}
+
+public class TransactionRepository(AppDbContext context) : BaseRepository<DataAccess.Entities.Transaction>(context)
+{
+    protected override DbSet<DataAccess.Entities.Transaction> Set => Context.Transactions;
+}
+
+public class MobilePayRepository(AppDbContext context) : BaseRepository<DataAccess.Entities.MobilePayPayment>(context)
+{
+    protected override DbSet<DataAccess.Entities.MobilePayPayment> Set => Context.MobilePayPayments;
+}
 public abstract class BaseRepository<T>(AppDbContext context) : IRepository<T> where T : class
 {
     protected AppDbContext Context => context;

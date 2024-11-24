@@ -11,7 +11,7 @@ public static class GameMapper
             game.ValidFromDate,
             game.ValidUntilDate,
             game.Status,
-            game.WinningSequence,
+            game.WinningSequence?.ToArray() ?? null,
             game.FinishedAt
         );
     }

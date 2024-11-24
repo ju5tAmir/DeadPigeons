@@ -8,6 +8,6 @@ public record GameResponse(
     DateTime ValidFromDate,
     DateTime ValidUntilDate,
     string? Status,
-    string? WinningSequence,
+    int[]? WinningSequence,
     DateTime? FinishedAt
 );

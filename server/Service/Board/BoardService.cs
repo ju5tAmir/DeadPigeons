@@ -170,7 +170,7 @@ public class BoardService(
             GameId = game.GameId,
             PlayerId = user.Id,
             PackageId = package.PackageId,
-            PlaySequence = string.Join(", ", data.PlaySequence),
+            PlaySequence = data.PlaySequence.ToList(),
             PlayDate = DateTime.UtcNow
         };
 
@@ -360,7 +360,7 @@ public class BoardService(
         
         // Update the board with new package and moves
         board.PackageId = newPackage.PackageId;
-        board.PlaySequence = string.Join(", ", data.PlaySequence);
+        board.PlaySequence = data.PlaySequence.ToList();
 
         await boardRepository
             .Update(board);
