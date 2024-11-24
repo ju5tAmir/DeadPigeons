@@ -22,7 +22,13 @@ public partial class Transaction
     [Precision(10, 2)]
     public decimal Amount { get; set; }
 
+    [StringLength(50)]
+    public string? Status { get; set; }
+
     public DateTime? TransactionDate { get; set; }
+
+    [InverseProperty("Transaction")]
+    public virtual ICollection<MobilePayPayment> MobilePayPayments { get; set; } = new List<MobilePayPayment>();
 
     [ForeignKey("UserId")]
     [InverseProperty("Transactions")]

@@ -50,6 +50,7 @@ public class Program
         builder.Services.AddScoped<IRepository<Package>, PackageRepository>();
         builder.Services.AddScoped<IRepository<Winner>, WinnerRepository>();
         builder.Services.AddScoped<IRepository<Transaction>, TransactionRepository>();
+        builder.Services.AddScoped<IRepository<MobilePayPayment>, MobilePayRepository>();
         #endregion
 
         #region Security

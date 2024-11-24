@@ -38,6 +38,10 @@ public class TransactionRepository(AppDbContext context) : BaseRepository<DataAc
     protected override DbSet<DataAccess.Entities.Transaction> Set => Context.Transactions;
 }
 
+public class MobilePayRepository(AppDbContext context) : BaseRepository<DataAccess.Entities.MobilePayPayment>(context)
+{
+    protected override DbSet<DataAccess.Entities.MobilePayPayment> Set => Context.MobilePayPayments;
+}
 public abstract class BaseRepository<T>(AppDbContext context) : IRepository<T> where T : class
 {
     protected AppDbContext Context => context;
