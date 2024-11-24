@@ -6,4 +6,5 @@ namespace Service.Transactions;
 public interface ITransactionService
 {
     Task<TransactionResponse> Create(ClaimsPrincipal principal, CreateTransactionRequest data);
+    Task<TransactionResponse> GetTransactionById(ClaimsPrincipal principal, Guid transactionId);
 }

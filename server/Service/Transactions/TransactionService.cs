@@ -62,6 +62,34 @@ public class TransactionService( // Note: Implement proper access control for ad
         return TransactionMapper.ToResponse(transaction);
     }
 
+    public async Task<TransactionResponse> GetTransactionById(ClaimsPrincipal principal, Guid transactionId)
+    {
+        await authority.AuthorizeAndThrowAsync(principal);
+        
+        // Get the target user
+        var user = await userRepository
+            .Query()
+            .Where(u => u.Id == principal.GetUserId())
+            .FirstOrDefaultAsync();
+
+        if (user == null)
+        {
+            throw new ForbiddenError();
+        }
+
+        var transaction = await transactionRepository
+            .Query()
+            .Where(t => t.TransactionId == transactionId)
+            .FirstOrDefaultAsync();
+
+        if (transaction == null)
+        {
+            throw new NotFoundError(nameof(Transaction), transactionId);
+        }
+
+        return TransactionMapper.ToResponse(transaction);
+    }
+
     private async Task ProcessDeposit(Transaction transaction, User user)
     {
         
