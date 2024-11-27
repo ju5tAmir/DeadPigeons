@@ -14,6 +14,7 @@ public interface IAuthService
     Task<RegisterResponse> Register(
         IOptions<AppOptions> options,
         UserManager<User> userManager,
+        IEmailSender<User> emailSender,
         IValidator<RegisterRequest> validator,
         RegisterRequest data
     );
@@ -28,4 +29,9 @@ public interface IAuthService
     Task<IResult> Logout(SignInManager<User> signInManager);
 
     Task<UserInfoResponse> UserInfo(UserManager<User> userManager, ClaimsPrincipal principal);
+
+    Task<IResult> Confirm(
+        UserManager<User> userManager,
+        string token,
+        string email);
 }

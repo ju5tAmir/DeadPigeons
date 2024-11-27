@@ -17,19 +17,18 @@ public class AuthService(
     IRepository<DataAccess.Entities.Preference> preferenceRepository
     ): IAuthService
 {
-    public async Task<RegisterResponse> Register(IOptions<AppOptions> options, UserManager<User> userManager, IValidator<RegisterRequest> validator, RegisterRequest data)
+    public async Task<RegisterResponse> Register(IOptions<AppOptions> options, UserManager<User> userManager, IEmailSender<User> emailSender , IValidator<RegisterRequest> validator, RegisterRequest data)
     {
         await validator.ValidateAndThrowAsync(data);
 
         // Fixing Security Issue: Duplicate email registration. #2 https://github.com/ju5tAmir/DeadPigeons/issues/2
-        var normalizedEmail = userManager.NormalizeEmail(data.Email);
-        if (await userManager.FindByEmailAsync(normalizedEmail) != null)
-        {
-            throw new DuplicateEmail();
-        }
+        // var normalizedEmail = userManager.NormalizeEmail(data.Email);
+        // if (await userManager.FindByEmailAsync(normalizedEmail) != null)
+        // {
+        //     throw new DuplicateEmail();
+        // }
         
-        
-        var user = new User {FirstName = data.FirsName, LastName = data.LastName, UserName = data.Username, PhoneNumber = data.PhoneNumber, Email = data.Email};
+        var user = new User {FirstName = data.FirsName, LastName = data.LastName, UserName = data.Email, PhoneNumber = data.PhoneNumber, Email = data.Email};
         var result = await userManager.CreateAsync(user, data.Password);
         if (!result.Succeeded)
         {
@@ -43,6 +42,18 @@ public class AuthService(
 
         await preferenceRepository
             .Add(preferences);
+        
+        var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
+        
+        var qs = new Dictionary<string, string?> { { "token", token }, { "email", user.Email } };
+        
+        var confirmationLink = new UriBuilder(options.Value.Address)
+        {
+            Path = "/api/auth/confirm",
+            Query = QueryString.Create(qs).Value
+        }.Uri.ToString();
+
+        await emailSender.SendConfirmationLinkAsync(user, user.Email, confirmationLink);
         
         return new RegisterResponse(UserId:user.Id);
     }
@@ -110,5 +121,14 @@ public class AuthService(
         }
 
         return UserInfoMapper.ToResponse(user, role, preference);
+    }
+
+    public async Task<IResult> Confirm(UserManager<User> userManager, string token, string email)
+    {
+        var user = await userManager.FindByEmailAsync(email) ?? throw new AuthenticationError();
+        var result = await userManager.ConfirmEmailAsync(user, token);
+        if (!result.Succeeded)
+            throw new AuthenticationError();
+        return Results.Content("<h1>Email confirmed</h1>", "text/html", statusCode: 200);
     }
 }

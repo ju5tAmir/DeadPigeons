@@ -22,6 +22,7 @@ public class AuthController(IAuthService service): ControllerBase
     public async Task<RegisterResponse> Register(
         IOptions<AppOptions> options,
         [FromServices] UserManager<User> userManager,
+        [FromServices] IEmailSender<User> emailSender,
         [FromServices] IValidator<RegisterRequest> validator,
         [FromBody] RegisterRequest data
     )
@@ -29,6 +30,7 @@ public class AuthController(IAuthService service): ControllerBase
         return await service.Register(
             options,
             userManager,
+            emailSender,
             validator,
             data);
     }
@@ -62,5 +64,17 @@ public class AuthController(IAuthService service): ControllerBase
     public async Task<UserInfoResponse> UserInfo([FromServices] UserManager<User> userManager)
     {
         return await service.UserInfo(userManager, HttpContext.User);
+    }
+    
+    [HttpGet]
+    [Route("confirm")]
+    [AllowAnonymous]
+    public async Task<IResult> ConfirmEmail(
+        [FromServices] UserManager<User> userManager,
+        string token,
+        string email
+    )
+    {
+        return await service.Confirm(userManager, token, email);
     }
 }
