@@ -15,3 +15,5 @@ public record UserInfoResponse(
 public record UserPiiResponse( // Personal Identifiable Information
     string UserId, string FirstName, string LastName, string Username
 );
+
+public record ConfirmResponse(string PasswordToken);

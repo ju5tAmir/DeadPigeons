@@ -69,12 +69,24 @@ public class AuthController(IAuthService service): ControllerBase
     [HttpGet]
     [Route("confirm")]
     [AllowAnonymous]
-    public async Task<IResult> ConfirmEmail(
+    public async Task<ConfirmResponse> ConfirmEmail(
         [FromServices] UserManager<User> userManager,
         string token,
         string email
     )
     {
         return await service.Confirm(userManager, token, email);
+    }
+    
+    [HttpPost]
+    [Route("activate")]
+    [AllowAnonymous]
+    public async Task<IResult> ActivateAccount(
+        [FromServices] UserManager<User> userManager,
+        [FromServices] IValidator<ActivateRequest> validator,
+        [FromBody] ActivateRequest data
+    )
+    {
+        return await service.Activate(userManager, validator, data);
     }
 }

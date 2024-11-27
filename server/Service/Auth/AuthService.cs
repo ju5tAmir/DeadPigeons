@@ -2,8 +2,11 @@ using System.Security.Claims;
 using DataAccess.Entities;
 using FluentValidation;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Service.Auth.Dto;
 using Service.Auth.Utils;
@@ -29,7 +32,7 @@ public class AuthService(
         // }
         
         var user = new User {FirstName = data.FirsName, LastName = data.LastName, UserName = data.Email, PhoneNumber = data.PhoneNumber, Email = data.Email};
-        var result = await userManager.CreateAsync(user, data.Password);
+        var result = await userManager.CreateAsync(user);
         if (!result.Succeeded)
         {
             throw new ValidationError(
@@ -123,12 +126,30 @@ public class AuthService(
         return UserInfoMapper.ToResponse(user, role, preference);
     }
 
-    public async Task<IResult> Confirm(UserManager<User> userManager, string token, string email)
+    public async Task<ConfirmResponse> Confirm(UserManager<User> userManager, string token, string email)
     {
         var user = await userManager.FindByEmailAsync(email) ?? throw new AuthenticationError();
         var result = await userManager.ConfirmEmailAsync(user, token);
         if (!result.Succeeded)
             throw new AuthenticationError();
-        return Results.Content("<h1>Email confirmed</h1>", "text/html", statusCode: 200);
+        
+        // Return password reset token to set the new password
+        var passwordToken = await userManager.GeneratePasswordResetTokenAsync(user);
+        
+        return new ConfirmResponse(passwordToken);
+    }
+
+    public async Task<IResult> Activate(UserManager<User> userManager, IValidator<ActivateRequest> validator, ActivateRequest data)
+    {
+        await validator.ValidateAndThrowAsync(data);
+        var user = await userManager.FindByEmailAsync(data.Email) ?? throw new AuthenticationError();
+        var result = await userManager.ResetPasswordAsync(user, data.Token, data.Password);
+        if (!result.Succeeded)
+        {
+            throw new AuthenticationError(); // Not using InvalidToken exception due to user enumeration
+        }
+
+        
+        return Results.Ok(new {Message = "Password reset successfull."});
     }
 }

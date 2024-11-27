@@ -16,6 +16,7 @@ public class UnauthorizedError(string type) : AppError($"Operation not authorize
 public class ForbiddenError() : AppError("Forbiddden!") { }
 
 public class AuthenticationError() : AppError("Unable to authenticate!") { }
+public class InvalidToken() : AppError("Invalid Token!") { }
 public class GameAlreadyStartedError() : AppError("This week's game has already started!") { }
 public class GameNotStartedError() : AppError("This week's game has not yet started!") { }
 public class GameHasFinished() : AppError("This week's game has already been finished.") { }
