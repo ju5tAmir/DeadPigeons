@@ -166,7 +166,12 @@ public class Program
         app.UseAuthentication();
         app.UseAuthorization();
         app.MapControllers();
-
+        app.UseCors( opts => {
+            opts.AllowAnyOrigin();
+            opts.AllowAnyMethod();
+            opts.AllowAnyHeader();
+        });
+        
         app.Run();
     }
 }

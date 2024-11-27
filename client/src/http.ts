@@ -5,7 +5,9 @@ import { tokenStorage, TOKEN_KEY } from "./atoms/auth";
 // This is to protect us from accidently sending the JWT to 3rd party services.
 const AUTHORIZE_ORIGIN = "/";
 
-const _api = new Api();
+const _api = new Api(
+    {baseURL: "http://localhost:5000"}
+);
 
 _api.instance.interceptors.request.use((config) => {
     // Get the JWT from storage.
