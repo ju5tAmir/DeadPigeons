@@ -13,6 +13,15 @@ public class GameService(
     IValidator<FinishGameRequest> validator
     ): IGameService
 {
+    public async  Task<List<GameResponse>> GetAllGamesByYear(int year)
+    {
+       return await gameRepository
+            .Query()
+            .Where(g => g.Year == year)
+            .Select(g => GameMapper.ToResponse(g))
+            .ToListAsync();
+    }
+
     public async Task<GameResponse> GetGameById(Guid gameId)
     {
         var game = await gameRepository

@@ -19,6 +19,14 @@ public class GameController(IGameService service): ControllerBase
               return await service.GetCurrentGame();
        }
        
+       [HttpGet]
+       [Route("year")]
+       [AllowAnonymous]
+       public async Task<List<GameResponse>> GetAllGamesByYear(int year)
+       {
+              return await service.GetAllGamesByYear(year);
+       }
+       
        [HttpPost]
        [Route("start")]
        // [Authorize(Roles = Role.Admin)]
