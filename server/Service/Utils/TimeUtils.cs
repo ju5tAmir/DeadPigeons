@@ -73,6 +73,23 @@ public class TimeUtils
         DateTime cetDateTime = TimeZoneInfo.ConvertTimeFromUtc(utcDateTime, cetTimeZone);
         return cetDateTime;
     }
+    
+    public static (int year, int weekNumber) GetNextWeek(int year, int weekNumber)
+    {
+        // Check if the given week number is the last week of the year (week 52 or 53)
+        int daysInYear = DateTime.IsLeapYear(year) ? 366 : 365;
+        DateTime lastDayOfYear = new DateTime(year, 12, 31);
+        int lastWeekNumber = ISOWeek.GetWeekOfYear(lastDayOfYear);
+
+        if (weekNumber == lastWeekNumber)
+        {
+            // If it's the last week, the next week will be the first week of the next year
+            return (year + 1, 1);
+        }
+
+        // Otherwise, simply increment the week number
+        return (year, weekNumber + 1);
+    }
 }
 
 

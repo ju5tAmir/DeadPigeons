@@ -3,11 +3,13 @@ using Microsoft.EntityFrameworkCore;
 using Service.Game.Dto;
 using Service.Repositories;
 using Service.Utils;
+using Service.Winner;
 
 namespace Service.Game;
 
 public class GameService(
     IRepository<DataAccess.Entities.Game> gameRepository,
+    IWinnerService winnerService,
     IValidator<FinishGameRequest> validator
     ): IGameService
 {
@@ -95,12 +97,16 @@ public class GameService(
 
         // NOTE: Winners 
         
+        // Finish the game
         game.FinishedAt = DateTime.UtcNow;
-
         game.Status = GameStatus.Finished;
-        
         await gameRepository.Update(game);
+        
+        // Start the next week's game
+        var (year, week) = TimeUtils.GetNextWeek(game.Year, game.WeekNumber);
 
+        await StartGame(new StartGameRequest(year, week));
+        
         return GameMapper.ToResponse(game);
     }
 

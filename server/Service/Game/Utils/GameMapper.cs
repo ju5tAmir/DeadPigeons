@@ -15,7 +15,7 @@ public static class GameMapper
             TimeUtils.ToCet(game.RegisterCloseDate),
             game.Status,
             game.WinningSequence?.ToArray() ?? null,
-            game.FinishedAt
+            game.FinishedAt.HasValue ? TimeUtils.ToCet(game.FinishedAt.Value) : null
         );
     }
 }
