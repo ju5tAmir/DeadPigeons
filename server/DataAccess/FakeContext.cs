@@ -66,8 +66,6 @@ public partial class FakeContext : DbContext
             entity.Property(e => e.BoardId).ValueGeneratedNever();
             entity.Property(e => e.PlayDate).HasDefaultValueSql("CURRENT_TIMESTAMP");
 
-            entity.HasOne(d => d.Game).WithMany(p => p.Boards).HasConstraintName("Boards_GameId_fkey");
-
             entity.HasOne(d => d.Package).WithMany(p => p.Boards).HasConstraintName("Boards_PackageId_fkey");
 
             entity.HasOne(d => d.Player).WithMany(p => p.Boards).HasConstraintName("Boards_PlayerId_fkey");
@@ -124,8 +122,6 @@ public partial class FakeContext : DbContext
             entity.Property(e => e.WinningRecordId).ValueGeneratedNever();
 
             entity.HasOne(d => d.Board).WithMany(p => p.Winners).HasConstraintName("Winners_BoardId_fkey");
-
-            entity.HasOne(d => d.Game).WithMany(p => p.Winners).HasConstraintName("Winners_GameId_fkey");
 
             entity.HasOne(d => d.Player).WithMany(p => p.Winners).HasConstraintName("Winners_PlayerId_fkey");
         });

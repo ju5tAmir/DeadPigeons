@@ -6,6 +6,6 @@ public interface IGameService
 {
     Task<GameResponse> GetCurrentGame();
     Task<GameResponse> GetGameById(Guid guid);
-    Task<GameResponse> StartGame();
+    Task<GameResponse> StartGame(StartGameRequest data);
     Task<GameResponse> FinishGame(FinishGameRequest data);
 }

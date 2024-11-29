@@ -26,12 +26,17 @@ public class GameService(
         return GameMapper.ToResponse(game);
     }
 
-    public async Task<GameResponse> StartGame()
+    public async Task<GameResponse> StartGame(StartGameRequest data)
     {
+        int y = data.Year;
+        int w = data.Week;
+        int currentYear = DateTime.Now.Year;
+        int currentWeek = TimeUtils.GetCurrentWeekNumber();
+        
         // Check if the week game is already started
         var isAlreadyStarted = await gameRepository
             .Query()
-            .Where(g => g.WeekNumber == TimeUtils.GetCurrentWeekNumber())
+            .Where(g => g.Year == y && g.WeekNumber == w)
             .FirstOrDefaultAsync();
 
         if (isAlreadyStarted != null)
@@ -39,13 +44,20 @@ public class GameService(
             throw new GameAlreadyStartedError();  // If the game for the current week already exists
         }
 
-        // Create a new game with UTC timestamps
+        if (y < currentYear ||
+            y == currentYear && w < currentWeek)
+        {
+            throw new GameStartError();
+        }
+        
         var game = new DataAccess.Entities.Game
         {
             GameId = Guid.NewGuid(),
-            WeekNumber = TimeUtils.GetCurrentWeekNumber(),
-            ValidFromDate = TimeUtils.GetCurrentWeekStartDate(),
-            ValidUntilDate = TimeUtils.GetCurrentWeekEndDate(),
+            Year = y,
+            WeekNumber = w,
+            ValidFromDate = TimeUtils.GetStartOfWeek(y, w),
+            ValidUntilDate = TimeUtils.GetEndOfWeek(y, w),
+            RegisterCloseDate = TimeUtils.RegisterCloseDate(y, w),
             Status = GameStatus.Active,
             WinningSequence = null,
             FinishedAt = null

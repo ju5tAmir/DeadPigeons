@@ -1,5 +1,6 @@
 using DataAccess.Entities;
 using Service.Game.Dto;
+using Service.Utils;
 
 public static class GameMapper
 {
@@ -7,9 +8,11 @@ public static class GameMapper
     {
         return new GameResponse(
             game.GameId,
+            game.Year,
             game.WeekNumber,
-            game.ValidFromDate,
-            game.ValidUntilDate,
+            TimeUtils.ToCet(game.ValidFromDate),
+            TimeUtils.ToCet(game.ValidUntilDate),
+            TimeUtils.ToCet(game.RegisterCloseDate),
             game.Status,
             game.WinningSequence?.ToArray() ?? null,
             game.FinishedAt

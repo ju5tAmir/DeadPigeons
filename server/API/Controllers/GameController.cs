@@ -19,12 +19,13 @@ public class GameController(IGameService service): ControllerBase
               return await service.GetCurrentGame();
        }
        
-       [HttpGet]
+       [HttpPost]
        [Route("start")]
-       [Authorize(Roles = Role.Admin)]
-       public async Task<GameResponse> CreateGame()
+       // [Authorize(Roles = Role.Admin)]
+       [AllowAnonymous]
+       public async Task<GameResponse> CreateGame([FromBody] StartGameRequest data)
        {
-              return await service.StartGame();
+              return await service.StartGame(data);
        }
        
        [HttpPost]

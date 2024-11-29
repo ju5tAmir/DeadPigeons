@@ -2,6 +2,24 @@ using FluentValidation;
 
 namespace Service.Game.Dto;
 
+public record StartGameRequest(
+    int Year,
+    int Week
+    );
+
+public class StartGameRequestValidator : AbstractValidator<StartGameRequest>
+{
+    public StartGameRequestValidator()
+    {
+        RuleFor(x => x.Year)
+            .NotEmpty();
+        RuleFor(x => x.Week)
+            .GreaterThanOrEqualTo(1)
+            .LessThanOrEqualTo(53);
+    }
+}
+
+
 public record FinishGameRequest(
     Guid GameId,
     HashSet<int> WinningSequence

@@ -18,6 +18,7 @@ public class ForbiddenError() : AppError("Forbiddden!") { }
 public class AuthenticationError() : AppError("Unable to authenticate!") { }
 public class InvalidToken() : AppError("Invalid Token!") { }
 public class GameAlreadyStartedError() : AppError("This week's game has already started!") { }
+public class GameStartError() : AppError("A game cannot be started in the past.") { }
 public class GameNotStartedError() : AppError("This week's game has not yet started!") { }
 public class GameHasFinished() : AppError("This week's game has already been finished.") { }
 public class GameIsNotFinished() : AppError("The game is still active and not finished.") { }
