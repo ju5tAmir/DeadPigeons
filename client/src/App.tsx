@@ -3,8 +3,8 @@ import Footer from "./components/general/Footer.tsx";
 import WeeksOfYear from "./components/game/WeeksOfYear.tsx";
 import {Toaster} from "react-hot-toast";
 import {BrowserRouter, Route, Routes} from "react-router-dom";
-import React from "react";
 import {RoutePath} from "./utils/RoutePath.ts";
+import Lab from "./pages/Lab.tsx";
 
 function App() {
   return (
@@ -17,10 +17,9 @@ function App() {
               <main className="flex-grow">
                   <BrowserRouter>
                       <Routes>
-                          <Route path={RoutePath.home} element={</>}/>
+                          <Route path={RoutePath.lab} element={<Lab/>}/>
                       </Routes>
                   </BrowserRouter>
-                  <WeeksOfYear/>
                   <Toaster
                       position="top-center"
                       reverseOrder={false}

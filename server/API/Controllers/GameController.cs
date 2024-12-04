@@ -20,7 +20,16 @@ public class GameController(IGameService service): ControllerBase
        }
        
        [HttpGet]
-       [Route("year")]
+       [Route("{id}")]
+       [AllowAnonymous]
+       public async Task<GameResponse> GetGameById(Guid id)
+       {
+              return await service.GetGameById(id);
+       }
+
+
+       [HttpGet]
+       [Route("year/{year}")]
        [AllowAnonymous]
        public async Task<List<GameResponse>> GetAllGamesByYear(int year)
        {

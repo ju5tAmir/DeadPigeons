@@ -48,7 +48,7 @@ public class WinnerService( // Question: At this point IDK if I should go with r
 
         if (game.Status != GameStatus.Finished)
         {
-            throw new GameHasFinished();
+            throw new GameIsNotFinished();
         }
 
         // Fetch all boards with the matching game ID and winning sequence
@@ -129,13 +129,13 @@ public class WinnerService( // Question: At this point IDK if I should go with r
                 boardDetailsList,
                 totalWin
             );
-
             winners.Add(winner);
         }
 
+        
 
         // Return the mapped response
         return WinnersMapper.ToResponse(game, winners);
 
-            }
+    }
 }
