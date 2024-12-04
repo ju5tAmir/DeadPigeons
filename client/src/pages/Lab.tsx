@@ -1,4 +1,5 @@
-import GamesTable from "../components/admin/GamesTable.tsx";
+import GamesTable from "../components/admin/game/GamesTable.tsx";
+import GameDetails from "../components/admin/game/GameDetails.tsx";
 
 function Lab() {
 
@@ -71,14 +72,26 @@ function Lab() {
         },
     ];
 
+    const exampleGame: GameDetails = {
+        weekNumber: 42,
+        timeFrame: { from: "2024-11-01", until: "2024-11-07", finishedAt: "2024-11-07 18:00" },
+        players: { online: 80, offline: 40, total: 120 },
+        winners: { online: 12, offline: 2, total: 3 },
+        boards: { online: 30, offline: 20, total: 50 },
+        winningBoards: { online: 15, offline: 5, total: 20 },
+        revenue: { online: 1000, offline: 500, total: 1500 },
+        payouts: { online: 400, offline: 200, total: 600 },
+    };
 
     return(
         <>
-            <div className="p-4">
-                <h1 className="text-xl font-bold mb-4">Games</h1>
-                <GamesTable data={data} />
-            </div>
+            {/*Games Table*/}
+            {/*<div className="p-4">*/}
+            {/*    <h1 className="text-xl font-bold mb-4">Games</h1>*/}
+            {/*    <GamesTable data={data} />*/}
+            {/*</div>*/}
 
+            <GameDetails game={exampleGame} />
         </>
     )
 }
