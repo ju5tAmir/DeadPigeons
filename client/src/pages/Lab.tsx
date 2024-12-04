@@ -1,5 +1,7 @@
 import GamesTable from "../components/admin/game/GamesTable.tsx";
 import GameDetails from "../components/admin/game/GameDetails.tsx";
+import React from "react";
+import GamePlayersDetails, {UserInfo} from "../components/admin/game/GamePlayersDeatils.tsx";
 
 function Lab() {
 
@@ -83,6 +85,45 @@ function Lab() {
         payouts: { online: 400, offline: 200, total: 600 },
     };
 
+    const mockPlayers: UserInfo[] = [
+        {
+            userId: "1",
+            firstName: "John",
+            lastName: "Doe",
+            username: "johndoe123",
+            email: "johndoe@example.com",
+            phoneNumber: "+1234567890",
+            role: "Player",
+            isActive: true,
+            isAutoplay: false,
+            registrationDate: new Date("2023-01-15"),
+        },
+        {
+            userId: "2",
+            firstName: "Jane",
+            lastName: "Smith",
+            username: "janesmith456",
+            email: "janesmith@example.com",
+            phoneNumber: "+9876543210",
+            role: "Admin",
+            isActive: true,
+            isAutoplay: true,
+            registrationDate: new Date("2023-02-20"),
+        },
+        {
+            userId: "3",
+            firstName: "Alice",
+            lastName: "Johnson",
+            username: "alicej",
+            email: "alicej@example.com",
+            phoneNumber: "+1122334455",
+            role: "Player",
+            isActive: false,
+            isAutoplay: false,
+            registrationDate: new Date("2023-03-10"),
+        },
+    ];
+
     return(
         <>
             {/*Games Table*/}
@@ -91,7 +132,8 @@ function Lab() {
             {/*    <GamesTable data={data} />*/}
             {/*</div>*/}
 
-            <GameDetails game={exampleGame} />
+            {/*<GameDetails game={exampleGame} />*/}
+            <GamePlayersDetails players={mockPlayers} />
         </>
     )
 }

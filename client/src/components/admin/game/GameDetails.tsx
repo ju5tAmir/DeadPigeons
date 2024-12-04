@@ -48,7 +48,25 @@ function GameDetails({ game }: { game: GameDetails }) {
                         <tbody>
                         {/* Players */}
                         <tr>
-                            <td className="border border-gray-300 px-4 py-2">Players</td>
+                            <td className="border border-gray-300 px-4 py-2 flex justify-between items-center">
+                                
+                                <span className="flex-1 text-center">Players</span>
+                                {/* Position the Icon to the Right */}
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    strokeWidth={1.5}
+                                    stroke="currentColor"
+                                    className="w-4 h-4 text-blue-500 cursor-pointer hover:text-blue-700"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-3a2.25 2.25 0 00-2.25 2.25V9m-1.5 0h9m-10.5 0A2.25 2.25 0 003 11.25v6A2.25 2.25 0 005.25 19.5h13.5A2.25 2.25 0 0021 17.25v-6A2.25 2.25 0 0018.75 9m-10.5 0V5.25m0 13.5h6"
+                                    />
+                                </svg>
+                            </td>
                             <td className="border border-gray-300 px-4 py-2 text-center">{game.players.online}</td>
                             <td className="border border-gray-300 px-4 py-2 text-center">{game.players.offline}</td>
                             <td className="border border-gray-300 px-4 py-2 text-center">{game.players.total}</td>
@@ -56,7 +74,25 @@ function GameDetails({ game }: { game: GameDetails }) {
 
                         {/* Winners */}
                         <tr>
-                            <td className="border border-gray-300 px-4 py-2">Winners</td>
+                            <td className="border border-gray-300 px-4 py-2 flex justify-between items-center">
+                                
+                                <span className="flex-1 text-center">Winners</span>
+                                {/* Position the Icon to the Right */}
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    strokeWidth={1.5}
+                                    stroke="currentColor"
+                                    className="w-4 h-4 text-blue-500 cursor-pointer hover:text-blue-700"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-3a2.25 2.25 0 00-2.25 2.25V9m-1.5 0h9m-10.5 0A2.25 2.25 0 003 11.25v6A2.25 2.25 0 005.25 19.5h13.5A2.25 2.25 0 0021 17.25v-6A2.25 2.25 0 0018.75 9m-10.5 0V5.25m0 13.5h6"
+                                    />
+                                </svg>
+                            </td>
                             <td className="border border-gray-300 px-4 py-2 text-center">
                                 {game.winners.online}
                             </td>
@@ -68,7 +104,25 @@ function GameDetails({ game }: { game: GameDetails }) {
 
                         {/* Boards */}
                         <tr>
-                            <td className="border border-gray-300 px-4 py-2">Boards</td>
+                            <td className="border border-gray-300 px-4 py-2 flex justify-between items-center">
+                                
+                                <span className="flex-1 text-center">Boards</span>
+                                {/* Position the Icon to the Right */}
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    strokeWidth={1.5}
+                                    stroke="currentColor"
+                                    className="w-4 h-4 text-blue-500 cursor-pointer hover:text-blue-700"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-3a2.25 2.25 0 00-2.25 2.25V9m-1.5 0h9m-10.5 0A2.25 2.25 0 003 11.25v6A2.25 2.25 0 005.25 19.5h13.5A2.25 2.25 0 0021 17.25v-6A2.25 2.25 0 0018.75 9m-10.5 0V5.25m0 13.5h6"
+                                    />
+                                </svg>
+                            </td>
                             <td className="border border-gray-300 px-4 py-2 text-center">{game.boards.online}</td>
                             <td className="border border-gray-300 px-4 py-2 text-center">{game.boards.offline}</td>
                             <td className="border border-gray-300 px-4 py-2 text-center">{game.boards.total}</td>
@@ -76,7 +130,25 @@ function GameDetails({ game }: { game: GameDetails }) {
 
                         {/* Winning Boards */}
                         <tr>
-                            <td className="border border-gray-300 px-4 py-2">Winning Boards</td>
+                            <td className="border border-gray-300 px-4 py-2 flex justify-between items-center">
+                                
+                                <span className="flex-1 text-center">Winning Boards</span>
+                                {/* Position the Icon to the Right */}
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    strokeWidth={1.5}
+                                    stroke="currentColor"
+                                    className="w-4 h-4 text-blue-500 cursor-pointer hover:text-blue-700"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-3a2.25 2.25 0 00-2.25 2.25V9m-1.5 0h9m-10.5 0A2.25 2.25 0 003 11.25v6A2.25 2.25 0 005.25 19.5h13.5A2.25 2.25 0 0021 17.25v-6A2.25 2.25 0 0018.75 9m-10.5 0V5.25m0 13.5h6"
+                                    />
+                                </svg>
+                            </td>
                             <td className="border border-gray-300 px-4 py-2 text-center">{game.winningBoards.online}</td>
                             <td className="border border-gray-300 px-4 py-2 text-center">{game.winningBoards.offline}</td>
                             <td className="border border-gray-300 px-4 py-2 text-center">{game.winningBoards.total}</td>
@@ -84,15 +156,21 @@ function GameDetails({ game }: { game: GameDetails }) {
 
                         {/* Revenue */}
                         <tr>
-                            <td className="border border-gray-300 px-4 py-2">Net Revenue</td>
-                            <td className="border border-gray-300 px-4 py-2 text-center">${game.revenue.online.toFixed(2)}</td>
-                            <td className="border border-gray-300 px-4 py-2 text-center">${game.revenue.offline.toFixed(2)}</td>
-                            <td className="border border-gray-300 px-4 py-2 text-center">${game.revenue.total.toFixed(2)}</td>
+                            <td className="border border-gray-300 px-4 py-2 flex justify-between items-center">
+                                
+                                <span className="flex-1 text-center">Net Revenue</span>
+                            </td>
+                            <td className="border border-gray-300 px-4 py-2 text-center">${game.revenue.online.toFixed (2)}</td>
+                            <td className="border border-gray-300 px-4 py-2 text-center">${game.revenue.offline.toFixed (2)}</td>
+                            <td className="border border-gray-300 px-4 py-2 text-center">${game.revenue.total.toFixed (2)}</td>
                         </tr>
 
                         {/* Club Revenue */}
                         <tr>
-                            <td className="border border-gray-300 px-4 py-2">Club (30%)</td>
+                            <td className="border border-gray-300 px-4 py-2 flex justify-between items-center">
+                                
+                                <span className="flex-1 text-center">Club (30%)</span>
+                            </td>
                             <td className="border border-gray-300 px-4 py-2 text-center">${(game.revenue.online * 0.30).toFixed (2)} </td>
                             <td className="border border-gray-300 px-4 py-2 text-center">${(game.revenue.offline * 0.30).toFixed (2)}</td>
                             <td className="border border-gray-300 px-4 py-2 text-center">${(game.revenue.total * 0.30).toFixed (2)}</td>
@@ -100,36 +178,45 @@ function GameDetails({ game }: { game: GameDetails }) {
 
                         {/* Players Revenue */}
                         <tr>
-                            <td className="border border-gray-300 px-4 py-2">Game (70%)</td>
+                            <td className="border border-gray-300 px-4 py-2 flex justify-between items-center">
+                                
+                                <span className="flex-1 text-center">Game (70%)</span>
+                            </td>
                             <td className="border border-gray-300 px-4 py-2 text-center">${(game.revenue.online * 0.70).toFixed (2)} </td>
-                            <td className="border border-gray-300 px-4 py-2 text-center">${(game.revenue.offline * 0.70).toFixed(2)}</td>
-                            <td className="border border-gray-300 px-4 py-2 text-center">${(game.revenue.total * 0.70).toFixed(2)}</td>
+                            <td className="border border-gray-300 px-4 py-2 text-center">${(game.revenue.offline * 0.70).toFixed (2)}</td>
+                            <td className="border border-gray-300 px-4 py-2 text-center">${(game.revenue.total * 0.70).toFixed (2)}</td>
                         </tr>
 
                         {/* Payouts */}
                         <tr>
-                            <td className="border border-gray-300 px-4 py-2">Payouts</td>
-                            <td className="border border-gray-300 px-4 py-2 text-center">${game.payouts.online.toFixed(2)}</td>
-                            <td className="border border-gray-300 px-4 py-2 text-center">${game.payouts.offline.toFixed(2)}</td>
-                            <td className="border border-gray-300 px-4 py-2 text-center">${game.payouts.total.toFixed(2)}</td>
+                            <td className="border border-gray-300 px-4 py-2 flex justify-between items-center">
+                                
+                                <span className="flex-1 text-center">Payouts</span>
+                            </td>
+                            <td className="border border-gray-300 px-4 py-2 text-center">${game.payouts.online.toFixed (2)}</td>
+                            <td className="border border-gray-300 px-4 py-2 text-center">${game.payouts.offline.toFixed (2)}</td>
+                            <td className="border border-gray-300 px-4 py-2 text-center">${game.payouts.total.toFixed (2)}</td>
                         </tr>
 
                         {/* Players Revenue */}
                         <tr>
-                            <td className="border border-gray-300 px-4 py-2">NextGame Pot</td>
+                            <td className="border border-gray-300 px-4 py-2 flex justify-between items-center">
+                                
+                                <span className="flex-1 text-center">Next Game Pot</span>
+                            </td>
                             <td className="border border-gray-300 px-4 py-2 text-center">${(game.revenue.online * 0.70).toFixed (2)} </td>
-                            <td className="border border-gray-300 px-4 py-2 text-center">${(game.revenue.offline * 0.70).toFixed(2)}</td>
-                            <td className="border border-gray-300 px-4 py-2 text-center">${(game.revenue.total * 0.70).toFixed(2)}</td>
+                            <td className="border border-gray-300 px-4 py-2 text-center">${(game.revenue.offline * 0.70).toFixed (2)}</td>
+                            <td className="border border-gray-300 px-4 py-2 text-center">${(game.revenue.total * 0.70).toFixed (2)}</td>
                         </tr>
                         </tbody>
                     </table>
                 </div>
 
-            {/* Back Button */}
-            <div className="mt-6">
-                <button
-                    className="px-4 py-2 bg-blue-500 text-white rounded shadow hover:bg-blue-600"
-                    onClick={() => window.history.back ()}
+                {/* Back Button */}
+                <div className="mt-6">
+                    <button
+                        className="px-4 py-2 bg-blue-500 text-white rounded shadow hover:bg-blue-600"
+                        onClick={() => window.history.back ()}
                 >
                     Back
                 </button>
