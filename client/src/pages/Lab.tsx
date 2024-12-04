@@ -2,6 +2,7 @@ import GamesTable from "../components/admin/game/GamesTable.tsx";
 import GameDetails from "../components/admin/game/GameDetails.tsx";
 import React from "react";
 import GamePlayersDetails, {UserInfo} from "../components/admin/game/GamePlayersDeatils.tsx";
+import GameBoardsDetails, {Boards} from "../components/admin/game/GameBoardsDetails.tsx";
 
 function Lab() {
 
@@ -124,6 +125,48 @@ function Lab() {
         },
     ];
 
+    const mockBoards: Boards[] = [
+        {
+            player: {
+                fullName: "JerneIF",
+                email: "dot@dot.com"
+            },
+            package: {
+                numberOfFields: 20,
+                price: 50.5,
+            },
+            playSequence: new Set([1, 2, 3, 4]),
+            playTime: new Date("2023-04-15T10:30:00"),
+        },
+        {
+            player: {
+                fullName: "JerneIF",
+                email: "dot@dot.com"
+            },
+            package: {
+                numberOfFields: 30,
+                price: 75.0,
+            },
+            playSequence: new Set([5, 6, 7, 8]),
+            playTime: new Date("2023-05-10T14:00:00"),
+        },
+        {
+            player: {
+                fullName: "JerneIF",
+                email: "dot@dot.com"
+            },
+            package: {
+                numberOfFields: 25,
+                price: 60.25,
+            },
+            playSequence: new Set([9, 10, 11]),
+            playTime: new Date("2023-06-01T09:45:00"),
+        },
+    ];
+
+
+
+
     return(
         <>
             {/*Games Table*/}
@@ -133,7 +176,11 @@ function Lab() {
             {/*</div>*/}
 
             {/*<GameDetails game={exampleGame} />*/}
-            <GamePlayersDetails players={mockPlayers} />
+
+            {/*<GamePlayersDetails players={mockPlayers} />*/}
+
+            <GameBoardsDetails boards={mockBoards} />
+
         </>
     )
 }
