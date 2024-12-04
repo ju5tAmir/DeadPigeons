@@ -212,9 +212,8 @@ public class GameService(
             playersList.Add(player);
         }
 
-        return new GameFullResponse()
-
         throw new NotImplementedException();
+        // return new GameFullResponse();
     }
 
     public async Task<GameResponse> GetCurrentGame()
