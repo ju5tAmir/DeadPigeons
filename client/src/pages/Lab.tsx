@@ -4,6 +4,7 @@ import React from "react";
 import GamePlayersDetails, {UserInfo} from "../components/admin/game/GamePlayersDeatils.tsx";
 import GameBoardsDetails, {Boards} from "../components/admin/game/GameBoardsDetails.tsx";
 import GamesOverview from "../components/admin/game/GamesOverview.tsx";
+import UsersOverview from "../components/admin/users/UsersOverview.tsx";
 
 function Lab() {
 
@@ -182,7 +183,10 @@ function Lab() {
 
             {/*<GameBoardsDetails boards={mockBoards} />*/}
 
-            <GamesOverview/>
+            {/*<GamesOverview/>*/}
+
+            <UsersOverview players={mockPlayers}/>
+
         </>
     )
 }
