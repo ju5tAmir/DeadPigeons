@@ -12,6 +12,7 @@ import UserGames from "../components/admin/users/UserGames.tsx";
 import userGames from "../components/admin/users/UserGames.tsx";
 import UserBoards from "../components/admin/users/UserBoards.tsx";
 import UserTransactions from "../components/admin/users/UserTransactions.tsx";
+import TransactionDetails from "../components/admin/users/TransactionDetails.tsx";
 
 function Lab() {
 
@@ -239,6 +240,15 @@ function Lab() {
         },
     ]
 
+    const transactionDetail = {
+        transactionId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        paymentMethod: "Credit Card",
+        amount: 120.5,
+        status: "Completed",
+        imagePath: "https://s3.ap-south-1.amazonaws.com/prod4-uploads-container/COINDCX_IMAGE_63808afbcd5bc822bdb169aa_1",
+        transactionDate: "2024-12-06T18:21:59.874Z",
+    }
+
     return(
         <>
             {/*Games Table*/}
@@ -267,7 +277,9 @@ function Lab() {
 
             {/*<UserBoards data={userBoardsData}/>*/}
 
-            <UserTransactions data={transactionsData} />
+            {/*<UserTransactions data={transactionsData} />*/}
+
+            <TransactionDetails transaction={transactionDetail} />
 
         </>
     )
