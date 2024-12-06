@@ -5,6 +5,8 @@ import GamePlayersDetails, {UserInfo} from "../components/admin/game/GamePlayers
 import GameBoardsDetails, {Boards} from "../components/admin/game/GameBoardsDetails.tsx";
 import GamesOverview from "../components/admin/game/GamesOverview.tsx";
 import UsersOverview from "../components/admin/users/UsersOverview.tsx";
+import EditUser from "../components/admin/users/EditUser.tsx";
+import ViewUser from "../components/admin/users/ViewUser.tsx";
 
 function Lab() {
 
@@ -167,6 +169,18 @@ function Lab() {
     ];
 
 
+    const mockUser = {
+        userId: "3",
+        firstName: "Alice",
+        lastName: "Johnson",
+        username: "alicej",
+        email: "alicej@example.com",
+        phoneNumber: "+1122334455",
+        role: "Player",
+        isActive: false,
+        isAutoplay: false,
+        registrationDate: new Date("2023-03-10"),
+    };
 
 
     return(
@@ -185,7 +199,11 @@ function Lab() {
 
             {/*<GamesOverview/>*/}
 
-            <UsersOverview players={mockPlayers}/>
+            {/*<UsersOverview players={mockPlayers}/>*/}
+
+            {/*<EditUser user={mockUser}/>*/}
+
+            <ViewUser user={mockUser} />
 
         </>
     )
