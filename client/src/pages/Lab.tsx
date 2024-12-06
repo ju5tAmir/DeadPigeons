@@ -7,6 +7,7 @@ import GamesOverview from "../components/admin/game/GamesOverview.tsx";
 import UsersOverview from "../components/admin/users/UsersOverview.tsx";
 import EditUser from "../components/admin/users/EditUser.tsx";
 import ViewUser from "../components/admin/users/ViewUser.tsx";
+import CreateUser from "../components/admin/users/CreateUser.tsx";
 
 function Lab() {
 
@@ -203,7 +204,9 @@ function Lab() {
 
             {/*<EditUser user={mockUser}/>*/}
 
-            <ViewUser user={mockUser} />
+            {/*<ViewUser user={mockUser} />*/}
+
+            <CreateUser/>
 
         </>
     )
