@@ -8,6 +8,8 @@ import UsersOverview from "../components/admin/users/UsersOverview.tsx";
 import EditUser from "../components/admin/users/EditUser.tsx";
 import ViewUser from "../components/admin/users/ViewUser.tsx";
 import CreateUser from "../components/admin/users/CreateUser.tsx";
+import UserGames from "../components/admin/users/UserGames.tsx";
+import userGames from "../components/admin/users/UserGames.tsx";
 
 function Lab() {
 
@@ -183,6 +185,18 @@ function Lab() {
         registrationDate: new Date("2023-03-10"),
     };
 
+    const userGamesData = [
+        {
+            weekNumber: 43,
+            boards: 3,
+            isWinner: false
+        },
+        {
+            weekNumber: 44,
+            boards: 1,
+            isWinner: true
+        }
+    ]
 
     return(
         <>
@@ -206,7 +220,9 @@ function Lab() {
 
             {/*<ViewUser user={mockUser} />*/}
 
-            <CreateUser/>
+            {/*<CreateUser/>*/}
+
+            <UserGames data={userGamesData} />
 
         </>
     )

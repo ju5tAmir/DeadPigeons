@@ -13,6 +13,8 @@ export interface UserInfo {
     registrationDate: Date;
 }
 
+// Add balance
+
 function UsersOverview({ players }: { players: UserInfo[] }) {
     const [userList, setUserList] = useState(players);
 
