@@ -11,6 +11,7 @@ import CreateUser from "../components/admin/users/CreateUser.tsx";
 import UserGames from "../components/admin/users/UserGames.tsx";
 import userGames from "../components/admin/users/UserGames.tsx";
 import UserBoards from "../components/admin/users/UserBoards.tsx";
+import UserTransactions from "../components/admin/users/UserTransactions.tsx";
 
 function Lab() {
 
@@ -221,6 +222,23 @@ function Lab() {
         }
     ]
 
+    const transactionsData = [
+        {
+            transactionId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+            paymentMethod: "Credit Card",
+            amount: 120.5,
+            status: "Completed",
+            transactionDate: "2024-12-06T18:21:59.874Z",
+        },
+        {
+            transactionId: "a12b34c56d78e90f12g34h56",
+            paymentMethod: "PayPal",
+            amount: 45.99,
+            status: "Pending",
+            transactionDate: "2024-12-05T14:11:22.000Z",
+        },
+    ]
+
     return(
         <>
             {/*Games Table*/}
@@ -245,9 +263,11 @@ function Lab() {
 
             {/*<CreateUser/>*/}
 
-            <UserGames data={userGamesData} />
+            {/*<UserGames data={userGamesData} />*/}
 
             {/*<UserBoards data={userBoardsData}/>*/}
+
+            <UserTransactions data={transactionsData} />
 
         </>
     )
