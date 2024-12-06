@@ -3,7 +3,6 @@ import React from "react";
 export interface UserGamesProp {
     weekNumber: number;
     boards: number;
-    isWinner: boolean;
 }
 
 function UserGames({ data }: { data: UserGamesProp[] }) {
@@ -15,7 +14,6 @@ function UserGames({ data }: { data: UserGamesProp[] }) {
                 <tr className="bg-gray-100">
                     <th className="border border-gray-300 px-4 py-2 text-left">Week Number</th>
                     <th className="border border-gray-300 px-4 py-2 text-left">Boards</th>
-                    <th className="border border-gray-300 px-4 py-2 text-left">Winner</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -39,9 +37,6 @@ function UserGames({ data }: { data: UserGamesProp[] }) {
                                     d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-3a2.25 2.25 0 00-2.25 2.25V9m-1.5 0h9m-10.5 0A2.25 2.25 0 003 11.25v6A2.25 2.25 0 005.25 19.5h13.5A2.25 2.25 0 0021 17.25v-6A2.25 2.25 0 0018.75 9m-10.5 0V5.25m0 13.5h6"
                                 />
                             </svg>
-                        </td>
-                        <td className="border border-gray-300 px-4 py-2">
-                            {game.isWinner ? "Yes" : "No"}
                         </td>
                     </tr>
                 ))}

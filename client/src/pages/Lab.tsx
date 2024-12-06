@@ -10,6 +10,7 @@ import ViewUser from "../components/admin/users/ViewUser.tsx";
 import CreateUser from "../components/admin/users/CreateUser.tsx";
 import UserGames from "../components/admin/users/UserGames.tsx";
 import userGames from "../components/admin/users/UserGames.tsx";
+import UserBoards from "../components/admin/users/UserBoards.tsx";
 
 function Lab() {
 
@@ -189,12 +190,34 @@ function Lab() {
         {
             weekNumber: 43,
             boards: 3,
-            isWinner: false
         },
         {
             weekNumber: 44,
             boards: 1,
+        }
+    ]
+
+    const userBoardsData = [
+        {
+            weekNumber: 43,
+            packagePrice: 80,
+            playSequence: [1,2,3,4,5],
+            playDate: new Date().getDate(),
+            isWinner: false
+        },
+        {
+            weekNumber: 43,
+            packagePrice: 80,
+            playSequence: [5,6,7,8,9],
+            playDate: new Date().getDate(),
             isWinner: true
+        },
+        {
+            weekNumber: 44,
+            packagePrice: 100,
+            playSequence: [1,2,3,4,5,12],
+            playDate: new Date().getDate(),
+            isWinner: false
         }
     ]
 
@@ -223,6 +246,8 @@ function Lab() {
             {/*<CreateUser/>*/}
 
             <UserGames data={userGamesData} />
+
+            {/*<UserBoards data={userBoardsData}/>*/}
 
         </>
     )
