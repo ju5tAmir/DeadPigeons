@@ -1,9 +1,9 @@
-import GamesTable from "../components/admin/game/GamesTable.tsx";
+import GamesTable from "../components/user/game/GamesTable.tsx";
 import GameDetails from "../components/admin/game/GameDetails.tsx";
 import React from "react";
 import GamePlayersDetails, {UserInfo} from "../components/admin/game/GamePlayersDeatils.tsx";
 import GameBoardsDetails, {Boards} from "../components/admin/game/GameBoardsDetails.tsx";
-import GamesOverview from "../components/admin/game/GamesOverview.tsx";
+import GamesOverview from "../components/user/game/GamesOverview.tsx";
 import UsersOverview from "../components/admin/users/UsersOverview.tsx";
 import EditUser from "../components/admin/users/EditUser.tsx";
 import ViewUser from "../components/admin/users/ViewUser.tsx";
@@ -250,6 +250,60 @@ function Lab() {
         transactionDate: "2024-12-06T18:21:59.874Z",
     }
 
+    const userGames = [
+        {
+            weekNumber: 1,
+            timeFrame: {
+                from: "2024-12-01 08:00",
+                until: "2024-12-01 20:00",
+                finishedAt: "2024-12-01 19:45",
+            },
+            boards: 5,
+            status: "Completed",
+        },
+        {
+            weekNumber: 2,
+            timeFrame: {
+                from: "2024-12-02 09:00",
+                until: "2024-12-02 21:00",
+                finishedAt: "2024-12-02 20:50",
+            },
+            boards: 8,
+            status: "Completed",
+        },
+        {
+            weekNumber: 3,
+            timeFrame: {
+                from: "2024-12-03 10:00",
+                until: "2024-12-03 22:00",
+                finishedAt: "2024-12-03 21:55",
+            },
+            boards: 7,
+            status: "In Progress",
+        },
+        {
+            weekNumber: 4,
+            timeFrame: {
+                from: "2024-12-04 11:00",
+                until: "2024-12-04 23:00",
+                finishedAt: "2024-12-04 22:30",
+            },
+            boards: 6,
+            status: "Completed",
+        },
+        {
+            weekNumber: 5,
+            timeFrame: {
+                from: "2024-12-05 12:00",
+                until: "2024-12-05 18:00",
+                finishedAt: "2024-12-05 17:45",
+            },
+            boards: 9,
+            status: "Pending",
+        },
+    ];
+
+
     return(
         <>
             {/*Games Table*/}
@@ -282,8 +336,9 @@ function Lab() {
 
             {/*<TransactionDetails transaction={transactionDetail} />*/}
 
-            <TransferMoney />
+            {/*<TransferMoney />*/}
 
+            <GamesOverview />
         </>
     )
 }
