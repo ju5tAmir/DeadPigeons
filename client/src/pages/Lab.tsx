@@ -13,6 +13,7 @@ import userGames from "../components/admin/users/UserGames.tsx";
 import UserBoards from "../components/admin/users/UserBoards.tsx";
 import UserTransactions from "../components/admin/users/UserTransactions.tsx";
 import TransactionDetails from "../components/admin/users/TransactionDetails.tsx";
+import TransferMoney from "../components/admin/transactions/TransferMoney.tsx";
 
 function Lab() {
 
@@ -279,7 +280,9 @@ function Lab() {
 
             {/*<UserTransactions data={transactionsData} />*/}
 
-            <TransactionDetails transaction={transactionDetail} />
+            {/*<TransactionDetails transaction={transactionDetail} />*/}
+
+            <TransferMoney />
 
         </>
     )
