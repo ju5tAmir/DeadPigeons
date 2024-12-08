@@ -14,6 +14,7 @@ import UserBoards from "../components/admin/users/UserBoards.tsx";
 import UserTransactions from "../components/admin/users/UserTransactions.tsx";
 import TransactionDetails from "../components/admin/users/TransactionDetails.tsx";
 import TransferMoney from "../components/admin/transactions/TransferMoney.tsx";
+import Login from "./auth/Login.tsx";
 
 function Lab() {
 
@@ -338,7 +339,9 @@ function Lab() {
 
             {/*<TransferMoney />*/}
 
-            <GamesOverview />
+            {/*<GamesOverview />*/}
+
+            <Login></Login>
         </>
     )
 }

@@ -5,6 +5,7 @@ import {Toaster} from "react-hot-toast";
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import {RoutePath} from "./utils/RoutePath.ts";
 import Lab from "./pages/Lab.tsx";
+import GamesOverview from "./components/user/game/GamesOverview.tsx";
 
 function App() {
   return (
@@ -18,6 +19,10 @@ function App() {
                   <BrowserRouter>
                       <Routes>
                           <Route path={RoutePath.lab} element={<Lab/>}/>
+                          <Route path={RoutePath.game} element={<GamesOverview/>}/>
+                          <Route path={RoutePath.game}>
+                              {/*<Route path=":id" element={<Post />} />*/}
+                          </Route>
                       </Routes>
                   </BrowserRouter>
                   <Toaster
