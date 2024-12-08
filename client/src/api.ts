@@ -9,6 +9,12 @@
  * ---------------------------------------------------------------
  */
 
+export interface ActivateRequest {
+  token?: string | null;
+  email?: string | null;
+  password?: string | null;
+}
+
 export interface BoardDetails {
   /** @format uuid */
   boardId?: string;
@@ -38,6 +44,10 @@ export interface BoardResponse {
   playTime?: string | null;
 }
 
+export interface ConfirmResponse {
+  passwordToken?: string | null;
+}
+
 export interface CreateTransactionRequest {
   /** @format uuid */
   userId?: string;
@@ -58,11 +68,15 @@ export interface GameResponse {
   /** @format uuid */
   gameId?: string;
   /** @format int32 */
+  year?: number;
+  /** @format int32 */
   weekNumber?: number;
   /** @format date-time */
   validFromDate?: string;
   /** @format date-time */
   validUntilDate?: string;
+  /** @format date-time */
+  registerCloseDate?: string;
   status?: string | null;
   winningSequence?: number[] | null;
   /** @format date-time */
@@ -117,14 +131,19 @@ export interface PreferenceUpdateRequest {
 export interface RegisterRequest {
   firsName?: string | null;
   lastName?: string | null;
-  username?: string | null;
   email?: string | null;
   phoneNumber?: string | null;
-  password?: string | null;
 }
 
 export interface RegisterResponse {
   userId?: string | null;
+}
+
+export interface StartGameRequest {
+  /** @format int32 */
+  year?: number;
+  /** @format int32 */
+  week?: number;
 }
 
 export interface TransactionResponse {
@@ -391,6 +410,48 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
+     * @tags Auth
+     * @name AuthConfirmList
+     * @request GET:/api/auth/confirm
+     * @secure
+     */
+    authConfirmList: (
+      query?: {
+        token?: string;
+        email?: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<ConfirmResponse, any>({
+        path: `/api/auth/confirm`,
+        method: "GET",
+        query: query,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Auth
+     * @name AuthActivateCreate
+     * @request POST:/api/auth/activate
+     * @secure
+     */
+    authActivateCreate: (data: ActivateRequest, params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/api/auth/activate`,
+        method: "POST",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
      * @tags Board
      * @name BoardDetail
      * @request GET:/api/board/{id}
@@ -515,15 +576,68 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * No description
      *
      * @tags Game
-     * @name GameStartList
-     * @request GET:/api/game/start
+     * @name GameYearsList
+     * @request GET:/api/game/years
      * @secure
      */
-    gameStartList: (params: RequestParams = {}) =>
-      this.request<GameResponse, any>({
-        path: `/api/game/start`,
+    gameYearsList: (params: RequestParams = {}) =>
+      this.request<number[], any>({
+        path: `/api/game/years`,
         method: "GET",
         secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Game
+     * @name GameDetail
+     * @request GET:/api/game/{id}
+     * @secure
+     */
+    gameDetail: (id: string, params: RequestParams = {}) =>
+      this.request<GameResponse, any>({
+        path: `/api/game/${id}`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Game
+     * @name GameYearDetail
+     * @request GET:/api/game/year/{year}
+     * @secure
+     */
+    gameYearDetail: (year: number, params: RequestParams = {}) =>
+      this.request<GameResponse[], any>({
+        path: `/api/game/year/${year}`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Game
+     * @name GameStartCreate
+     * @request POST:/api/game/start
+     * @secure
+     */
+    gameStartCreate: (data: StartGameRequest, params: RequestParams = {}) =>
+      this.request<GameResponse, any>({
+        path: `/api/game/start`,
+        method: "POST",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
         format: "json",
         ...params,
       }),

@@ -1,12 +1,7 @@
+import {GameResponse} from "../../../api.ts";
+import {toDanishTimeFormat} from "../../../utils/TimeUtils.ts";
 
-interface RowData {
-    weekNumber: number;
-    timeFrame: {from: string; until: string; finishedAt: string;}
-    boards: number;
-    status:  string
-}
-
-function GamesTable({ data }: { data: RowData[] }) {
+function    GamesTable({ data }: { data: GameResponse[] }) {
     return (
         <table className="min-w-full border-collapse border border-gray-300">
             {/* Table Header */}
@@ -14,7 +9,7 @@ function GamesTable({ data }: { data: RowData[] }) {
             <tr className="bg-gray-100">
                 <th rowSpan={2} className="border border-gray-300 px-4 py-2">WeekNumber</th>
                 <th colSpan={3} className="border border-gray-300 px-4 py-2">TimeFrame</th>
-                <th rowSpan={2} className="border border-gray-300 px-4 py-2">Your Boards</th>
+                {/*<th rowSpan={2} className="border border-gray-300 px-4 py-2">Your Boards</th>*/}
                 <th rowSpan={2} className="border border-gray-300 px-4 py-2">Game Status</th>
 
             </tr>
@@ -48,10 +43,10 @@ function GamesTable({ data }: { data: RowData[] }) {
                             />
                         </svg>
                     </td>
-                    <td className="border border-gray-300 px-4 py-2">{row.timeFrame.from}</td>
-                    <td className="border border-gray-300 px-4 py-2">{row.timeFrame.until}</td>
-                    <td className="border border-gray-300 px-4 py-2">{row.timeFrame.finishedAt}</td>
-                    <td className="border border-gray-300 px-4 py-2">{row.boards}</td>
+                    <td className="border border-gray-300 px-4 py-2">{toDanishTimeFormat(row.validFromDate!)}</td>
+                    <td className="border border-gray-300 px-4 py-2">{toDanishTimeFormat(row.validUntilDate!)}</td>
+                    <td className="border border-gray-300 px-4 py-2">{row.finishedAt == null ? "Ongoing" : toDanishTimeFormat(row.finishedAt)}</td>
+                    {/*<td className="border border-gray-300 px-4 py-2">{row.boards}</td>*/}
                     <td className="border border-gray-300 px-4 py-2">{row.status}</td>
 
                 </tr>

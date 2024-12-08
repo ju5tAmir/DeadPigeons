@@ -29,3 +29,22 @@ export function formatDate(isoString: string): string {
 
     return `${formattedDate}, ${formattedTime}`;
 }
+
+/**
+ * Converts an ISO 8601 datetime string to Danish time format (dd-MM-yyyy HH:mm).
+ * @param isoDateTime - The ISO 8601 datetime string.
+ * @returns The formatted datetime string in Danish format.
+ */
+export function toDanishTimeFormat(isoDateTime: string): string {
+    const date = new Date(isoDateTime);
+
+    // Extract parts of the date and time
+    const day = String(date.getDate()).padStart(2, '0'); // Day with leading zero
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Month with leading zero
+    const year = date.getFullYear(); // Full year
+    const hours = String(date.getHours()).padStart(2, '0'); // Hours with leading zero
+    const minutes = String(date.getMinutes()).padStart(2, '0'); // Minutes with leading zero
+
+    // Return formatted string
+    return `${day}-${month}-${year} ${hours}:${minutes}`;
+}
