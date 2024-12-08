@@ -10,5 +10,6 @@ public interface IGameService
     Task<GameResponse> StartGame(StartGameRequest data);
     Task<GameResponse> FinishGame(FinishGameRequest data);
     Task<GameResponse> GetGameFullDetails(Guid gameId);
+    Task<List<int>> GetYears();
     
 }

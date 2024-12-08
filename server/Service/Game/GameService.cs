@@ -216,6 +216,15 @@ public class GameService(
         // return new GameFullResponse();
     }
 
+    public async Task<List<int>> GetYears()
+    {
+        return await gameRepository
+            .Query()
+            .Select(g => g.Year)
+            .Distinct()
+            .ToListAsync();
+    }
+
     public async Task<GameResponse> GetCurrentGame()
     {
         // Check if the week game is already started
