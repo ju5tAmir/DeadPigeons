@@ -29,6 +29,13 @@ function GamesOverview() {
         }
     }
 
+    // Get the most recent year
+    function mostRecentYear() {
+        if (years && years.length > 0) {
+            return Math.max(...years);
+        }
+    }
+
     // Load the years when the component mounts
     useEffect(() => {
         yearsLoader();
@@ -46,7 +53,7 @@ function GamesOverview() {
                     <details
                         key={year}
                         className="border border-gray-300 rounded-lg"
-                        open={year === new Date().getFullYear()}
+                        open={year === mostRecentYear()}
                         onClick={() => loadGamesForYear(year)} // Handle click for year-specific games
                     >
                         <summary className="cursor-pointer px-6 py-4 text-gray-800 font-semibold bg-gray-100 rounded-t-lg hover:bg-gray-200">
