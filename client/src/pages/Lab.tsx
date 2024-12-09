@@ -16,6 +16,8 @@ import TransactionDetails from "../components/admin/users/TransactionDetails.tsx
 import TransferMoney from "../components/admin/transactions/TransferMoney.tsx";
 import Login from "./auth/Login.tsx";
 import BoardsOverview from "../components/user/board/BoardsOverview.tsx";
+import PlayGame from "../components/user/game/PlayGame.tsx";
+import TileSelection from "../components/user/game/TileSelection.tsx";
 
 function Lab() {
 
@@ -340,14 +342,15 @@ function Lab() {
 
             {/*<TransferMoney />*/}
 
-            <GamesOverview />
+            {/*<GamesOverview />*/}
 
             {/*<Login></Login>*/}
 
-            <BoardsOverview/>
+            {/*<BoardsOverview/>*/}
 
+            {/*<PlayGame/>*/}
 
-
+            <TileSelection/>
 
         </>
     )

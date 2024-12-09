@@ -6,6 +6,7 @@ import {BrowserRouter, Route, Routes} from "react-router-dom";
 import {RoutePath} from "./utils/RoutePath.ts";
 import Lab from "./pages/Lab.tsx";
 import GamesOverview from "./components/user/game/GamesOverview.tsx";
+import PlayGame from "./components/user/game/PlayGame.tsx";
 
 function App() {
   return (
@@ -21,7 +22,7 @@ function App() {
                           <Route path={RoutePath.lab} element={<Lab/>}/>
                           <Route path={RoutePath.game} element={<GamesOverview/>}/>
                           <Route path={RoutePath.game}>
-                              {/*<Route path=":id" element={<Post />} />*/}
+                              <Route path=":id" element={<PlayGame />} />
                           </Route>
                       </Routes>
                   </BrowserRouter>
