@@ -216,6 +216,15 @@ public class GameService(
         // return new GameFullResponse();
     }
 
+    public async Task<List<GameLwResponse>> GetGamesLightWeightResponse(int year)
+    {
+        return await gameRepository
+            .Query()
+            .Where(g => g.Year == year)
+            .Select(g => GameMapper.ToLightWeightResponse(g))
+            .ToListAsync();
+    }
+
     public async Task<List<int>> GetYears()
     {
         return await gameRepository

@@ -1,7 +1,9 @@
 export const RoutePath = {
     home: "/",
-    game: "/game",
+    game: "/games",
     boards: "/boards",
     packages: "/packages",
+    users: "/users",
+    transactions: "/transactions",
     lab: "/lab"
 }

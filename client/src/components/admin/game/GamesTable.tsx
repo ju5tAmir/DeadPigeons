@@ -1,14 +1,6 @@
+import {GameResponse} from "../../../api.ts";
 
-interface RowData {
-    weekNumber: number;
-    timeFrame: {from: string; until: string; finishedAt: string;}
-    players: { total: number; winners: string };
-    boards: { total: number; winning: number };
-    revenue: { total: number; club: number; players: number };
-    payout:  number
-}
-
-function GamesTable({ data }: { data: RowData[] }) {
+function GamesTable({ data }: { data: GameResponse[] }) {
     return (
         <table className="min-w-full border-collapse border border-gray-300">
             {/* Table Header */}
@@ -57,7 +49,7 @@ function GamesTable({ data }: { data: RowData[] }) {
                             />
                         </svg>
                     </td>
-                    <td className="border border-gray-300 px-4 py-2">{row.timeFrame.from}</td>
+                    <td className="border border-gray-300 px-4 py-2">{row.validFromDate}</td>
                     <td className="border border-gray-300 px-4 py-2">{row.timeFrame.until}</td>
                     <td className="border border-gray-300 px-4 py-2">{row.timeFrame.finishedAt}</td>
                     <td className="border border-gray-300 px-4 py-2">{row.players.total}</td>

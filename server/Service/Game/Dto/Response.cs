@@ -15,13 +15,77 @@ public record GameResponse(
     DateTime? FinishedAt
 );
 
-public record GameFullResponse(
-    Guid GameId,
+
+
+// Game light-weight response to fill the overview table
+public record GameLwResponse(
+    GameInfo GameInfo,
+    TimeFrame TimeFrame,
+    PlayersLw Players,
+    WinningPlayersLw WinningPlayers,
+    BoardsLw Boards,
+    WinningBoardsLw WinningBoards,
+    IncomeLw Income,
+    PayoutsLw Payouts
+    );
+
+public record PlayersLw(
+    int OnlinePlayers,
+    int OfflinePlayers,
+    int TotalPlayers
+    );
+
+public record WinningPlayersLw(
+    int OnlineWinningPlayers,
+    int OfflineWinningPlayers,
+    int TotalWinningPlayers
+);
+
+public record BoardsLw(
+    int OnlineBoards,
+    int OfflineBoards,
+    int TotalBoards
+    );
+
+public record WinningBoardsLw(
+    int OnlineWinningBoards,
+    int OfflineWinningBoards,
+    int TotalWinningBoards
+);
+
+public record IncomeLw(
+    decimal OnlineIncome,
+    decimal OfflineIncome,
+    decimal TotalIncome
+    );
+
+
+public record PayoutsLw(
+    decimal OnlinePayouts,
+    decimal OfflinePayouts,
+    decimal TotalPayouts
+);
+
+public record TimeFrame(
     int Year,
     int WeekNumber,
     DateTime ValidFromDate,
     DateTime ValidUntilDate,
     DateTime RegisterCloseDate,
+    DateTime? FinishedAt
+    );
+
+public record GameInfo(
+    Guid GameId,
+    string? Status,
+    List<int>? WinningSequence
+);
+
+public record GameFullResponse(
+    Guid GameId,
+    int Year,
+    int WeekNumber,
+    TimeFrame TimeFrame,
     string? Status,
     int[]? WinningSequence,
     DateTime? FinishedAt,
@@ -32,13 +96,17 @@ public record GameFullResponse(
     decimal NextGameShare
     
 );
-
 public record Player(
     PlayerDetails PlayerDetails,
     List<BoardDetails> PlayedBoards,
     decimal Prize
 );
-    
+
+public record Players(
+    List<Player> OnlinePlayers,
+    int OfflinePlayers);
+
+
 public record PlayerDetails(
     Guid PlayerId,
     string FirstName,

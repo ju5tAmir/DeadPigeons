@@ -45,6 +45,14 @@ public class GameController(IGameService service): ControllerBase
               return await service.GetAllGamesByYear(year);
        }
        
+       [HttpGet]
+       [Route("year/{year}/lw")] // Note: Change it to query
+       [AllowAnonymous] // Note : Admin only
+       public async Task<List<GameLwResponse>> GetGamesLightWeight(int year)
+       {
+              return await service.GetGamesLightWeightResponse(year);
+       }
+       
        [HttpPost]
        [Route("start")]
        // [Authorize(Roles = Role.Admin)]

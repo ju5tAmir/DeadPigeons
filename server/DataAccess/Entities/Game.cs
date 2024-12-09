@@ -27,4 +27,32 @@ public partial class Game
     public List<int>? WinningSequence { get; set; }
 
     public DateTime? FinishedAt { get; set; }
+
+    public int OnlinePlayers { get; set; }
+
+    public int OfflinePlayers { get; set; }
+
+    public int OnlineWinningPlayers { get; set; }
+
+    public int OfflineWinningPlayers { get; set; }
+
+    public int OnlineBoards { get; set; }
+
+    public int OfflineBoards { get; set; }
+
+    public int OnlineWinningBoards { get; set; }
+
+    public int OfflineWinningBoards { get; set; }
+
+    [Precision(10, 2)]
+    public decimal OnlineIncome { get; set; }
+
+    [Precision(10, 2)]
+    public decimal OfflineIncome { get; set; }
+
+    [Precision(10, 2)]
+    public decimal OnlinePayout { get; set; }
+
+    [Precision(10, 2)]
+    public decimal OfflinePayout { get; set; }
 }

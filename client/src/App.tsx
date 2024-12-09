@@ -7,6 +7,7 @@ import {RoutePath} from "./utils/RoutePath.ts";
 import Lab from "./pages/Lab.tsx";
 import GamesOverview from "./components/user/game/GamesOverview.tsx";
 import PlayGame from "./components/user/game/PlayGame.tsx";
+import BoardsOverview from "./components/user/board/BoardsOverview.tsx";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
                           <Route path={RoutePath.game}>
                               <Route path=":id" element={<PlayGame />} />
                           </Route>
+                          <Route path={RoutePath.boards} element={<BoardsOverview/>}/>
                       </Routes>
                   </BrowserRouter>
                   <Toaster

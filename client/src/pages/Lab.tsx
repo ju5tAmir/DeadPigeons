@@ -346,11 +346,11 @@ function Lab() {
 
             {/*<Login></Login>*/}
 
-            {/*<BoardsOverview/>*/}
+            <BoardsOverview/>
 
             {/*<PlayGame/>*/}
 
-            <TileSelection/>
+            {/*<TileSelection/>*/}
 
         </>
     )

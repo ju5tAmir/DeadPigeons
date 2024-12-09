@@ -76,6 +76,14 @@ public partial class FakeContext : DbContext
             entity.HasKey(e => e.GameId).HasName("Games_pkey");
 
             entity.Property(e => e.GameId).ValueGeneratedNever();
+            entity.Property(e => e.OfflineBoards).HasDefaultValue(0);
+            entity.Property(e => e.OfflinePlayers).HasDefaultValue(0);
+            entity.Property(e => e.OfflineWinningBoards).HasDefaultValue(0);
+            entity.Property(e => e.OfflineWinningPlayers).HasDefaultValue(0);
+            entity.Property(e => e.OnlineBoards).HasDefaultValue(0);
+            entity.Property(e => e.OnlinePlayers).HasDefaultValue(0);
+            entity.Property(e => e.OnlineWinningBoards).HasDefaultValue(0);
+            entity.Property(e => e.OnlineWinningPlayers).HasDefaultValue(0);
         });
 
         modelBuilder.Entity<MobilePayPayment>(entity =>
