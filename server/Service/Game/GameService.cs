@@ -234,6 +234,22 @@ public class GameService(
             .ToListAsync();
     }
 
+    public async Task<GameLwResponse> GetLightWeightGameById(Guid id)
+    {
+        var game = await gameRepository
+            .Query()
+            .Where(g => g.GameId == id)
+            .Select(g => GameMapper.ToLightWeightResponse(g))
+            .FirstOrDefaultAsync();
+
+        if (game == null)
+        {
+            throw new NotFoundError(nameof(Game), new { Id = id });
+        }
+
+        return game;
+    }
+
     public async Task<GameResponse> GetCurrentGame()
     {
         // Check if the week game is already started

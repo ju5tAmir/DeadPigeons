@@ -697,6 +697,23 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * No description
      *
      * @tags Game
+     * @name GameLwDetail
+     * @request GET:/api/game/{id}/lw
+     * @secure
+     */
+    gameLwDetail: (id: string, params: RequestParams = {}) =>
+      this.request<GameLwResponse, any>({
+        path: `/api/game/${id}/lw`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Game
      * @name GameYearDetail
      * @request GET:/api/game/year/{year}
      * @secure

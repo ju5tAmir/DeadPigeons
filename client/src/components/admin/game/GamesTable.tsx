@@ -1,7 +1,15 @@
 import {GameLwResponse} from "../../../api.ts";
 import {toDanishTimeFormat} from "../../../utils/TimeUtils.ts";
+import {useNavigate} from "react-router-dom";
 
 function GamesTable({ data }: { data: GameLwResponse[] }) {
+
+    const navigate = useNavigate();
+
+    const handleClickOnGame = (gameId: string) => {
+        navigate(`${gameId}`)
+    }
+
     return (
         <table className="min-w-full border-collapse border border-gray-300">
             {/* Table Header */}
@@ -30,7 +38,11 @@ function GamesTable({ data }: { data: GameLwResponse[] }) {
             {/* Table Body */}
             <tbody>
             {data.map ((row, index) => (
-                <tr key={index} className="hover:bg-gray-50">
+                <tr
+                    key={index} className="hover:bg-gray-50"
+                    onClick={() => handleClickOnGame(row.gameInfo?.gameId)}
+
+                >
                     <td className="border border-gray-300 px-4 py-2 flex justify-between items-center">
                         {/* Center the Week Number */}
                         <span className="flex-1 text-center">{row.timeFrame?.weekNumber}</span>

@@ -36,6 +36,13 @@ public class GameController(IGameService service): ControllerBase
               return await service.GetGameById(id);
        }
 
+       [HttpGet]
+       [Route("{id}/lw")]
+       [AllowAnonymous]
+       public async Task<GameLwResponse> GetLightWeightGameById(Guid id)
+       {
+              return await service.GetLightWeightGameById(id);
+       }
 
        [HttpGet]
        [Route("year/{year}")]

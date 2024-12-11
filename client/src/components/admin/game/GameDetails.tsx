@@ -1,3 +1,8 @@
+import {useEffect, useState} from "react";
+import {GameLwResponse} from "../../../api.ts";
+import {useParams} from "react-router-dom";
+import {http} from "../../../http.ts";
+
 interface GameDetails {
     weekNumber: number;
     timeFrame: { from: string; until: string; finishedAt: string };
@@ -9,14 +14,14 @@ interface GameDetails {
     payouts: { online: number; offline: number; total: number };
 }
 
-function GameDetails({ game }: { game: GameDetails }) {
+function GameDetails({game} : {game: GameLwResponse}) {
     return (
         <div className="max-w-4xl mx-auto mt-8 p-6 bg-white shadow-md rounded-lg">
             {/* Header Section */}
             <div className="border-b pb-4 mb-6">
                 <h1 className="text-2xl font-bold text-gray-800">Game Details</h1>
                 <p className="text-sm text-gray-500">
-                    Week {game.weekNumber} - From {game.timeFrame.from} to {game.timeFrame.until}
+                    Week {game?.timeFrame?.weekNumber} - From {game?.timeFrame?.validFromDate} to {game?.timeFrame?.validUntilDate}
                 </p>
             </div>
 
@@ -26,9 +31,9 @@ function GameDetails({ game }: { game: GameDetails }) {
                 <div>
                     <h2 className="text-lg font-semibold text-gray-700">TimeFrame</h2>
                     <ul className="mt-2 space-y-1 text-gray-600">
-                        <li><strong>From:</strong> {game.timeFrame.from}</li>
-                        <li><strong>Until:</strong> {game.timeFrame.until}</li>
-                        <li><strong>Finished At:</strong> {game.timeFrame.finishedAt}</li>
+                        <li><strong>From:</strong> {game?.timeFrame?.validFromDate}</li>
+                        <li><strong>Until:</strong> {game?.timeFrame?.validUntilDate}</li>
+                        <li><strong>Finished At:</strong> {game?.timeFrame?.finishedAt}</li>
                     </ul>
                 </div>
 
@@ -49,7 +54,7 @@ function GameDetails({ game }: { game: GameDetails }) {
                         {/* Players */}
                         <tr>
                             <td className="border border-gray-300 px-4 py-2 flex justify-between items-center">
-                                
+
                                 <span className="flex-1 text-center">Players</span>
                                 {/* Position the Icon to the Right */}
                                 <svg
@@ -67,15 +72,15 @@ function GameDetails({ game }: { game: GameDetails }) {
                                     />
                                 </svg>
                             </td>
-                            <td className="border border-gray-300 px-4 py-2 text-center">{game.players.online}</td>
-                            <td className="border border-gray-300 px-4 py-2 text-center">{game.players.offline}</td>
-                            <td className="border border-gray-300 px-4 py-2 text-center">{game.players.total}</td>
+                            <td className="border border-gray-300 px-4 py-2 text-center">{game?.players?.onlinePlayers}</td>
+                            <td className="border border-gray-300 px-4 py-2 text-center">{game?.players?.offlinePlayers}</td>
+                            <td className="border border-gray-300 px-4 py-2 text-center">{game?.players?.totalPlayers}</td>
                         </tr>
 
                         {/* Winners */}
                         <tr>
                             <td className="border border-gray-300 px-4 py-2 flex justify-between items-center">
-                                
+
                                 <span className="flex-1 text-center">Winners</span>
                                 {/* Position the Icon to the Right */}
                                 <svg
@@ -94,18 +99,18 @@ function GameDetails({ game }: { game: GameDetails }) {
                                 </svg>
                             </td>
                             <td className="border border-gray-300 px-4 py-2 text-center">
-                                {game.winners.online}
+                                {game?.winningPlayers?.onlineWinningPlayers}
                             </td>
                             <td className="border border-gray-300 px-4 py-2 text-center">
-                                {game.winners.offline}
+                                {game?.winningPlayers?.offlineWinningPlayers}
                             </td>
-                            <td className="border border-gray-300 px-4 py-2 text-center">{game.winners.total}</td>
+                            <td className="border border-gray-300 px-4 py-2 text-center">{game?.winningPlayers?.totalWinningPlayers}</td>
                         </tr>
 
                         {/* Boards */}
                         <tr>
                             <td className="border border-gray-300 px-4 py-2 flex justify-between items-center">
-                                
+
                                 <span className="flex-1 text-center">Boards</span>
                                 {/* Position the Icon to the Right */}
                                 <svg
@@ -123,15 +128,15 @@ function GameDetails({ game }: { game: GameDetails }) {
                                     />
                                 </svg>
                             </td>
-                            <td className="border border-gray-300 px-4 py-2 text-center">{game.boards.online}</td>
-                            <td className="border border-gray-300 px-4 py-2 text-center">{game.boards.offline}</td>
-                            <td className="border border-gray-300 px-4 py-2 text-center">{game.boards.total}</td>
+                            <td className="border border-gray-300 px-4 py-2 text-center">{game?.boards?.onlineBoards}</td>
+                            <td className="border border-gray-300 px-4 py-2 text-center">{game?.boards?.offlineBoards}</td>
+                            <td className="border border-gray-300 px-4 py-2 text-center">{game?.boards?.totalBoards}</td>
                         </tr>
 
                         {/* Winning Boards */}
                         <tr>
                             <td className="border border-gray-300 px-4 py-2 flex justify-between items-center">
-                                
+
                                 <span className="flex-1 text-center">Winning Boards</span>
                                 {/* Position the Icon to the Right */}
                                 <svg
@@ -149,78 +154,68 @@ function GameDetails({ game }: { game: GameDetails }) {
                                     />
                                 </svg>
                             </td>
-                            <td className="border border-gray-300 px-4 py-2 text-center">{game.winningBoards.online}</td>
-                            <td className="border border-gray-300 px-4 py-2 text-center">{game.winningBoards.offline}</td>
-                            <td className="border border-gray-300 px-4 py-2 text-center">{game.winningBoards.total}</td>
+                            <td className="border border-gray-300 px-4 py-2 text-center">{game?.winningBoards?.onlineWinningBoards}</td>
+                            <td className="border border-gray-300 px-4 py-2 text-center">{game?.winningBoards?.offlineWinningBoards}</td>
+                            <td className="border border-gray-300 px-4 py-2 text-center">{game?.winningBoards?.totalWinningBoards}</td>
                         </tr>
 
                         {/* Revenue */}
                         <tr>
                             <td className="border border-gray-300 px-4 py-2 flex justify-between items-center">
-                                
+
                                 <span className="flex-1 text-center">Net Revenue</span>
                             </td>
-                            <td className="border border-gray-300 px-4 py-2 text-center">${game.revenue.online.toFixed (2)}</td>
-                            <td className="border border-gray-300 px-4 py-2 text-center">${game.revenue.offline.toFixed (2)}</td>
-                            <td className="border border-gray-300 px-4 py-2 text-center">${game.revenue.total.toFixed (2)}</td>
+                            <td className="border border-gray-300 px-4 py-2 text-center">${game?.income?.onlineIncome?.toFixed (2)}</td>
+                            <td className="border border-gray-300 px-4 py-2 text-center">${game?.income?.offlineIncome?.toFixed (2)}</td>
+                            <td className="border border-gray-300 px-4 py-2 text-center">${game?.income?.totalIncome?.toFixed (2)}</td>
                         </tr>
 
                         {/* Club Revenue */}
                         <tr>
                             <td className="border border-gray-300 px-4 py-2 flex justify-between items-center">
-                                
+
                                 <span className="flex-1 text-center">Club (30%)</span>
                             </td>
-                            <td className="border border-gray-300 px-4 py-2 text-center">${(game.revenue.online * 0.30).toFixed (2)} </td>
-                            <td className="border border-gray-300 px-4 py-2 text-center">${(game.revenue.offline * 0.30).toFixed (2)}</td>
-                            <td className="border border-gray-300 px-4 py-2 text-center">${(game.revenue.total * 0.30).toFixed (2)}</td>
+                            <td className="border border-gray-300 px-4 py-2 text-center">${(game?.income?.onlineIncome * 0.30).toFixed (2)} </td>
+                            <td className="border border-gray-300 px-4 py-2 text-center">${(game?.income?.offlineIncome * 0.30).toFixed (2)}</td>
+                            <td className="border border-gray-300 px-4 py-2 text-center">${(game?.income?.totalIncome * 0.30).toFixed (2)}</td>
                         </tr>
 
                         {/* Players Revenue */}
                         <tr>
                             <td className="border border-gray-300 px-4 py-2 flex justify-between items-center">
-                                
+
                                 <span className="flex-1 text-center">Game (70%)</span>
                             </td>
-                            <td className="border border-gray-300 px-4 py-2 text-center">${(game.revenue.online * 0.70).toFixed (2)} </td>
-                            <td className="border border-gray-300 px-4 py-2 text-center">${(game.revenue.offline * 0.70).toFixed (2)}</td>
-                            <td className="border border-gray-300 px-4 py-2 text-center">${(game.revenue.total * 0.70).toFixed (2)}</td>
+                            <td className="border border-gray-300 px-4 py-2 text-center">${(game?.income?.onlineIncome  * 0.70).toFixed (2)} </td>
+                            <td className="border border-gray-300 px-4 py-2 text-center">${(game?.income?.offlineIncome * 0.70).toFixed (2)}</td>
+                            <td className="border border-gray-300 px-4 py-2 text-center">${(game?.income?.totalIncome * 0.70).toFixed (2)}</td>
                         </tr>
 
                         {/* Payouts */}
                         <tr>
                             <td className="border border-gray-300 px-4 py-2 flex justify-between items-center">
-                                
+
                                 <span className="flex-1 text-center">Payouts</span>
                             </td>
-                            <td className="border border-gray-300 px-4 py-2 text-center">${game.payouts.online.toFixed (2)}</td>
-                            <td className="border border-gray-300 px-4 py-2 text-center">${game.payouts.offline.toFixed (2)}</td>
-                            <td className="border border-gray-300 px-4 py-2 text-center">${game.payouts.total.toFixed (2)}</td>
+                            <td className="border border-gray-300 px-4 py-2 text-center">${game?.payouts?.onlinePayouts?.toFixed (2)}</td>
+                            <td className="border border-gray-300 px-4 py-2 text-center">${game?.payouts?.offlinePayouts?.toFixed (2)}</td>
+                            <td className="border border-gray-300 px-4 py-2 text-center">${game?.payouts?.totalPayouts?.toFixed (2)}</td>
                         </tr>
 
                         {/* Players Revenue */}
-                        <tr>
-                            <td className="border border-gray-300 px-4 py-2 flex justify-between items-center">
-                                
-                                <span className="flex-1 text-center">Next Game Pot</span>
-                            </td>
-                            <td className="border border-gray-300 px-4 py-2 text-center">${(game.revenue.online * 0.70).toFixed (2)} </td>
-                            <td className="border border-gray-300 px-4 py-2 text-center">${(game.revenue.offline * 0.70).toFixed (2)}</td>
-                            <td className="border border-gray-300 px-4 py-2 text-center">${(game.revenue.total * 0.70).toFixed (2)}</td>
-                        </tr>
+                        {/*<tr>*/}
+                        {/*    <td className="border border-gray-300 px-4 py-2 flex justify-between items-center">*/}
+
+                        {/*        <span className="flex-1 text-center">Next Game Pot</span>*/}
+                        {/*    </td>*/}
+                        {/*    <td className="border border-gray-300 px-4 py-2 text-center">${(game.revenue.online * 0.70).toFixed (2)} </td>*/}
+                        {/*    <td className="border border-gray-300 px-4 py-2 text-center">${(game.revenue.offline * 0.70).toFixed (2)}</td>*/}
+                        {/*    <td className="border border-gray-300 px-4 py-2 text-center">${(game.revenue.total * 0.70).toFixed (2)}</td>*/}
+                        {/*</tr>*/}
                         </tbody>
                     </table>
                 </div>
-
-                {/* Back Button */}
-                <div className="mt-6">
-                    <button
-                        className="px-4 py-2 bg-blue-500 text-white rounded shadow hover:bg-blue-600"
-                        onClick={() => window.history.back ()}
-                >
-                    Back
-                </button>
-            </div>
 
             </div>
         </div>
