@@ -50,10 +50,11 @@ public static class GameMapper
         return new TimeFrame(
             game.Year,
             game.WeekNumber,
-            game.ValidFromDate,
-            game.ValidUntilDate,
-            game.RegisterCloseDate,
-            game.FinishedAt);
+            TimeUtils.ToCet(game.ValidFromDate),
+            TimeUtils.ToCet(game.ValidUntilDate),
+            TimeUtils.ToCet(game.RegisterCloseDate),
+            game.FinishedAt.HasValue ? TimeUtils.ToCet(game.FinishedAt.Value) : null
+            );
     }
 
     private static PlayersLw ToLwPlayers(Game game)

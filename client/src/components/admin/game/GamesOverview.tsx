@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from "react";
 import GamesTable from "./GamesTable.tsx";
-import {GameResponse} from "../../../api.ts";
+import {GameLwResponse, GameResponse} from "../../../api.ts";
 import {http} from "../../../http.ts";
 
 function GamesOverview() {
     const [years, setYears] = useState<number[] | null>(null);
-    const [games, setGames] = useState<GameResponse[]>([]);
+    const [games, setGames] = useState<GameLwResponse[]>([]);
 
     async function yearsLoader() {
         const response = await http.gameYearsList();
@@ -14,9 +14,9 @@ function GamesOverview() {
 
     async function loadGamesForYear(year: number) {
         // If games for this year are already loaded, skip the request
-        if (games.some((g) => g.year === year)) return;
+        if (games.some((g) => g.timeFrame?.year === year)) return;
 
-        const newGames = await http.gameYearDetail(year).then((res) => res.data);
+        const newGames = await http.gameYearLwDetail(year).then((res) => res.data);
         if (newGames) {
             setGames((prevGames) => [...prevGames, ...newGames]);
         }
@@ -61,7 +61,7 @@ function GamesOverview() {
                             {year}
                         </summary>
                         <div className="px-6 py-4 bg-white border-t border-gray-300">
-                            <GamesTable data={games.filter((g) => g.year === year)} />
+                            <GamesTable data={games.filter((g) => g.timeFrame?.year === year)} />
                         </div>
                     </details>
                 ))}

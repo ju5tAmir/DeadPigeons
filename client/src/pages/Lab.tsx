@@ -346,7 +346,7 @@ function Lab() {
 
             {/*<Login></Login>*/}
 
-            <BoardsOverview/>
+            {/*<BoardsOverview/>*/}
 
             {/*<PlayGame/>*/}
 

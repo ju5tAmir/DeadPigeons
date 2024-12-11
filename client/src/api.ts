@@ -44,6 +44,15 @@ export interface BoardResponse {
   playTime?: string | null;
 }
 
+export interface BoardsLw {
+  /** @format int32 */
+  onlineBoards?: number;
+  /** @format int32 */
+  offlineBoards?: number;
+  /** @format int32 */
+  totalBoards?: number;
+}
+
 export interface ConfirmResponse {
   passwordToken?: string | null;
 }
@@ -64,6 +73,24 @@ export interface FinishGameRequest {
   winningSequence?: number[] | null;
 }
 
+export interface GameInfo {
+  /** @format uuid */
+  gameId?: string;
+  status?: string | null;
+  winningSequence?: number[] | null;
+}
+
+export interface GameLwResponse {
+  gameInfo?: GameInfo;
+  timeFrame?: TimeFrame;
+  players?: PlayersLw;
+  winningPlayers?: WinningPlayersLw;
+  boards?: BoardsLw;
+  winningBoards?: WinningBoardsLw;
+  income?: IncomeLw;
+  payouts?: PayoutsLw;
+}
+
 export interface GameResponse {
   /** @format uuid */
   gameId?: string;
@@ -81,6 +108,15 @@ export interface GameResponse {
   winningSequence?: number[] | null;
   /** @format date-time */
   finishedAt?: string | null;
+}
+
+export interface IncomeLw {
+  /** @format double */
+  onlineIncome?: number;
+  /** @format double */
+  offlineIncome?: number;
+  /** @format double */
+  totalIncome?: number;
 }
 
 export interface LoginRequest {
@@ -108,12 +144,30 @@ export interface PackageResponse {
   price?: number;
 }
 
+export interface PayoutsLw {
+  /** @format double */
+  onlinePayouts?: number;
+  /** @format double */
+  offlinePayouts?: number;
+  /** @format double */
+  totalPayouts?: number;
+}
+
 export interface PlayerDetails {
   /** @format uuid */
   playerId?: string;
   firstName?: string | null;
   lastName?: string | null;
   username?: string | null;
+}
+
+export interface PlayersLw {
+  /** @format int32 */
+  onlinePlayers?: number;
+  /** @format int32 */
+  offlinePlayers?: number;
+  /** @format int32 */
+  totalPlayers?: number;
 }
 
 export interface PreferenceResponse {
@@ -144,6 +198,21 @@ export interface StartGameRequest {
   year?: number;
   /** @format int32 */
   week?: number;
+}
+
+export interface TimeFrame {
+  /** @format int32 */
+  year?: number;
+  /** @format int32 */
+  weekNumber?: number;
+  /** @format date-time */
+  validFromDate?: string;
+  /** @format date-time */
+  validUntilDate?: string;
+  /** @format date-time */
+  registerCloseDate?: string;
+  /** @format date-time */
+  finishedAt?: string | null;
 }
 
 export interface TransactionResponse {
@@ -194,6 +263,24 @@ export interface WinnersRequest {
 export interface WinnersResponse {
   gameDetails?: GameResponse;
   winners?: Winners[] | null;
+}
+
+export interface WinningBoardsLw {
+  /** @format int32 */
+  onlineWinningBoards?: number;
+  /** @format int32 */
+  offlineWinningBoards?: number;
+  /** @format int32 */
+  totalWinningBoards?: number;
+}
+
+export interface WinningPlayersLw {
+  /** @format int32 */
+  onlineWinningPlayers?: number;
+  /** @format int32 */
+  offlineWinningPlayers?: number;
+  /** @format int32 */
+  totalWinningPlayers?: number;
 }
 
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse, HeadersDefaults, ResponseType } from "axios";
@@ -617,6 +704,23 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     gameYearDetail: (year: number, params: RequestParams = {}) =>
       this.request<GameResponse[], any>({
         path: `/api/game/year/${year}`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Game
+     * @name GameYearLwDetail
+     * @request GET:/api/game/year/{year}/lw
+     * @secure
+     */
+    gameYearLwDetail: (year: number, params: RequestParams = {}) =>
+      this.request<GameLwResponse[], any>({
+        path: `/api/game/year/${year}/lw`,
         method: "GET",
         secure: true,
         format: "json",

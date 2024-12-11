@@ -1,14 +1,14 @@
-import Navbar from "./components/admin/general/Navbar.tsx";
+import Navbar from "./components/user/general/Navbar.tsx";
 import {BrowserRouter, Route, Routes} from "react-router-dom";
-import {RoutePath} from "./utils/admin/RoutePath.ts";
+import {RoutePath} from "./utils/user/RoutePath.ts";
 import Lab from "./pages/Lab.tsx";
 import {Toaster} from "react-hot-toast";
 import Footer from "./components/general/Footer.tsx";
-import GamesOverview from "./components/admin/game/GamesOverview.tsx";
+import GamesOverview from "./components/user/game/GamesOverview.tsx";
 import PlayGame from "./components/user/game/PlayGame.tsx";
 import BoardsOverview from "./components/user/board/BoardsOverview.tsx";
 
-function AdminRoutes() {
+function UserRoutes() {
     return (
         <>
             <div className="flex flex-col min-h-screen">
@@ -22,7 +22,7 @@ function AdminRoutes() {
                             <Route path={RoutePath.lab} element={<Lab/>}/>
                             <Route path={RoutePath.game} element={<GamesOverview/>}/>
                             <Route path={RoutePath.game}>
-                                <Route path=":id" element={<PlayGame/>}/>
+                                <Route path=":id" element={<PlayGame />} />
                             </Route>
                             <Route path={RoutePath.boards} element={<BoardsOverview/>}/>
                         </Routes>
@@ -40,4 +40,4 @@ function AdminRoutes() {
     )
 }
 
-export default AdminRoutes
+export default UserRoutes

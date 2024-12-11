@@ -1,6 +1,7 @@
-import {GameResponse} from "../../../api.ts";
+import {GameLwResponse} from "../../../api.ts";
+import {toDanishTimeFormat} from "../../../utils/TimeUtils.ts";
 
-function GamesTable({ data }: { data: GameResponse[] }) {
+function GamesTable({ data }: { data: GameLwResponse[] }) {
     return (
         <table className="min-w-full border-collapse border border-gray-300">
             {/* Table Header */}
@@ -11,7 +12,7 @@ function GamesTable({ data }: { data: GameResponse[] }) {
                 <th colSpan={2} className="border border-gray-300 px-4 py-2">Players</th>
                 <th colSpan={2} className="border border-gray-300 px-4 py-2">Boards</th>
                 <th colSpan={3} className="border border-gray-300 px-4 py-2">Revenue</th>
-                <th rowSpan={3} className="border border-gray-300 px-4 py-2">Payouts</th>
+                <th rowSpan={2} className="border border-gray-300 px-4 py-2">Payouts</th>
             </tr>
             <tr className="bg-gray-200">
                 <th className="border border-gray-300 px-4 py-2">From</th>
@@ -32,7 +33,7 @@ function GamesTable({ data }: { data: GameResponse[] }) {
                 <tr key={index} className="hover:bg-gray-50">
                     <td className="border border-gray-300 px-4 py-2 flex justify-between items-center">
                         {/* Center the Week Number */}
-                        <span className="flex-1 text-center">{row.weekNumber}</span>
+                        <span className="flex-1 text-center">{row.timeFrame?.weekNumber}</span>
                         {/* Position the Icon to the Right */}
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -49,17 +50,17 @@ function GamesTable({ data }: { data: GameResponse[] }) {
                             />
                         </svg>
                     </td>
-                    <td className="border border-gray-300 px-4 py-2">{row.validFromDate}</td>
-                    <td className="border border-gray-300 px-4 py-2">{row.timeFrame.until}</td>
-                    <td className="border border-gray-300 px-4 py-2">{row.timeFrame.finishedAt}</td>
-                    <td className="border border-gray-300 px-4 py-2">{row.players.total}</td>
-                    <td className="border border-gray-300 px-4 py-2">{row.players.winners}</td>
-                    <td className="border border-gray-300 px-4 py-2">{row.boards.total}</td>
-                    <td className="border border-gray-300 px-4 py-2">{row.boards.winning}</td>
-                    <td className="border border-gray-300 px-4 py-2">{row.revenue.total}</td>
-                    <td className="border border-gray-300 px-4 py-2">{row.revenue.club}</td>
-                    <td className="border border-gray-300 px-4 py-2">{row.revenue.players}</td>
-                    <td className="border border-gray-300 px-4 py-2">{row.payout}</td>
+                    <td className="border border-gray-300 px-4 py-2">{toDanishTimeFormat(row.timeFrame?.validFromDate)}</td>
+                    <td className="border border-gray-300 px-4 py-2">{toDanishTimeFormat(row.timeFrame?.validUntilDate)}</td>
+                    <td className="border border-gray-300 px-4 py-2">{row.timeFrame?.finishedAt ? toDanishTimeFormat(row.timeFrame?.finishedAt) : <p className={"text-center"}>-</p>}</td>
+                    <td className="border border-gray-300 px-4 py-2">{row.players?.totalPlayers}</td>
+                    <td className="border border-gray-300 px-4 py-2">{row.winningPlayers?.totalWinningPlayers}</td>
+                    <td className="border border-gray-300 px-4 py-2">{row.boards?.totalBoards}</td>
+                    <td className="border border-gray-300 px-4 py-2">{row.winningBoards?.totalWinningBoards}</td>
+                    <td className="border border-gray-300 px-4 py-2">{row.income?.totalIncome}</td>
+                    <td className="border border-gray-300 px-4 py-2">{(row.income?.totalIncome ?? 0) * 30}</td>
+                    <td className="border border-gray-300 px-4 py-2">{(row.income?.totalIncome ?? 0) * 70}</td>
+                    <td className="border border-gray-300 px-4 py-2">{row.payouts?.totalPayouts}</td>
 
                 </tr>
             ))}
