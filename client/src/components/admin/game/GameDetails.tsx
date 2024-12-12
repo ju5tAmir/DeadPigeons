@@ -64,8 +64,7 @@ function GameDetails({game} : {game: GameLwResponse}) {
                             <li>
                                 <button
                                     onClick={handleUpdateOfflinesClick}
-                                    disabled={game?.gameInfo?.status === "Finished"}
-                                    className={`w-full px-6 py-3 font-semibold rounded-lg shadow-md transition duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75 ${game?.gameInfo?.status === "Finished" ? "bg-gray-400 text-gray-600 cursor-not-allowed" : "bg-green-500 text-white hover:bg-green-600"}`}
+                                    className={`w-full px-6 py-3 font-semibold rounded-lg shadow-md transition duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75 bg-green-500 text-white hover:bg-green-600"}`}
                                 >
                                     Update Offlines
                                 </button>

@@ -20,6 +20,8 @@ export interface BoardDetails {
   boardId?: string;
   packageDetails?: PackageResponse;
   playSequence?: number[] | null;
+  /** @format date-time */
+  playDate?: string;
   /** @format double */
   prize?: number;
 }

@@ -67,7 +67,7 @@ function GameManager() {
                     <details
                         key={gameLwDetails?.gameInfo?.gameId}
                         className="border border-gray-300 rounded-lg"
-                        open={false}
+                        open={true}
                     >
                         <summary
                             className="cursor-pointer px-6 py-4 text-gray-800 font-semibold bg-gray-100 rounded-t-lg hover:bg-gray-200">
@@ -135,8 +135,8 @@ function GameManager() {
                         }}
                     >
                         <summary
-                            className={`cursor-pointer px-6 py-4 text-gray-800 font-semibold bg-gray-100 rounded-t-lg hover:bg-gray-200 ${
-                                gameLwDetails?.gameInfo?.status !== 'Finished' ? 'text-gray-400 cursor-not-allowed' : ''
+                            className={` px-6 py-4 text-gray-800 font-semibold bg-gray-100 rounded-t-lg hover:bg-gray-200 ${
+                                gameLwDetails?.gameInfo?.status !== 'Finished' ? 'text-gray-400 cursor-not-allowed' : 'cursor-pointer'
                             }`}
                             onClick={(e) => {
                                 // Prevent toggling if the game isn't finished
@@ -150,7 +150,7 @@ function GameManager() {
                             Winners
                         </summary>
                         <div className="px-6 py-4 bg-white border-t border-gray-300">
-                            {boards ? (
+                            {winners ? (
                                 <GameWinners result={winners} />
                             ) : (
                                 <p>Loading Winners...</p>
