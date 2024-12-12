@@ -1064,6 +1064,23 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * No description
      *
      * @tags User
+     * @name UserDelete
+     * @request DELETE:/api/user/{id}
+     * @secure
+     */
+    userDelete: (id: string, params: RequestParams = {}) =>
+      this.request<boolean, any>({
+        path: `/api/user/${id}`,
+        method: "DELETE",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags User
      * @name UserAllList
      * @request GET:/api/user/all
      * @secure

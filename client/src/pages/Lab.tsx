@@ -19,6 +19,7 @@ import BoardsOverview from "../components/user/board/BoardsOverview.tsx";
 import PlayGame from "../components/user/game/PlayGame.tsx";
 import TileSelection from "../components/user/game/TileSelection.tsx";
 import {FinishGame} from "../components/admin/game/FinishGame.tsx";
+import DeleteConfirmationModal from "../components/admin/users/DeleteConfirmationModal.tsx";
 
 function Lab() {
 
@@ -354,6 +355,7 @@ function Lab() {
             {/*<TileSelection/>*/}
 
             {/*<FinishGame/>*/}
+
 
         </>
     )
