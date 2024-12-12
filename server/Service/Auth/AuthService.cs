@@ -30,7 +30,7 @@ public class AuthService(
         //     throw new DuplicateEmail();
         // }
         
-        var user = new User {FirstName = data.FirsName, LastName = data.LastName, UserName = data.Email, PhoneNumber = data.PhoneNumber, Email = data.Email};
+        var user = new User {FirstName = data.FirstName, LastName = data.LastName, UserName = data.Email, PhoneNumber = data.PhoneNumber, Email = data.Email};
         var result = await userManager.CreateAsync(user);
         if (!result.Succeeded)
         {

@@ -57,7 +57,7 @@ function UsersOverview() {
     };
 
     const handleCreatePlayer = () => {
-        console.log("Create a new player");
+        navigate("create");
     };
 
     useEffect(() => {
@@ -80,7 +80,7 @@ function UsersOverview() {
                 handleEdit={handleEdit}
                 handleDelete={handleDelete}
             />
-            
+
             <DeleteUserModal
                 isModalOpen={isModalOpen}
                 cancelDelete={cancelDelete}

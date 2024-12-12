@@ -1,105 +1,98 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
+import toast from "react-hot-toast";
+import { http } from "../../../http.ts"; // Assuming http is your API utility
 
-interface UserInfo {
-    firstName: string;
-    lastName: string;
-    email: string;
-    phoneNumber: string;
-}
+const CreateUser = () => {
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [email, setEmail] = useState('');
+    const [phoneNumber, setPhoneNumber] = useState('');
 
-function CreateUser() {
-    const [formData, setFormData] = useState<UserInfo>({
-        firstName: "",
-        lastName: "",
-        email: "",
-        phoneNumber: "",
-    });
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        const { name, value } = e.target;
-        setFormData((prev) => ({
-            ...prev,
-            [name]: name === "isActive" || name === "isAutoplay" ? value === "true" : value,
-        }));
-    };
-
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log("New User Data:", formData);
-        // Perform user creation logic here
+        await handleCreate({ firstName, lastName, email, phoneNumber });
     };
 
-    const handleCancel = () => {
-        setFormData({
-            firstName: "",
-            lastName: "",
-            email: "",
-            phoneNumber: "",
-        });
+    const handleCreate = async (userData: { firstName: string; lastName: string; email: string; phoneNumber: string }) => {
+        toast.promise(
+            http.authRegisterCreate(userData),
+            {
+                loading: 'Creating user...',
+                success: 'User created successfully!',
+                error: (err) => {
+                    const message = err?.response?.data?.error || "Failed to create the user.";
+                    return `Error: ${message}`;
+                }
+            }
+        );
     };
 
     return (
-        <div className="max-w-lg mx-auto mt-8 p-6 bg-white shadow-md rounded-lg">
-            <h2 className="text-xl font-bold text-gray-800 mb-6">Create User</h2>
-            <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                    <label className="block text-gray-600 font-medium mb-1">First Name</label>
+        <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+            <h3 className="text-lg font-medium text-gray-700 mb-4">Create New User</h3>
+            <form onSubmit={handleSubmit}>
+                <div className="mb-4">
+                    <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">First Name</label>
                     <input
                         type="text"
-                        name="firstName"
-                        value={formData.firstName}
-                        onChange={handleChange}
-                        className="w-full border border-gray-300 px-3 py-2 rounded-md"
+                        id="firstName"
+                        value={firstName}
+                        onChange={(e) => setFirstName(e.target.value)}
+                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        required
                     />
                 </div>
-                <div>
-                    <label className="block text-gray-600 font-medium mb-1">Last Name</label>
+                <div className="mb-4">
+                    <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">Last Name</label>
                     <input
                         type="text"
-                        name="lastName"
-                        value={formData.lastName}
-                        onChange={handleChange}
-                        className="w-full border border-gray-300 px-3 py-2 rounded-md"
+                        id="lastName"
+                        value={lastName}
+                        onChange={(e) => setLastName(e.target.value)}
+                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        required
                     />
                 </div>
-                <div>
-                    <label className="block text-gray-600 font-medium mb-1">Email</label>
+                <div className="mb-4">
+                    <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
                     <input
                         type="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        className="w-full border border-gray-300 px-3 py-2 rounded-md"
+                        id="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        required
                     />
                 </div>
-                <div>
-                    <label className="block text-gray-600 font-medium mb-1">Phone Number</label>
+                <div className="mb-4">
+                    <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700">Phone Number</label>
                     <input
                         type="text"
-                        name="phoneNumber"
-                        value={formData.phoneNumber}
-                        onChange={handleChange}
-                        className="w-full border border-gray-300 px-3 py-2 rounded-md"
+                        id="phoneNumber"
+                        value={phoneNumber}
+                        onChange={(e) => setPhoneNumber(e.target.value)}
+                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        required
                     />
                 </div>
-                <div className="flex justify-end space-x-4 mt-6">
+                <div className="flex justify-end gap-4">
                     <button
                         type="button"
-                        onClick={handleCancel}
-                        className="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400"
+                        className="bg-gray-300 px-4 py-2 rounded-md hover:bg-gray-400"
+                        // You can add a cancel function here
                     >
                         Cancel
                     </button>
                     <button
                         type="submit"
-                        className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                        className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600"
                     >
-                        Create
+                        Create User
                     </button>
                 </div>
             </form>
         </div>
     );
-}
+};
 
 export default CreateUser;

@@ -2,13 +2,13 @@ using FluentValidation;
 
 namespace Service.Auth.Dto;
 
-public record RegisterRequest(string FirsName, string LastName, string Email, string PhoneNumber);
+public record RegisterRequest(string FirstName, string LastName, string Email, string PhoneNumber);
 
 public class RegisterRequestValidator : AbstractValidator<RegisterRequest>
 {
     public RegisterRequestValidator()
     {
-        RuleFor(x => x.FirsName)
+        RuleFor(x => x.FirstName)
             .NotEmpty()
             .WithMessage("FirstName is required.")
             .MinimumLength(2)

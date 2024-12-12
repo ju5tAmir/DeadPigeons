@@ -14,6 +14,7 @@ import UsersOverview from "./components/admin/users/UsersOverview.tsx";
 import ViewUser from "./components/admin/users/ViewUser.tsx";
 import EditUser from "./components/admin/users/EditUser.tsx";
 import UserManager from "./components/admin/users/UserManager.tsx";
+import CreateUser from "./components/admin/users/CreateUser.tsx";
 
 function AdminRoutes() {
     return (
@@ -36,11 +37,12 @@ function AdminRoutes() {
                             </Route>
                             <Route path={RoutePath.users} element={<UsersOverview/>}/>
                             <Route path={RoutePath.users}>
-                            <Route path=":id" element={<UserManager />}></Route>
-                                <Route path=":id">
-                                    <Route path="update" element={<EditUser/>}/>
+                                <Route path="create" element={<CreateUser/>} />
+                                <Route path=":id" element={<UserManager />}></Route>
+                                    <Route path=":id">
+                                        <Route path="update" element={<EditUser/>}/>
+                                    </Route>
                                 </Route>
-                            </Route>
                             <Route path={RoutePath.boards} element={<BoardsOverview/>}/>
                         </Routes>
                     </BrowserRouter>
