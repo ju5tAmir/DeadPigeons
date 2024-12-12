@@ -1,76 +1,68 @@
 import React from "react";
-import { UserInfo } from "./UsersOverview.tsx";
+import { UserInfo } from "../../../api.ts";
 
-interface ViewUserProps {
-    user: UserInfo;
-}
-
-function ViewUser({ user }: ViewUserProps) {
+function ViewUser({ user }: { user: UserInfo }) {
     return (
-        <div className="max-w-lg mx-auto mt-8 p-6 bg-white shadow-md rounded-lg">
-            <h2 className="text-xl font-bold text-gray-800 mb-6">View User</h2>
-            <div className="space-y-4">
-                <div>
-                    <label className="block text-gray-600 font-medium mb-1">First Name</label>
-                    <div className="w-full border border-gray-300 px-3 py-2 rounded-md bg-gray-100">
-                        {user.firstName}
+        <div className="max-w-xl mx-auto mt-10 p-8 bg-white shadow-lg rounded-xl border border-gray-200">
+            <h2 className="text-2xl font-semibold text-gray-800 mb-6 border-b pb-4">User Details</h2>
+            <div className="space-y-6">
+                <div className="flex items-center space-x-4">
+                    <label className="w-1/3 text-gray-600 font-medium">First Name:</label>
+                    <div className="flex-1 px-4 py-2 bg-gray-100 border border-gray-300 rounded-md text-gray-700">
+                        {user?.firstName || "N/A"}
                     </div>
                 </div>
-                <div>
-                    <label className="block text-gray-600 font-medium mb-1">Last Name</label>
-                    <div className="w-full border border-gray-300 px-3 py-2 rounded-md bg-gray-100">
-                        {user.lastName}
+                <div className="flex items-center space-x-4">
+                    <label className="w-1/3 text-gray-600 font-medium">Last Name:</label>
+                    <div className="flex-1 px-4 py-2 bg-gray-100 border border-gray-300 rounded-md text-gray-700">
+                        {user?.lastName || "N/A"}
                     </div>
                 </div>
-                <div>
-                    <label className="block text-gray-600 font-medium mb-1">Username</label>
-                    <div className="w-full border border-gray-300 px-3 py-2 rounded-md bg-gray-100">
-                        {user.username}
+                <div className="flex items-center space-x-4">
+                    <label className="w-1/3 text-gray-600 font-medium">Username:</label>
+                    <div className="flex-1 px-4 py-2 bg-gray-100 border border-gray-300 rounded-md text-gray-700">
+                        {user?.username || "N/A"}
                     </div>
                 </div>
-                <div>
-                    <label className="block text-gray-600 font-medium mb-1">Email</label>
-                    <div className="w-full border border-gray-300 px-3 py-2 rounded-md bg-gray-100">
-                        {user.email}
+                <div className="flex items-center space-x-4">
+                    <label className="w-1/3 text-gray-600 font-medium">Email:</label>
+                    <div className="flex-1 px-4 py-2 bg-gray-100 border border-gray-300 rounded-md text-gray-700">
+                        {user?.email || "N/A"}
                     </div>
                 </div>
-                <div>
-                    <label className="block text-gray-600 font-medium mb-1">Phone Number</label>
-                    <div className="w-full border border-gray-300 px-3 py-2 rounded-md bg-gray-100">
-                        {user.phoneNumber}
+                <div className="flex items-center space-x-4">
+                    <label className="w-1/3 text-gray-600 font-medium">Phone Number:</label>
+                    <div className="flex-1 px-4 py-2 bg-gray-100 border border-gray-300 rounded-md text-gray-700">
+                        {user?.phoneNumber || "N/A"}
                     </div>
                 </div>
-                <div>
-                    <label className="block text-gray-600 font-medium mb-1">Role</label>
-                    <div className="w-full border border-gray-300 px-3 py-2 rounded-md bg-gray-100">
-                        {user.role}
+                <div className="flex items-center space-x-4">
+                    <label className="w-1/3 text-gray-600 font-medium">Role:</label>
+                    <div className="flex-1 px-4 py-2 bg-gray-100 border border-gray-300 rounded-md text-gray-700">
+                        {user?.role || "N/A"}
                     </div>
                 </div>
-                <div>
-                    <label className="block text-gray-600 font-medium mb-1">Active</label>
-                    <div className="w-full border border-gray-300 px-3 py-2 rounded-md bg-gray-100">
-                        {user.isActive ? "Active" : "Inactive"}
-                    </div>
-                </div>
-                <div>
-                    <label className="block text-gray-600 font-medium mb-1">Autoplay</label>
-                    <div className="w-full border border-gray-300 px-3 py-2 rounded-md bg-gray-100">
-                        {user.isAutoplay ? "Enabled" : "Disabled"}
-                    </div>
-                </div>
-                <div>
-                    <label className="block text-gray-600 font-medium mb-1">Registration Date</label>
-                    <div className="w-full border border-gray-300 px-3 py-2 rounded-md bg-gray-100">
-                        {new Date(user.registrationDate).toLocaleDateString()}
-                    </div>
-                </div>
-                <div className="flex justify-end mt-6">
-                    <button
-                        type="button"
-                        className="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400"
+                <div className="flex items-center space-x-4">
+                    <label className="w-1/3 text-gray-600 font-medium">Status:</label>
+                    <div
+                        className={`flex-1 px-4 py-2 bg-gray-100 border border-gray-300 rounded-md text-gray-700 ${
+                            user?.isActive ? "text-green-600" : "text-red-600"
+                        }`}
                     >
-                        Close
-                    </button>
+                        {user?.isActive ? "Active" : "Inactive"}
+                    </div>
+                </div>
+                <div className="flex items-center space-x-4">
+                    <label className="w-1/3 text-gray-600 font-medium">Autoplay:</label>
+                    <div className="flex-1 px-4 py-2 bg-gray-100 border border-gray-300 rounded-md text-gray-700">
+                        {user?.isAutoplay ? "Enabled" : "Disabled"}
+                    </div>
+                </div>
+                <div className="flex items-center space-x-4">
+                    <label className="w-1/3 text-gray-600 font-medium">Registration Date:</label>
+                    <div className="flex-1 px-4 py-2 bg-gray-100 border border-gray-300 rounded-md text-gray-700">
+                        {user?.registerationDate || "N/A"}
+                    </div>
                 </div>
             </div>
         </div>

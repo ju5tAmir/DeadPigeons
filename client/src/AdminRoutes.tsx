@@ -13,6 +13,7 @@ import FinishGame from "./components/admin/game/FinishGame.tsx";
 import UsersOverview from "./components/admin/users/UsersOverview.tsx";
 import ViewUser from "./components/admin/users/ViewUser.tsx";
 import EditUser from "./components/admin/users/EditUser.tsx";
+import UserManager from "./components/admin/users/UserManager.tsx";
 
 function AdminRoutes() {
     return (
@@ -35,7 +36,7 @@ function AdminRoutes() {
                             </Route>
                             <Route path={RoutePath.users} element={<UsersOverview/>}/>
                             <Route path={RoutePath.users}>
-                                <Route path=":id" >
+                                <Route path=":id" element={<UserManager />}>
                                     <Route path="update" />
                                 </Route>
                             </Route>

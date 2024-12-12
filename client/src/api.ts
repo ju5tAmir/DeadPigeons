@@ -1002,6 +1002,23 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * No description
      *
      * @tags User
+     * @name UserDetail
+     * @request GET:/api/user/{id}
+     * @secure
+     */
+    userDetail: (id: string, params: RequestParams = {}) =>
+      this.request<UserInfo, any>({
+        path: `/api/user/${id}`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags User
      * @name UserAllList
      * @request GET:/api/user/all
      * @secure
