@@ -2,9 +2,17 @@ import GameDetails from "./GameDetails.tsx";
 import GamePlayers from "./GamePlayers.tsx";
 import {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
-import {BoardResponse, GameBoardsDetails, GameLwResponse, GamePlayerDetails} from "../../../api.ts";
+import {
+    BoardResponse,
+    GameBoardsDetails,
+    GameLwResponse,
+    GamePlayerDetails,
+    WinnersRequest,
+    WinnersResponse
+} from "../../../api.ts";
 import {http} from "../../../http.ts";
 import GameBoardDetails from "./GameBoardDetails.tsx";
+import GameWinners from "./GameWinners.tsx";
 
 function GameManager() {
     const { id } = useParams();
@@ -13,6 +21,9 @@ function GameManager() {
     const [playersFetched, setPlayersFetched] = useState(false); // Track if players are fetched
     const [boards, setBoards] = useState<GameBoardsDetails[] | null>(null);
     const [boardsFetched, setBoardsFetched] = useState(false);
+    const [winners, setWinners] = useState<WinnersResponse | null>(null);
+    const [winnersFetched, setWinnersFetched] = useState(false);
+
 
     const fetchGameLightWeightDetails = async (gameId: string) => {
         const response = await http.gameLwDetail(gameId);
@@ -32,6 +43,14 @@ function GameManager() {
             const response = await http.gameBoardsDetail(id);
             setBoards(response.data);
             setBoardsFetched(true);
+        }
+    };
+
+    const fetchGameWinners = async () => {
+        if (!winnersFetched && id) {
+            const response = await http.winnerDetail(id);
+            setWinners(response.data);
+            setWinnersFetched(true);
         }
     };
 
@@ -104,6 +123,43 @@ function GameManager() {
                             )}
                         </div>
                     </details>
+
+
+                    <details
+                        className="border border-gray-300 rounded-lg"
+                        open={false}
+                        onToggle={(e) => {
+                            if ((e.target as HTMLDetailsElement).open && gameLwDetails?.gameInfo?.status === 'finished') {
+                                fetchGameWinners();
+                            }
+                        }}
+                    >
+                        <summary
+                            className={`cursor-pointer px-6 py-4 text-gray-800 font-semibold bg-gray-100 rounded-t-lg hover:bg-gray-200 ${
+                                gameLwDetails?.gameInfo?.status !== 'Finished' ? 'text-gray-400 cursor-not-allowed' : ''
+                            }`}
+                            onClick={(e) => {
+                                // Prevent toggling if the game isn't finished
+                                if (gameLwDetails?.gameInfo?.status !== 'Finished') {
+                                    e.preventDefault();
+                                } else {
+                                    fetchGameWinners();
+                                }
+                            }}
+                        >
+                            Winners
+                        </summary>
+                        <div className="px-6 py-4 bg-white border-t border-gray-300">
+                            {boards ? (
+                                <GameWinners result={winners} />
+                            ) : (
+                                <p>Loading Winners...</p>
+                            )}
+                        </div>
+                    </details>
+
+
+
                 </div>
 
                 {/* Back Button */}

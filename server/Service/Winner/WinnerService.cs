@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Service.Game;
 using Service.Package.Utils;
 using Service.Repositories;
+using Service.Utils;
 using Service.Winner.Dto;
 using Service.Winner.Utils;
 
@@ -119,6 +120,7 @@ public class WinnerService( // Question: At this point IDK if I should go with r
                     board.BoardId,
                     PackageMapper.ToResponse(board.Package),
                     board.PlaySequence,
+                    TimeUtils.ToCet(board.PlayDate ?? DateTime.MaxValue),
                     boardPrize
                 ));
             }

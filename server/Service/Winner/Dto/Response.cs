@@ -23,6 +23,7 @@ public record BoardDetails(
     Guid BoardId,
     PackageResponse PackageDetails,
     List<int> PlaySequence,
+    DateTime PlayDate,
     decimal Prize
     );
 
