@@ -650,6 +650,23 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * No description
      *
      * @tags Board
+     * @name BoardUserDetail
+     * @request GET:/api/board/user/{id}
+     * @secure
+     */
+    boardUserDetail: (id: string, params: RequestParams = {}) =>
+      this.request<BoardResponse[], any>({
+        path: `/api/board/user/${id}`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Board
      * @name BoardPlayCreate
      * @request POST:/api/board/play
      * @secure

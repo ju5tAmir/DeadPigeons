@@ -1,14 +1,17 @@
 using DataAccess.Entities;
+using FluentValidation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Service.Auth.Dto;
 using Service.Auth.Utils;
 using Service.Repositories;
+using Service.Users.Dto;
 
 namespace Service.Users;
 
 public class UserService(    
-    IRepository<User> userRepository
+    IRepository<User> userRepository,
+    IValidator<UpdateUserRequest> updateValidator
 )
     : IUserService
 {
@@ -50,5 +53,36 @@ public class UserService(
         return usersWithRoles;
     }
 
-   
+    public async Task<bool> UpdateUser(Guid id, UpdateUserRequest user)
+    {
+        await updateValidator.ValidateAndThrowAsync(user);
+        try
+        {
+            // Find the existing user in the database
+            var existingUser = await userRepository
+                .Query()
+                .Where(u => u.Id == id.ToString())
+                .FirstOrDefaultAsync();
+                
+            if (existingUser == null)
+            {
+                throw new NotFoundError(nameof(User), new { Id = id });
+            }
+
+            existingUser.FirstName = user.FirstName;
+            existingUser.LastName = user.LastName;
+            existingUser.Email = user.Email;
+            existingUser.PhoneNumber = user.PhoneNumber;
+            existingUser.IsActive = user.IsActive;
+            existingUser.IsAutoPlay = user.IsAutoplay;
+        
+            // Save changes to the database
+            await userRepository.Update(existingUser);
+            return true;
+        }
+        catch (Exception ex)
+        {
+            return false;
+        }
+    }
 }

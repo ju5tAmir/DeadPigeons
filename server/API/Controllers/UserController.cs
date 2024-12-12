@@ -9,6 +9,7 @@ using Service.Auth;
 using Service.Auth.Dto;
 using Service.Security;
 using Service.Users;
+using Service.Users.Dto;
 
 namespace API.Controllers;
 
@@ -37,5 +38,15 @@ public class UserController(IUserService service): ControllerBase
         return await service.GetAllUsers(userManager);
     }
     
+    [HttpPut]
+    [Route("{id}")]
+    [AllowAnonymous]
+    public async Task<bool> UpdateUser(
+        [FromBody] UpdateUserRequest user, Guid id
+    )
+    {
+        return await service.UpdateUser(id, user);
+    }
+
     
 }

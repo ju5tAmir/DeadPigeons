@@ -5,11 +5,16 @@ import {http} from "../../../http.ts";
 
 function EditUser() {
     const { id } = useParams();
-    const [user, setUser] = useState();
+    const [user, setUser] = useState<UserInfo>();
 
 
-    const fetchUser = async () => {
-        // const res = await http.
+    const fetchUser = async (userId: string) => {
+        const res = await http.userDetail(userId);
+        setUser(res.data);
+    }
+
+    const handleUpdate = async ( ) => {
+        const res = await http.
     }
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -25,7 +30,7 @@ function EditUser() {
     };
 
     useEffect (() => {
-        if (id) fetchUser();
+        if (id) fetchUser(id);
     }, []);
 
     return (
