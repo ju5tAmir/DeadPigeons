@@ -11,4 +11,5 @@ public interface IUserService
     Task<List<UserInfo>> GetAllUsers(UserManager<User> userManager);
 
     Task<bool> UpdateUser(Guid id, UpdateUserRequest user);
+    Task<bool> DeleteUser(Guid id);
 }

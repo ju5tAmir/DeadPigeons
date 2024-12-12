@@ -47,6 +47,16 @@ public class UserController(IUserService service): ControllerBase
     {
         return await service.UpdateUser(id, user);
     }
+    
+    [HttpDelete]
+    [Route("{id}")]
+    [AllowAnonymous]
+    public async Task<bool> DeleteUser(
+        Guid id
+    )
+    {
+        return await service.DeleteUser(id);
+    }
 
     
 }

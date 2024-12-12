@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using DataAccess.Entities;
 using FluentValidation;
 using Microsoft.AspNetCore.Identity;
@@ -79,6 +80,33 @@ public class UserService(
             // Save changes to the database
             await userRepository.Update(existingUser);
             return true;
+        }
+        catch (Exception ex)
+        {
+            return false;
+        }
+    }
+
+    public async Task<bool> DeleteUser(Guid id)
+    {
+        try
+        {
+            var user = await userRepository
+                .Query()
+                .Where(u => u.Id == id.ToString())
+                .FirstOrDefaultAsync();
+
+            if (user == null)
+            {
+                throw new NotFoundError(nameof(User), new { Id = id });
+
+            }
+
+            await userRepository
+                .Delete(user);
+
+            return true;
+
         }
         catch (Exception ex)
         {
