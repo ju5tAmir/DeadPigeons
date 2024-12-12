@@ -36,8 +36,9 @@ function AdminRoutes() {
                             </Route>
                             <Route path={RoutePath.users} element={<UsersOverview/>}/>
                             <Route path={RoutePath.users}>
-                                <Route path=":id" element={<UserManager />}>
-                                    <Route path="update" />
+                            <Route path=":id" element={<UserManager />}></Route>
+                                <Route path=":id">
+                                    <Route path="update" element={<EditUser/>}/>
                                 </Route>
                             </Route>
                             <Route path={RoutePath.boards} element={<BoardsOverview/>}/>

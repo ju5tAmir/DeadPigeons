@@ -1,23 +1,59 @@
-import React, {useEffect, useState} from "react";
-import {UserInfo} from "../../../api.ts";
-import {useParams} from "react-router-dom";
-import {http} from "../../../http.ts";
+import React, { useEffect, useState } from "react";
+import { UserInfo } from "../../../api.ts";
+import { useParams, useNavigate } from "react-router-dom";
+import { http } from "../../../http.ts";
+import toast from "react-hot-toast";
 
 function EditUser() {
-    const { id } = useParams();
-    const [user, setUser] = useState<UserInfo>();
+    const { id } = useParams<{ id: string }>();
+    const navigate = useNavigate();
+    const [formData, setFormData] = useState<UserInfo>({
+        firstName: "",
+        lastName: "",
+        username: "",
+        email: "",
+        phoneNumber: "",
+        role: "",
+        isActive: false,
+        isAutoplay: false,
+    });
 
+    const [loading, setLoading] = useState(true);
 
+    // Fetch user data
     const fetchUser = async (userId: string) => {
-        const res = await http.userDetail(userId);
-        setUser(res.data);
-    }
+        try {
+            const res = await http.userDetail(userId);
+            setFormData(res.data);
+        } catch (error) {
+            toast.error("Failed to load user details.");
+        } finally {
+            setLoading(false);
+        }
+    };
 
-    const handleUpdate = async ( ) => {
-        const res = await http.
-    }
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const handleUpdate = async () => {
+        toast.promise(
+            http.userUpdate(id!, formData),
+            {
+                loading: "Updating the user...",
+                success: () => {
+                    navigate(-1); // Go back to the previous page
+                    return "User updated successfully!";
+                },
+                error: (err) => {
+                    const message = err?.response?.data?.error || "Failed to update user.";
+                    return `Error: ${message}`;
+                },
+            }
+        );
+    };
+
+    // Handle form changes
+    const handleChange = (
+        e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    ) => {
         const { name, value } = e.target;
         setFormData((prev) => ({
             ...prev,
@@ -25,13 +61,19 @@ function EditUser() {
         }));
     };
 
+    // Handle form submission
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+        handleUpdate();
     };
 
-    useEffect (() => {
+    useEffect(() => {
         if (id) fetchUser(id);
-    }, []);
+    }, [id]);
+
+    if (loading) {
+        return <p>Loading user details...</p>;
+    }
 
     return (
         <div className="max-w-lg mx-auto mt-8 p-6 bg-white shadow-md rounded-lg">
@@ -124,7 +166,7 @@ function EditUser() {
                 <div className="flex justify-end space-x-4 mt-6">
                     <button
                         type="button"
-                        // onClick={onCancel}
+                        onClick={() => navigate(-1)}
                         className="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400"
                     >
                         Cancel

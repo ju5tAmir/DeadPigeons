@@ -248,6 +248,15 @@ export interface TransactionResponse {
   transactionDate?: string | null;
 }
 
+export interface UpdateUserRequest {
+  firstName?: string | null;
+  lastName?: string | null;
+  email?: string | null;
+  phoneNumber?: string | null;
+  isActive?: boolean;
+  isAutoplay?: boolean;
+}
+
 export interface UserInfo {
   userId?: string | null;
   firstName?: string | null;
@@ -1028,6 +1037,25 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/api/user/${id}`,
         method: "GET",
         secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags User
+     * @name UserUpdate
+     * @request PUT:/api/user/{id}
+     * @secure
+     */
+    userUpdate: (id: string, data: UpdateUserRequest, params: RequestParams = {}) =>
+      this.request<boolean, any>({
+        path: `/api/user/${id}`,
+        method: "PUT",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
         format: "json",
         ...params,
       }),

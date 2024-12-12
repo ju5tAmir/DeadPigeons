@@ -4,6 +4,7 @@ import {UserInfo} from "../../../api.ts";
 import {toDanishTimeFormat} from "../../../utils/TimeUtils.ts";
 import {useNavigate} from "react-router-dom";
 import {RoutePath} from "../../../utils/admin/RoutePath.ts";
+import EditUser from "./EditUser.tsx";
 
 function UsersOverview() {
     const [userList, setUserList] = useState<UserInfo[] | null>(null);
@@ -15,7 +16,7 @@ function UsersOverview() {
     }
 
     const handleEdit = (userId: string) => {
-        navigate(`${userId}/edit`)
+        navigate(`${userId}/update`)
     };
 
     const handleDelete = (userId: string) => {
