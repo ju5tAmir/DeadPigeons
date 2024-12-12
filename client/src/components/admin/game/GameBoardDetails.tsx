@@ -24,24 +24,28 @@ function GameBoardDetails({ boards }: { boards: GameBoardsDetails[] }) {
                 {/* Table Header */}
                 <thead className="bg-gray-100">
                 <tr>
+                    <th className="border border-gray-300 px-4 py-2 text-left">Full Name</th>
+                    <th className="border border-gray-300 px-4 py-2 text-left">Username</th>
                     <th className="border border-gray-300 px-4 py-2 text-left">Package Fields</th>
                     <th className="border border-gray-300 px-4 py-2 text-left">Package Price</th>
                     <th className="border border-gray-300 px-4 py-2 text-left">Play Sequence</th>
-                    {/*<th className="border border-gray-300 px-4 py-2 text-left">Play Time</th>*/}
+                    <th className="border border-gray-300 px-4 py-2 text-left">Play Date</th>
                 </tr>
                 </thead>
                 {/* Table Body */}
                 <tbody>
                 {boards.map((board, index) => (
                     <tr key={index} className="hover:bg-gray-50">
+                        <td className="border border-gray-300 px-4 py-2">{board.player?.firstName + " " + board.player?.lastName}</td>
+                        <td className="border border-gray-300 px-4 py-2">{board.player?.username}</td>
                         <td className="border border-gray-300 px-4 py-2">{board.packageDetails?.numberOfFields}</td>
                         <td className="border border-gray-300 px-4 py-2">{board.packageDetails?.price}</td>
                         <td className="border border-gray-300 px-4 py-2">
                             {board.playSequence?.join (", ")}
                         </td>
-                        {/*<td className="border border-gray-300 px-4 py-2">*/}
-                        {/*    {toDanishTimeFormat(board.)}*/}
-                        {/*</td>*/}
+                        <td className="border border-gray-300 px-4 py-2">
+                            {toDanishTimeFormat(board.playDate)}
+                        </td>
                     </tr>
                 ))
                 }

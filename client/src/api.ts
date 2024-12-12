@@ -76,8 +76,11 @@ export interface FinishGameRequest {
 export interface GameBoardsDetails {
   /** @format uuid */
   boardId?: string;
+  player?: GamePlayerDetails;
   packageDetails?: PackageResponse;
   playSequence?: number[] | null;
+  /** @format date-time */
+  playDate?: string;
 }
 
 export interface GameInfo {

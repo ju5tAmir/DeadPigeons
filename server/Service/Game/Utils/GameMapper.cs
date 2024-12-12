@@ -46,12 +46,16 @@ public static class GameMapper
             player.IsAutoPlay);
     }
 
-    public static GameBoardsDetails ToBoardDetails(Board board)
+    public static GameBoardsDetails ToBoardDetails(User player, Board board)
     {
         return new GameBoardsDetails(
             board.BoardId,
+            ToPlayer(player),
             PackageMapper.ToResponse(board.Package),
-            board.PlaySequence);
+            board.PlaySequence,
+            board.PlayDate.HasValue ? TimeUtils.ToCet(board.PlayDate.Value) : DateTime.MaxValue
+            
+            );
     }
     
     public static GameInfo ToGameInfo(Game game)

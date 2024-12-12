@@ -126,97 +126,97 @@ public class GameService(
     public async Task<GameResponse> GetGameFullDetails(Guid gameId)
     {
         throw new NotImplementedException();
-        // Fetching the game
-        var game = await gameRepository
-            .Query()
-            .Where(g => g.GameId == gameId)
-            .FirstOrDefaultAsync();
-        
-        // Fetching the boards related to the game
-        var boardsList = await boardRepository
-            .Query()
-            .Where(b => b.GameId == gameId)
-            .Include(b => b.Package)
-            .Include(b => b.Player)
-            .ToListAsync();
-        
-        // Fetch all the players objects
-        var players = boardsList
-            .Select(b => b.Player)
-            .ToList()
-            .Distinct();
-        
-        // Extract unique player IDs from the boards 
-        var playerIds = boardsList
-            .Select(b => b.PlayerId)
-            .Distinct()
-            .ToList();
-        
-        
-        // Map players to a dictionary for quick lookup
-        var playersDictionary = players.ToDictionary(p => p.Id, p => new GamePlayerDetails(
-            Guid.Parse(p.Id),
-            p.FirstName,
-            p.LastName,
-            p.UserName,
-            p.IsAutoPlay
-        ));
-        
-        // Group boards by PlayerId
-        var boardsGroupedByPlayer = boardsList
-            .GroupBy(b => b.PlayerId) // Group by PlayerId
-            .ToDictionary(g => g.Key, g => g.ToList()); // Convert to Dictionary for easy access
-
-        // Total bets
-        decimal totalPrize = boardsList.Sum(b => b.Package.Price) * GameProfits.UserProfit / 100;
-        totalPrize = Math.Round(totalPrize, 2); // Round to 2 decimal places
-
-        List<Player> playersList = new List<Player>();
-        // Process boards grouped by players
-        foreach (var playerBoards in boardsGroupedByPlayer)
-        {
-            var playerId = playerBoards.Key;
-            var playerBoardsList = playerBoards.Value;
-
-            // Get player details from the dictionary
-            if (!playersDictionary.TryGetValue(playerId, out var playerDetails))
-            {
-                throw new NotFoundError(nameof(User), new { Id = playerId });
-            }
-
-            // Calculate the total prize for the player (sum of all their board prizes)
-            decimal totalWin = 0;
-            var boardDetailsList = new List<GameBoardsDetails>();
-
-            // Calculate each board's prize
-            foreach (var board in playerBoardsList)
-            {
-                // Calculate individual board prize as a percentage of the total prize
-                decimal boardPrize = board.Package.Price / boardsList.Sum(b => b.Package.Price) * totalPrize;
-                boardPrize = Math.Round(boardPrize, 2); // Round to 2 decimal places
-
-                // Add the board prize to the total win
-                totalWin += boardPrize;
-
-                // Map board to BoardDetails
-                boardDetailsList.Add(new GameBoardsDetails(
-                    board.BoardId,
-                    PackageMapper.ToResponse(board.Package),
-                    board.PlaySequence
-                    // boardPrize
-                ));
-            }
-
-            var player = new Player(
-                playerDetails,
-                boardDetailsList
-                );
-            
-            playersList.Add(player);
-        }
-
-        throw new NotImplementedException();
-        // return new GameFullResponse();
+        // // Fetching the game
+        // var game = await gameRepository
+        //     .Query()
+        //     .Where(g => g.GameId == gameId)
+        //     .FirstOrDefaultAsync();
+        //
+        // // Fetching the boards related to the game
+        // var boardsList = await boardRepository
+        //     .Query()
+        //     .Where(b => b.GameId == gameId)
+        //     .Include(b => b.Package)
+        //     .Include(b => b.Player)
+        //     .ToListAsync();
+        //
+        // // Fetch all the players objects
+        // var players = boardsList
+        //     .Select(b => b.Player)
+        //     .ToList()
+        //     .Distinct();
+        //
+        // // Extract unique player IDs from the boards 
+        // var playerIds = boardsList
+        //     .Select(b => b.PlayerId)
+        //     .Distinct()
+        //     .ToList();
+        //
+        //
+        // // Map players to a dictionary for quick lookup
+        // var playersDictionary = players.ToDictionary(p => p.Id, p => new GamePlayerDetails(
+        //     Guid.Parse(p.Id),
+        //     p.FirstName,
+        //     p.LastName,
+        //     p.UserName,
+        //     p.IsAutoPlay
+        // ));
+        //
+        // // Group boards by PlayerId
+        // var boardsGroupedByPlayer = boardsList
+        //     .GroupBy(b => b.PlayerId) // Group by PlayerId
+        //     .ToDictionary(g => g.Key, g => g.ToList()); // Convert to Dictionary for easy access
+        //
+        // // Total bets
+        // decimal totalPrize = boardsList.Sum(b => b.Package.Price) * GameProfits.UserProfit / 100;
+        // totalPrize = Math.Round(totalPrize, 2); // Round to 2 decimal places
+        //
+        // List<Player> playersList = new List<Player>();
+        // // Process boards grouped by players
+        // foreach (var playerBoards in boardsGroupedByPlayer)
+        // {
+        //     var playerId = playerBoards.Key;
+        //     var playerBoardsList = playerBoards.Value;
+        //
+        //     // Get player details from the dictionary
+        //     if (!playersDictionary.TryGetValue(playerId, out var playerDetails))
+        //     {
+        //         throw new NotFoundError(nameof(User), new { Id = playerId });
+        //     }
+        //
+        //     // Calculate the total prize for the player (sum of all their board prizes)
+        //     decimal totalWin = 0;
+        //     var boardDetailsList = new List<GameBoardsDetails>();
+        //
+        //     // Calculate each board's prize
+        //     foreach (var board in playerBoardsList)
+        //     {
+        //         // Calculate individual board prize as a percentage of the total prize
+        //         decimal boardPrize = board.Package.Price / boardsList.Sum(b => b.Package.Price) * totalPrize;
+        //         boardPrize = Math.Round(boardPrize, 2); // Round to 2 decimal places
+        //
+        //         // Add the board prize to the total win
+        //         totalWin += boardPrize;
+        //
+        //         // Map board to BoardDetails
+        //         boardDetailsList.Add(new GameBoardsDetails(
+        //             board.BoardId,
+        //             PackageMapper.ToResponse(board.Package),
+        //             board.PlaySequence
+        //             // boardPrize
+        //         ));
+        //     }
+        //
+        //     var player = new Player(
+        //         playerDetails,
+        //         boardDetailsList
+        //         );
+        //     
+        //     playersList.Add(player);
+        // }
+        //
+        // throw new NotImplementedException();
+        // // return new GameFullResponse();
     }
 
     public async Task<List<GameLwResponse>> GetGamesLightWeightResponse(int year)
@@ -259,24 +259,32 @@ public class GameService(
             .Query()
             .Join(
                 boardRepository.Query(),
-                user => user.Id,             // Key from userRepository (User.Id)
-                board => board.PlayerId,       // Key from boardRepository (Board.UserId)
-                (user, board) => new { user, board } // Result selector
+                user => user.Id,            
+                board => board.PlayerId,      
+                (user, board) => new { user, board } 
             )
-            .Where(joined => joined.board.GameId == gameId) // Filter by GameId
-            .Select(joined => GameMapper.ToPlayer(joined.user)) // Map User to GamePlayerDetails
+            .Where(joined => joined.board.GameId == gameId)
+            .Select(joined => GameMapper.ToPlayer(joined.user))
             .ToListAsync();
     }
 
     public async Task<List<GameBoardsDetails>> GetGameBoards(Guid id)
     {
-        return await boardRepository
+        return await userRepository // UserRepository? because AspNetUser is not User :(  
             .Query()
-            .Where(b => b.GameId == id)
-            .Include(b => b.Package)
-            .Select(b => GameMapper.ToBoardDetails(b))
-            .ToListAsync();
+            .Join(
+                boardRepository.Query()
+                    .Include(board => board.Package),
+                user => user.Id,             
+                board => board.PlayerId,    
+                (user, board) => new { user, board }
+            )
+            .Where(joined => joined.board.GameId == id) 
+            .Select(joined => GameMapper.ToBoardDetails(joined.user, joined.board)) 
+            .ToListAsync(); 
     }
+
+
 
 
     public async Task<GameResponse> GetCurrentGame()

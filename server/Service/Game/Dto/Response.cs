@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices.JavaScript;
 using DataAccess.Entities;
 using Service.Package.Dto;
 
@@ -125,8 +126,10 @@ public record GamePlayerDetails(
 
 public record GameBoardsDetails(
     Guid BoardId,
+    GamePlayerDetails Player,
     PackageResponse PackageDetails,
-    List<int> PlaySequence
+    List<int> PlaySequence,
+    DateTime PlayDate
     // decimal Prize
 );
 
