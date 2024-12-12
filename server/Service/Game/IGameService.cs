@@ -14,4 +14,5 @@ public interface IGameService
     Task<List<int>> GetYears();
     Task<GameLwResponse> GetLightWeightGameById(Guid id);
     Task<List<GamePlayerDetails>> GetPlayersForGame(Guid id);
+    Task<List<GameBoardsDetails>> GetGameBoards(Guid id);
 }

@@ -2,7 +2,7 @@ import GamesTable from "../components/user/game/GamesTable.tsx";
 import GameDetails from "../components/admin/game/GameDetails.tsx";
 import React from "react";
 import GamePlayersDetails, {UserInfo} from "../components/admin/game/GamePlayersDeatils.tsx";
-import GameBoardsDetails, {Boards} from "../components/admin/game/GameBoardsDetails.tsx";
+import GameBoardDetails, {Boards} from "../components/admin/game/GameBoardDetails.tsx";
 import GamesOverview from "../components/user/game/GamesOverview.tsx";
 import UsersOverview from "../components/admin/users/UsersOverview.tsx";
 import EditUser from "../components/admin/users/EditUser.tsx";
@@ -320,7 +320,7 @@ function Lab() {
 
             {/*<GamePlayersDetails players={mockPlayers} />*/}
 
-            {/*<GameBoardsDetails boards={mockBoards} />*/}
+            {/*<GameBoardDetails boards={mockBoards} />*/}
 
             {/*<GamesOverview/>*/}
 

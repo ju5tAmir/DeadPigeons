@@ -73,6 +73,13 @@ export interface FinishGameRequest {
   winningSequence?: number[] | null;
 }
 
+export interface GameBoardsDetails {
+  /** @format uuid */
+  boardId?: string;
+  packageDetails?: PackageResponse;
+  playSequence?: number[] | null;
+}
+
 export interface GameInfo {
   /** @format uuid */
   gameId?: string;
@@ -730,6 +737,23 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     gamePlayersDetail: (id: string, params: RequestParams = {}) =>
       this.request<GamePlayerDetails[], any>({
         path: `/api/game/${id}/players`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Game
+     * @name GameBoardsDetail
+     * @request GET:/api/game/{id}/boards
+     * @secure
+     */
+    gameBoardsDetail: (id: string, params: RequestParams = {}) =>
+      this.request<GameBoardsDetails[], any>({
+        path: `/api/game/${id}/boards`,
         method: "GET",
         secure: true,
         format: "json",

@@ -2,14 +2,17 @@ import GameDetails from "./GameDetails.tsx";
 import GamePlayers from "./GamePlayers.tsx";
 import {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
-import {GameLwResponse, GamePlayerDetails} from "../../../api.ts";
+import {BoardResponse, GameBoardsDetails, GameLwResponse, GamePlayerDetails} from "../../../api.ts";
 import {http} from "../../../http.ts";
+import GameBoardDetails from "./GameBoardDetails.tsx";
 
 function GameManager() {
     const { id } = useParams();
     const [gameLwDetails, setGameLwDetails] = useState<GameLwResponse | null>(null);
     const [players, setPlayers] = useState<GamePlayerDetails[] | null>(null);
     const [playersFetched, setPlayersFetched] = useState(false); // Track if players are fetched
+    const [boards, setBoards] = useState<GameBoardsDetails[] | null>(null);
+    const [boardsFetched, setBoardsFetched] = useState(false);
 
     const fetchGameLightWeightDetails = async (gameId: string) => {
         const response = await http.gameLwDetail(gameId);
@@ -21,6 +24,14 @@ function GameManager() {
             const response = await http.gamePlayersDetail(id);
             setPlayers(response.data);
             setPlayersFetched(true); // Mark players as fetched
+        }
+    };
+
+    const fetchGameBoards = async () => {
+        if (!boardsFetched && id) {
+            const response = await http.gameBoardsDetail(id);
+            setBoards(response.data);
+            setBoardsFetched(true);
         }
     };
 
@@ -67,6 +78,29 @@ function GameManager() {
                                 <GamePlayers players={players} />
                             ) : (
                                 <p>Loading players...</p>
+                            )}
+                        </div>
+                    </details>
+
+                    {/* Boards Details */}
+                    <details
+                        className="border border-gray-300 rounded-lg"
+                        open={false}
+                        onToggle={(e) => {
+                            if ((e.target as HTMLDetailsElement).open) {
+                                fetchGameBoards();
+                            }
+                        }}
+                    >
+                        <summary
+                            className="cursor-pointer px-6 py-4 text-gray-800 font-semibold bg-gray-100 rounded-t-lg hover:bg-gray-200">
+                            Boards Details
+                        </summary>
+                        <div className="px-6 py-4 bg-white border-t border-gray-300">
+                            {boards ? (
+                                <GameBoardDetails boards={boards} />
+                            ) : (
+                                <p>Loading Boards...</p>
                             )}
                         </div>
                     </details>

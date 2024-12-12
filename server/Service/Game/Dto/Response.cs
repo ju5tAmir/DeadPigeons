@@ -102,12 +102,12 @@ public record GameFullResponse(
 );
 public record Player(
     GamePlayerDetails GamePlayerDetails,
-    List<BoardDetails> PlayedBoards
+    List<GameBoardsDetails> PlayedBoards
 );
 
 public record PlayerWithBoards(
     GamePlayerDetails GamePlayerDetails,
-    List<BoardDetails> PlayedBoards
+    List<GameBoardsDetails> PlayedBoards
 );
 
 public record Players(
@@ -123,7 +123,7 @@ public record GamePlayerDetails(
     bool AutoPlay
 );
 
-public record BoardDetails(
+public record GameBoardsDetails(
     Guid BoardId,
     PackageResponse PackageDetails,
     List<int> PlaySequence

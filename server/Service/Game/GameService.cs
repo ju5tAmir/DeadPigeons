@@ -186,7 +186,7 @@ public class GameService(
 
             // Calculate the total prize for the player (sum of all their board prizes)
             decimal totalWin = 0;
-            var boardDetailsList = new List<BoardDetails>();
+            var boardDetailsList = new List<GameBoardsDetails>();
 
             // Calculate each board's prize
             foreach (var board in playerBoardsList)
@@ -199,7 +199,7 @@ public class GameService(
                 totalWin += boardPrize;
 
                 // Map board to BoardDetails
-                boardDetailsList.Add(new BoardDetails(
+                boardDetailsList.Add(new GameBoardsDetails(
                     board.BoardId,
                     PackageMapper.ToResponse(board.Package),
                     board.PlaySequence
@@ -265,6 +265,16 @@ public class GameService(
             )
             .Where(joined => joined.board.GameId == gameId) // Filter by GameId
             .Select(joined => GameMapper.ToPlayer(joined.user)) // Map User to GamePlayerDetails
+            .ToListAsync();
+    }
+
+    public async Task<List<GameBoardsDetails>> GetGameBoards(Guid id)
+    {
+        return await boardRepository
+            .Query()
+            .Where(b => b.GameId == id)
+            .Include(b => b.Package)
+            .Select(b => GameMapper.ToBoardDetails(b))
             .ToListAsync();
     }
 

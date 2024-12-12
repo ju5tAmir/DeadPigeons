@@ -45,6 +45,14 @@ public static class GameMapper
             player.UserName,
             player.IsAutoPlay);
     }
+
+    public static GameBoardsDetails ToBoardDetails(Board board)
+    {
+        return new GameBoardsDetails(
+            board.BoardId,
+            PackageMapper.ToResponse(board.Package),
+            board.PlaySequence);
+    }
     
     public static GameInfo ToGameInfo(Game game)
     {
