@@ -197,34 +197,48 @@ function GameDetails({game} : {game: GameLwResponse}) {
                         {/* Revenue */}
                         <tr>
                             <td className="border border-gray-300 px-4 py-2 flex justify-between items-center">
-
                                 <span className="flex-1 text-center">Net Revenue</span>
                             </td>
-                            <td className="border border-gray-300 px-4 py-2 text-center">${game?.income?.onlineIncome?.toFixed (2)}</td>
-                            <td className="border border-gray-300 px-4 py-2 text-center">${game?.income?.offlineIncome?.toFixed (2)}</td>
-                            <td className="border border-gray-300 px-4 py-2 text-center">${game?.income?.totalIncome?.toFixed (2)}</td>
+                            <td className="border border-gray-300 px-4 py-2 text-center">
+                                ${game?.income?.onlineIncome ? game.income.onlineIncome.toFixed(2) : '0.00'}
+                            </td>
+                            <td className="border border-gray-300 px-4 py-2 text-center">
+                                ${game?.income?.offlineIncome ? game.income.offlineIncome.toFixed(2) : '0.00'}
+                            </td>
+                            <td className="border border-gray-300 px-4 py-2 text-center">
+                                ${game?.income?.totalIncome ? game.income.totalIncome.toFixed(2) : '0.00'}
+                            </td>
                         </tr>
 
                         {/* Club Revenue */}
                         <tr>
                             <td className="border border-gray-300 px-4 py-2 flex justify-between items-center">
-
                                 <span className="flex-1 text-center">Club (30%)</span>
                             </td>
-                            <td className="border border-gray-300 px-4 py-2 text-center">${(game?.income?.onlineIncome * 0.30).toFixed (2)} </td>
-                            <td className="border border-gray-300 px-4 py-2 text-center">${(game?.income?.offlineIncome * 0.30).toFixed (2)}</td>
-                            <td className="border border-gray-300 px-4 py-2 text-center">${(game?.income?.totalIncome * 0.30).toFixed (2)}</td>
+                            <td className="border border-gray-300 px-4 py-2 text-center">
+                                ${(game?.income?.onlineIncome ? game.income.onlineIncome * 0.30 : 0).toFixed(2)}
+                            </td>
+                            <td className="border border-gray-300 px-4 py-2 text-center">
+                                ${(game?.income?.offlineIncome ? game.income.offlineIncome * 0.30 : 0).toFixed(2)}
+                            </td>
+                            <td className="border border-gray-300 px-4 py-2 text-center">
+                                ${(game?.income?.totalIncome ? game.income.totalIncome * 0.30 : 0).toFixed(2)}
+                            </td>
                         </tr>
-
                         {/* Players Revenue */}
                         <tr>
                             <td className="border border-gray-300 px-4 py-2 flex justify-between items-center">
-
                                 <span className="flex-1 text-center">Game (70%)</span>
                             </td>
-                            <td className="border border-gray-300 px-4 py-2 text-center">${(game?.income?.onlineIncome  * 0.70).toFixed (2)} </td>
-                            <td className="border border-gray-300 px-4 py-2 text-center">${(game?.income?.offlineIncome * 0.70).toFixed (2)}</td>
-                            <td className="border border-gray-300 px-4 py-2 text-center">${(game?.income?.totalIncome * 0.70).toFixed (2)}</td>
+                            <td className="border border-gray-300 px-4 py-2 text-center">
+                                ${(game?.income?.onlineIncome ? game.income.onlineIncome * 0.70 : 0).toFixed(2)}
+                            </td>
+                            <td className="border border-gray-300 px-4 py-2 text-center">
+                                ${(game?.income?.offlineIncome ? game.income.offlineIncome * 0.70 : 0).toFixed(2)}
+                            </td>
+                            <td className="border border-gray-300 px-4 py-2 text-center">
+                                ${(game?.income?.totalIncome ? game.income.totalIncome * 0.70 : 0).toFixed(2)}
+                            </td>
                         </tr>
 
                         {/* Payouts */}
