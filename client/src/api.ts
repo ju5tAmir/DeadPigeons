@@ -562,23 +562,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
-     * @tags Auth
-     * @name AuthUsersCreate
-     * @request POST:/api/auth/users
-     * @secure
-     */
-    authUsersCreate: (params: RequestParams = {}) =>
-      this.request<UserInfo[], any>({
-        path: `/api/auth/users`,
-        method: "POST",
-        secure: true,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
      * @tags Board
      * @name BoardDetail
      * @request GET:/api/board/{id}
@@ -1011,6 +994,23 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         body: data,
         secure: true,
         type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags User
+     * @name UserAllList
+     * @request GET:/api/user/all
+     * @secure
+     */
+    userAllList: (params: RequestParams = {}) =>
+      this.request<UserInfo[], any>({
+        path: `/api/user/all`,
+        method: "GET",
+        secure: true,
         format: "json",
         ...params,
       }),

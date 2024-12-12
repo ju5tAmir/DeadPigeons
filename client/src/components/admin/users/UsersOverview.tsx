@@ -1,14 +1,14 @@
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import {http} from "../../../http.ts";
 import {UserInfo} from "../../../api.ts";
+import {toDanishTimeFormat} from "../../../utils/TimeUtils.ts";
 
 function UsersOverview() {
-    const [players, setPlayers] = useState<UserInfo[] | null>(null);
-    const [userList, setUserList] = useState(players);
+    const [userList, setUserList] = useState<UserInfo[] | null>(null);
 
     const fetchUsers = async () => {
-        const res = await http.authUsersList();
-        setPlayers(res.data);
+        const res = await http.userAllList();
+        setUserList(res.data);
     }
 
     const handleEdit = (userId: string) => {
@@ -25,12 +25,15 @@ function UsersOverview() {
         console.log("Create a new player");
     };
 
+    useEffect (() => {
+        fetchUsers()
+    }, []);
 
     return (
         <div className="max-w-6xl mx-auto mt-8 p-6 bg-white shadow-md rounded-lg">
 
             <div className="flex justify-between items-center mb-4">
-                <h1 className="text-2xl font-bold text-gray-800">Game Players Details</h1>
+                <h1 className="text-2xl font-bold text-gray-800">Users Overview</h1>
                 <button
                     onClick={handleCreatePlayer}
                     className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 flex gap-2"
@@ -61,7 +64,7 @@ function UsersOverview() {
                 </thead>
                 {/* Table Body */}
                 <tbody>
-                {userList.map ((player) => (
+                {userList?.map ((player) => (
                     <tr key={player.userId} className="hover:bg-gray-50">
                         <td className="border border-gray-300 px-4 py-2">
                             {player.firstName} {player.lastName}
@@ -71,20 +74,13 @@ function UsersOverview() {
                         <td className="border border-gray-300 px-4 py-2">{player.phoneNumber}</td>
                         <td className="border border-gray-300 px-4 py-2 text-center">{player.role}</td>
                         <td className="border border-gray-300 px-4 py-2 text-center">
-                            <select
-                                value={player.isActive ? "active" : "inactive"}
-                                onChange={() => toggleActiveStatus (player.userId, player.isActive)}
-                                className="bg-white border border-gray-300 rounded px-2 py-1"
-                            >
-                                <option value="active">Active</option>
-                                <option value="inactive">Inactive</option>
-                            </select>
+                            {player.isActive ? "✅" : "❌"}
                         </td>
                         <td className="border border-gray-300 px-4 py-2 text-center">
                             {player.isAutoplay ? "✅" : "❌"}
                         </td>
                         <td className="border border-gray-300 px-4 py-2">
-                            {new Date (player.registrationDate).toLocaleDateString ()}
+                            {toDanishTimeFormat(player.registerationDate)}
                         </td>
                         <td className="border border-gray-300 px-4 py-2 flex text-center align-middle">
                             <button
