@@ -12,6 +12,26 @@ public class UserService(
 )
     : IUserService
 {
+
+    public async Task<UserInfo> GetUserById(UserManager<User> userManager, Guid id)
+    {
+        var user = await userRepository
+            .Query()
+            .Where(u => u.Id == id.ToString())
+            .FirstOrDefaultAsync();
+
+        if (user == null)
+        {
+            throw new NotFoundError(nameof(User), new { Id = id });
+        }
+        
+        var roles = await userManager.GetRolesAsync(user); 
+        var userInfo = UserInfoMapper.ToResponse(user, string.Join(", ", roles));
+
+        return userInfo;
+    }
+
+
     public async Task<List<UserInfo>> GetAllUsers(UserManager<User> userManager)
     {
         var users = await userRepository
@@ -29,4 +49,6 @@ public class UserService(
 
         return usersWithRoles;
     }
+
+   
 }

@@ -11,6 +11,8 @@ import GameDetails from "./components/admin/game/GameDetails.tsx";
 import GameManager from "./components/admin/game/GameManager.tsx";
 import FinishGame from "./components/admin/game/FinishGame.tsx";
 import UsersOverview from "./components/admin/users/UsersOverview.tsx";
+import ViewUser from "./components/admin/users/ViewUser.tsx";
+import EditUser from "./components/admin/users/EditUser.tsx";
 
 function AdminRoutes() {
     return (
@@ -32,6 +34,11 @@ function AdminRoutes() {
                                 </Route>
                             </Route>
                             <Route path={RoutePath.users} element={<UsersOverview/>}/>
+                            <Route path={RoutePath.users}>
+                                <Route path=":id" >
+                                    <Route path="update" />
+                                </Route>
+                            </Route>
                             <Route path={RoutePath.boards} element={<BoardsOverview/>}/>
                         </Routes>
                     </BrowserRouter>

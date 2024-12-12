@@ -6,6 +6,6 @@ namespace Service.Users;
 
 public interface IUserService
 {
+    Task<UserInfo> GetUserById(UserManager<User> userManager, Guid id);
     Task<List<UserInfo>> GetAllUsers(UserManager<User> userManager);
-
 }

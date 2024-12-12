@@ -17,9 +17,20 @@ namespace API.Controllers;
 public class UserController(IUserService service): ControllerBase
 {
     [HttpGet]
+    [Route("{id}")]
+    [AllowAnonymous]
+    public async Task<UserInfo> GetUserById(
+        [FromServices] UserManager<User> userManager,
+        Guid id
+    )
+    {
+        return await service.GetUserById(userManager, id);
+    }
+    
+    [HttpGet]
     [Route("all")]
     [AllowAnonymous]
-    public async Task<List<UserInfo>> ActivateAccount(
+    public async Task<List<UserInfo>> GetAllUsers(
         [FromServices] UserManager<User> userManager
     )
     {

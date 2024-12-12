@@ -1,12 +1,16 @@
-import React, { useState } from "react";
-import {UserInfo} from "./UsersOverview.tsx";
+import React, {useEffect, useState} from "react";
+import {UserInfo} from "../../../api.ts";
+import {useParams} from "react-router-dom";
+import {http} from "../../../http.ts";
 
-interface EditUserProps {
-    user: UserInfo;
-}
+function EditUser() {
+    const { id } = useParams();
+    const [user, setUser] = useState();
 
-function EditUser({ user}: EditUserProps) {
-    const [formData, setFormData] = useState(user);
+
+    const fetchUser = async () => {
+        // const res = await http.
+    }
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
@@ -19,6 +23,10 @@ function EditUser({ user}: EditUserProps) {
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
     };
+
+    useEffect (() => {
+        if (id) fetchUser();
+    }, []);
 
     return (
         <div className="max-w-lg mx-auto mt-8 p-6 bg-white shadow-md rounded-lg">
@@ -107,22 +115,6 @@ function EditUser({ user}: EditUserProps) {
                         <option value="true">Enabled</option>
                         <option value="false">Disabled</option>
                     </select>
-                </div>
-                <div>
-                    <label className="block text-gray-600 font-medium mb-1">Registration Date</label>
-                    <input
-                        type="date"
-                        name="registrationDate"
-                        value={new Date(formData.registrationDate).toISOString().split("T")[0]}
-                        onChange={(e) =>
-                            setFormData((prev) => ({
-                                ...prev,
-                                registrationDate: new Date(e.target.value),
-                            }))
-                        }
-                        className="w-full border border-gray-300 px-3 py-2 rounded-md"
-                        disabled
-                    />
                 </div>
                 <div className="flex justify-end space-x-4 mt-6">
                     <button

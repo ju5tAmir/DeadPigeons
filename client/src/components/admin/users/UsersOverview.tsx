@@ -2,9 +2,11 @@ import {useEffect, useState} from "react";
 import {http} from "../../../http.ts";
 import {UserInfo} from "../../../api.ts";
 import {toDanishTimeFormat} from "../../../utils/TimeUtils.ts";
+import {useNavigate} from "react-router-dom";
 
 function UsersOverview() {
     const [userList, setUserList] = useState<UserInfo[] | null>(null);
+    const navigate = useNavigate();
 
     const fetchUsers = async () => {
         const res = await http.userAllList();
@@ -12,8 +14,7 @@ function UsersOverview() {
     }
 
     const handleEdit = (userId: string) => {
-        console.log(`Edit user with ID: ${userId}`);
-        // Add your edit functionality here
+        navigate(`${userId}/edit`)
     };
 
     const handleDelete = (userId: string) => {
