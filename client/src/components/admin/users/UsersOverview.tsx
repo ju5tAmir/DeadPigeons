@@ -1,30 +1,15 @@
 import { useState } from "react";
+import {UserInfoResponse} from "../../../api.ts";
+import {http} from "../../../http.ts";
 
-export interface UserInfo {
-    userId: string;
-    firstName: string;
-    lastName: string;
-    username: string;
-    email: string;
-    phoneNumber: string;
-    role: string;
-    isActive: boolean;
-    isAutoplay: boolean;
-    registrationDate: Date;
-}
-
-// Add balance
-
-function UsersOverview({ players }: { players: UserInfo[] }) {
+function UsersOverview() {
+    const [players, setPlayers] = useState<UserInfoResponse[] | null>(null);
     const [userList, setUserList] = useState(players);
 
-    const toggleActiveStatus = (userId: string, isActive: boolean) => {
-        setUserList((prevList) =>
-            prevList.map((user) =>
-                user.userId === userId ? { ...user, isActive: !isActive } : user
-            )
-        );
-    };
+    const fetchUsers = async () => {
+        const res = await http.authUserinfoList();
+        setPlayers(res.data);
+    }
 
     const handleEdit = (userId: string) => {
         console.log(`Edit user with ID: ${userId}`);

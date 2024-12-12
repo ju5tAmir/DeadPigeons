@@ -17,7 +17,8 @@ using Service.Security;
 namespace Service.Auth;
 
 public class AuthService(
-    IRepository<DataAccess.Entities.Preference> preferenceRepository
+    IRepository<DataAccess.Entities.Preference> preferenceRepository,
+    IRepository<User> userRepository
     ): IAuthService
 {
     public async Task<RegisterResponse> Register(IOptions<AppOptions> options, UserManager<User> userManager, IEmailSender<User> emailSender , IValidator<RegisterRequest> validator, RegisterRequest data)
@@ -148,8 +149,25 @@ public class AuthService(
         {
             throw new AuthenticationError(); // Not using InvalidToken exception due to user enumeration
         }
-
         
         return Results.Ok(new {Message = "Password reset successfull."});
+    }
+
+    public async Task<List<UserInfo>> GetAllUsers(UserManager<User> userManager)
+    {
+        var users = await userRepository
+            .Query()
+            .ToListAsync();
+
+
+        var usersWithRoles = new List<UserInfo>();
+        foreach (var user in users)
+        {
+            var roles = await userManager.GetRolesAsync(user); 
+            var userInfo = UserInfoMapper.ToResponse(user, string.Join(", ", roles));
+            usersWithRoles.Add(userInfo);
+        }
+
+        return usersWithRoles;
     }
 }
