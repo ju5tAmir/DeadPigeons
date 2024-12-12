@@ -225,6 +225,7 @@ public class GameService(
         return await gameRepository
             .Query()
             .Where(g => g.Year == year)
+            .OrderBy(g => g.WeekNumber)  
             .Select(g => GameMapper.ToLightWeightResponse(g))
             .ToListAsync();
     }
