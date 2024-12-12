@@ -1,7 +1,9 @@
 using DataAccess.Entities;
 using Microsoft.VisualBasic.CompilerServices;
+using Service.Auth.Utils;
 using Service.Game;
 using Service.Game.Dto;
+using Service.Package.Utils;
 using Service.Utils;
 
 public static class GameMapper
@@ -20,8 +22,6 @@ public static class GameMapper
             game.FinishedAt.HasValue ? TimeUtils.ToCet(game.FinishedAt.Value) : null
         );
     }
-
-
     public static GameLwResponse ToLightWeightResponse(Game game)
     {
         return new GameLwResponse(
@@ -36,6 +36,16 @@ public static class GameMapper
         );
     }
 
+    public static GamePlayerDetails ToPlayer(User player)
+    {
+        return new GamePlayerDetails(
+            Guid.Parse(player.Id),
+            player.FirstName,
+            player.LastName,
+            player.UserName,
+            player.IsAutoPlay);
+    }
+    
     public static GameInfo ToGameInfo(Game game)
     {
         return new GameInfo(

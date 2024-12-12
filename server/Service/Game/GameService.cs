@@ -12,6 +12,7 @@ namespace Service.Game;
 public class GameService(
     IRepository<DataAccess.Entities.Game> gameRepository,
     IRepository<DataAccess.Entities.Board> boardRepository,
+    IRepository<User> userRepository,
     IWinnerService winnerService,
     IValidator<FinishGameRequest> validator
     ): IGameService
@@ -124,6 +125,7 @@ public class GameService(
 
     public async Task<GameResponse> GetGameFullDetails(Guid gameId)
     {
+        throw new NotImplementedException();
         // Fetching the game
         var game = await gameRepository
             .Query()
@@ -152,11 +154,12 @@ public class GameService(
         
         
         // Map players to a dictionary for quick lookup
-        var playersDictionary = players.ToDictionary(p => p.Id, p => new PlayerDetails(
+        var playersDictionary = players.ToDictionary(p => p.Id, p => new GamePlayerDetails(
             Guid.Parse(p.Id),
             p.FirstName,
             p.LastName,
-            p.UserName
+            p.UserName,
+            p.IsAutoPlay
         ));
         
         // Group boards by PlayerId
@@ -199,15 +202,15 @@ public class GameService(
                 boardDetailsList.Add(new BoardDetails(
                     board.BoardId,
                     PackageMapper.ToResponse(board.Package),
-                    board.PlaySequence,
-                    boardPrize
+                    board.PlaySequence
+                    // boardPrize
                 ));
             }
 
             var player = new Player(
                 playerDetails,
-                boardDetailsList,
-                totalWin);
+                boardDetailsList
+                );
             
             playersList.Add(player);
         }
@@ -249,6 +252,22 @@ public class GameService(
 
         return game;
     }
+
+    public async Task<List<GamePlayerDetails>> GetPlayersForGame(Guid gameId)
+    {
+        return await userRepository
+            .Query()
+            .Join(
+                boardRepository.Query(),
+                user => user.Id,             // Key from userRepository (User.Id)
+                board => board.PlayerId,       // Key from boardRepository (Board.UserId)
+                (user, board) => new { user, board } // Result selector
+            )
+            .Where(joined => joined.board.GameId == gameId) // Filter by GameId
+            .Select(joined => GameMapper.ToPlayer(joined.user)) // Map User to GamePlayerDetails
+            .ToListAsync();
+    }
+
 
     public async Task<GameResponse> GetCurrentGame()
     {

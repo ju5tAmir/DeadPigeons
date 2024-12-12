@@ -81,6 +81,10 @@ public record GameInfo(
     List<int>? WinningSequence
 );
 
+public record GamePlayersResponse(
+    List<GamePlayerDetails> Players
+);
+
 public record GameFullResponse(
     Guid GameId,
     int Year,
@@ -97,9 +101,13 @@ public record GameFullResponse(
     
 );
 public record Player(
-    PlayerDetails PlayerDetails,
-    List<BoardDetails> PlayedBoards,
-    decimal Prize
+    GamePlayerDetails GamePlayerDetails,
+    List<BoardDetails> PlayedBoards
+);
+
+public record PlayerWithBoards(
+    GamePlayerDetails GamePlayerDetails,
+    List<BoardDetails> PlayedBoards
 );
 
 public record Players(
@@ -107,18 +115,19 @@ public record Players(
     int OfflinePlayers);
 
 
-public record PlayerDetails(
+public record GamePlayerDetails(
     Guid PlayerId,
     string FirstName,
     string LastName,
-    string Username
+    string Username,
+    bool AutoPlay
 );
 
 public record BoardDetails(
     Guid BoardId,
     PackageResponse PackageDetails,
-    List<int> PlaySequence,
-    decimal Prize
+    List<int> PlaySequence
+    // decimal Prize
 );
 
 public record PackageDetails(
