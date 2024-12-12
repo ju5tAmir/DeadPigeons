@@ -91,6 +91,15 @@ export interface GameLwResponse {
   payouts?: PayoutsLw;
 }
 
+export interface GamePlayerDetails {
+  /** @format uuid */
+  playerId?: string;
+  firstName?: string | null;
+  lastName?: string | null;
+  username?: string | null;
+  autoPlay?: boolean;
+}
+
 export interface GameResponse {
   /** @format uuid */
   gameId?: string;
@@ -704,6 +713,23 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     gameLwDetail: (id: string, params: RequestParams = {}) =>
       this.request<GameLwResponse, any>({
         path: `/api/game/${id}/lw`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Game
+     * @name GamePlayersDetail
+     * @request GET:/api/game/{id}/players
+     * @secure
+     */
+    gamePlayersDetail: (id: string, params: RequestParams = {}) =>
+      this.request<GamePlayerDetails[], any>({
+        path: `/api/game/${id}/players`,
         method: "GET",
         secure: true,
         format: "json",
