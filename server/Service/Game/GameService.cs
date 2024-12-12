@@ -14,7 +14,8 @@ public class GameService(
     IRepository<DataAccess.Entities.Board> boardRepository,
     IRepository<User> userRepository,
     IWinnerService winnerService,
-    IValidator<FinishGameRequest> validator
+    IValidator<FinishGameRequest> validator,
+        IValidator<UpdateOfflineProperties> updateValidator
     ): IGameService
 {
     public async  Task<List<GameResponse>> GetAllGamesByYear(int year)
@@ -284,7 +285,32 @@ public class GameService(
             .ToListAsync(); 
     }
 
+    public async Task<GameLwResponse> UpdateGameOfflineProperties(Guid id, UpdateOfflineProperties data)
+    {
+        await updateValidator.ValidateAndThrowAsync(data);
 
+        var game = await gameRepository
+            .Query()
+            .Where(g => g.GameId == id)
+            .FirstOrDefaultAsync();
+
+        if (game == null)
+        {
+            throw new NotFoundError(nameof(Game), new { Id = id });
+        }
+
+        game.OfflinePlayers = data.Players;
+        game.OfflineWinningPlayers = data.WinningPlayers;
+        game.OfflineBoards = data.Boards;
+        game.OfflineWinningPlayers = data.WinningBoards;
+        game.OfflineIncome = data.Income;
+        game.OfflinePayout = data.Payouts;
+
+        await gameRepository
+            .Update(game);
+
+        return GameMapper.ToLightWeightResponse(game);
+    }
 
 
     public async Task<GameResponse> GetCurrentGame()

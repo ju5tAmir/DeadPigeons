@@ -15,4 +15,5 @@ public interface IGameService
     Task<GameLwResponse> GetLightWeightGameById(Guid id);
     Task<List<GamePlayerDetails>> GetPlayersForGame(Guid id);
     Task<List<GameBoardsDetails>> GetGameBoards(Guid id);
+    Task<GameLwResponse> UpdateGameOfflineProperties(Guid id, UpdateOfflineProperties data);
 }

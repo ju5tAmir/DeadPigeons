@@ -44,3 +44,37 @@ public class FinishGameRequestValidator : AbstractValidator<FinishGameRequest>
             });
     }
 }
+
+public record UpdateOfflineProperties
+(
+    int Players,
+    int WinningPlayers,
+    int Boards,
+    int WinningBoards,
+    decimal Income,
+    decimal Payouts
+);
+
+public class UpdateOfflinePropertiesValidator : AbstractValidator<UpdateOfflineProperties>
+{
+    public UpdateOfflinePropertiesValidator()
+    {
+        RuleFor(x => x.Players)
+            .GreaterThanOrEqualTo(0).WithMessage("Players must be a positive integer.");
+
+        RuleFor(x => x.WinningPlayers)
+            .GreaterThanOrEqualTo(0).WithMessage("WinningPlayers must be a positive integer.");
+
+        RuleFor(x => x.Boards)
+            .GreaterThanOrEqualTo(0).WithMessage("Boards must be a positive integer.");
+
+        RuleFor(x => x.WinningBoards)
+            .GreaterThanOrEqualTo(0).WithMessage("WinningBoards must be a positive integer.");
+
+        RuleFor(x => x.Income)
+            .GreaterThanOrEqualTo(0).WithMessage("Income must be a positive integer.");
+
+        RuleFor(x => x.Payouts)
+            .GreaterThanOrEqualTo(0).WithMessage("Payouts must be a positive integer.");
+    }
+}

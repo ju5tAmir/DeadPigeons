@@ -36,6 +36,14 @@ public class GameController(IGameService service): ControllerBase
               return await service.GetGameById(id);
        }
 
+       [HttpPut]
+       [Route("{id}/update-offline")]
+       [AllowAnonymous]
+       public async Task<GameLwResponse> GetLightWeightGameById(Guid id, UpdateOfflineProperties data)
+       {
+              return await service.UpdateGameOfflineProperties(id, data);
+       }
+       
        [HttpGet]
        [Route("{id}/lw")]
        [AllowAnonymous]

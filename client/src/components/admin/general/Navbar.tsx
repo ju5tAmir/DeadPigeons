@@ -13,10 +13,6 @@ const Navbar = () => {
             path: "/games"
         },
         {
-            title: "Packages",
-            path: "/packages"
-        },
-        {
             title: "Users",
             path: "/users"
         },
