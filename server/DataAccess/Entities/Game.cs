@@ -55,4 +55,7 @@ public partial class Game
 
     [Precision(10, 2)]
     public decimal OfflinePayout { get; set; }
+
+    [InverseProperty("Game")]
+    public virtual ICollection<Board> Boards { get; set; } = new List<Board>();
 }

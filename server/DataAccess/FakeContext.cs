@@ -66,6 +66,10 @@ public partial class FakeContext : DbContext
             entity.Property(e => e.BoardId).ValueGeneratedNever();
             entity.Property(e => e.PlayDate).HasDefaultValueSql("CURRENT_TIMESTAMP");
 
+            entity.HasOne(d => d.Game).WithMany(p => p.Boards)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("boards_games_gameid_fk");
+
             entity.HasOne(d => d.Package).WithMany(p => p.Boards).HasConstraintName("Boards_PackageId_fkey");
 
             entity.HasOne(d => d.Player).WithMany(p => p.Boards).HasConstraintName("Boards_PlayerId_fkey");

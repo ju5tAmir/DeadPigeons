@@ -4,6 +4,7 @@ import {useEffect, useState} from "react";
 import {UserInfo} from "../../../api.ts";
 import {http} from "../../../http.ts";
 import ViewUser from "./ViewUser.tsx";
+import GameBoardDetails from "../game/GameBoardDetails.tsx";
 
 
 function UserManager() {
@@ -20,12 +21,36 @@ function UserManager() {
         if (id) fetchUser(id);
     }, []);
 
-
+    async function fetchGameBoards() {
+        const res = await http.
+    }
 
     return (
         <>
             <ViewUser user={user} />
             <div className="max-w-7xl mx-auto mt-8 p-6 bg-white shadow-md rounded-lg">
+                {/* Boards Details */}
+                <details
+                    className="border border-gray-300 rounded-lg"
+                    open={false}
+                    onToggle={(e) => {
+                        if ((e.target as HTMLDetailsElement).open) {
+                            fetchGameBoards();
+                        }
+                    }}
+                >
+                    <summary
+                        className="cursor-pointer px-6 py-4 text-gray-800 font-semibold bg-gray-100 rounded-t-lg hover:bg-gray-200">
+                        Boards Details
+                    </summary>
+                    <div className="px-6 py-4 bg-white border-t border-gray-300">
+                        {boards ? (
+                            <GameBoardDetails boards={boards} />
+                        ) : (
+                            <p>Loading Boards...</p>
+                        )}
+                    </div>
+                </details>
 
                 {/* Back Button */}
                 <div className="mt-6">
