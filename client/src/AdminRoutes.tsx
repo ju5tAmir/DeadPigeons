@@ -9,6 +9,7 @@ import PlayGame from "./components/user/game/PlayGame.tsx";
 import BoardsOverview from "./components/user/board/BoardsOverview.tsx";
 import GameDetails from "./components/admin/game/GameDetails.tsx";
 import GameManager from "./components/admin/game/GameManager.tsx";
+import FinishGame from "./components/admin/game/FinishGame.tsx";
 
 function AdminRoutes() {
     return (
@@ -25,6 +26,9 @@ function AdminRoutes() {
                             <Route path={RoutePath.game} element={<GamesOverview/>}/>
                             <Route path={RoutePath.game}>
                                 <Route path=":id" element={<GameManager/>}/>
+                                <Route path=":id">
+                                    <Route path="finish" element={<FinishGame/>}/>
+                                </Route>
                             </Route>
                             <Route path={RoutePath.boards} element={<BoardsOverview/>}/>
                         </Routes>

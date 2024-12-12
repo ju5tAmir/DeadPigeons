@@ -1,7 +1,8 @@
 import {useEffect, useState} from "react";
 import {GameLwResponse} from "../../../api.ts";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {http} from "../../../http.ts";
+import {toDanishTimeFormat} from "../../../utils/TimeUtils.ts";
 
 interface GameDetails {
     weekNumber: number;
@@ -15,28 +16,63 @@ interface GameDetails {
 }
 
 function GameDetails({game} : {game: GameLwResponse}) {
+
+    const navigate = useNavigate();
+
+    const handleFinishGameClick = () => {
+        navigate("finish")
+    };
+    const handleUpdateOfflinesClick = () => {
+        navigate("update/offline")
+    };
+
     return (
         <div className="max-w-4xl mx-auto mt-8 p-6 bg-white shadow-md rounded-lg">
             {/* Header Section */}
             <div className="border-b pb-4 mb-6">
-                <h1 className="text-2xl font-bold text-gray-800">Game Details</h1>
-                <p className="text-sm text-gray-500">
-                    Week {game?.timeFrame?.weekNumber} - From {game?.timeFrame?.validFromDate} to {game?.timeFrame?.validUntilDate}
-                </p>
+                <h1 className="text-2xl font-bold text-gray-800">Game Details - Week {game?.timeFrame?.weekNumber}</h1>
             </div>
 
             {/* Game Details Section */}
             <div className="space-y-4">
                 {/* TimeFrame Details */}
-                <div>
-                    <h2 className="text-lg font-semibold text-gray-700">TimeFrame</h2>
-                    <ul className="mt-2 space-y-1 text-gray-600">
-                        <li><strong>From:</strong> {game?.timeFrame?.validFromDate}</li>
-                        <li><strong>Until:</strong> {game?.timeFrame?.validUntilDate}</li>
-                        <li><strong>Finished At:</strong> {game?.timeFrame?.finishedAt}</li>
-                    </ul>
-                </div>
+                <div className={"flex justify-between"}>
+                    <div>
+                        <h2 className="text-lg font-semibold text-gray-700">TimeFrame</h2>
+                        <ul className="mt-2 space-y-1 text-gray-600">
+                            <li><strong>From:</strong> {toDanishTimeFormat(game?.timeFrame?.validFromDate)}</li>
+                            <li><strong>Until:</strong> {toDanishTimeFormat(game?.timeFrame?.validUntilDate)}</li>
+                            <li>
+                                <strong>Finished
+                                    At:</strong> {game?.timeFrame?.finishedAt ? game.timeFrame.finishedAt : "Not finished yet"}
+                            </li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h2 className="text-lg font-semibold text-gray-700">Actions</h2>
+                        <ul className="mt-2 space-y-1 text-gray-600">
+                            <li>
+                                <button
+                                    onClick={handleFinishGameClick}
+                                    disabled={game?.gameInfo?.status === "Finished"}
+                                    className={`w-full px-6 py-3 font-semibold rounded-lg shadow-md transition duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75 ${game?.gameInfo?.status === "Finished" ? "bg-gray-400 text-gray-600 cursor-not-allowed" : "bg-blue-500 text-white hover:bg-blue-600"}`}
+                                >
+                                    Finish Game
+                                </button>
+                            </li>
 
+                            <li>
+                                <button
+                                    onClick={handleUpdateOfflinesClick}
+                                    disabled={game?.gameInfo?.status === "Finished"}
+                                    className={`w-full px-6 py-3 font-semibold rounded-lg shadow-md transition duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75 ${game?.gameInfo?.status === "Finished" ? "bg-gray-400 text-gray-600 cursor-not-allowed" : "bg-green-500 text-white hover:bg-green-600"}`}
+                                >
+                                    Update Offlines
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
                 <div className="max-w-4xl mx-auto mt-8 p-6 bg-white shadow-md rounded-lg">
                     <h1 className="text-2xl font-bold text-gray-800 mb-4">Game Details</h1>
                     <table className="min-w-full border border-gray-300 text-gray-700">
