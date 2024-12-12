@@ -90,15 +90,4 @@ public class AuthController(IAuthService service): ControllerBase
         return await service.Activate(userManager, validator, data);
     }
     
-    [HttpPost]
-    [Route("users")]
-    [AllowAnonymous]
-    public async Task<List<UserInfo>> ActivateAccount(
-        [FromServices] UserManager<User> userManager
-    )
-    {
-        return await service.GetAllUsers(userManager);
-    }
-    
-    
 }

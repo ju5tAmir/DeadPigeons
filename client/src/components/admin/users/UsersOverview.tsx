@@ -1,13 +1,13 @@
 import { useState } from "react";
-import {UserInfoResponse} from "../../../api.ts";
 import {http} from "../../../http.ts";
+import {UserInfo} from "../../../api.ts";
 
 function UsersOverview() {
-    const [players, setPlayers] = useState<UserInfoResponse[] | null>(null);
+    const [players, setPlayers] = useState<UserInfo[] | null>(null);
     const [userList, setUserList] = useState(players);
 
     const fetchUsers = async () => {
-        const res = await http.authUserinfoList();
+        const res = await http.authUsersList();
         setPlayers(res.data);
     }
 

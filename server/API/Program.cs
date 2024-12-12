@@ -17,6 +17,7 @@ using Service.Preference;
 using Service.Repositories;
 using Service.Security;
 using Service.Transactions;
+using Service.Users;
 using Service.Winner;
 
 namespace Api;
@@ -93,6 +94,7 @@ public class Program
         builder.Services.AddScoped<IAuthService, AuthService>();
         builder.Services.AddScoped<IWinnerService, WinnerService>();
         builder.Services.AddScoped<ITransactionService, TransactionService>();
+        builder.Services.AddScoped<IUserService, UserService>();
         #endregion
 
         #region Swagger

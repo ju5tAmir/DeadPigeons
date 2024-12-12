@@ -255,6 +255,8 @@ export interface UserInfo {
   username?: string | null;
   email?: string | null;
   phoneNumber?: string | null;
+  /** @format double */
+  balance?: number;
   role?: string | null;
   isActive?: boolean;
   isAutoplay?: boolean;
@@ -554,6 +556,23 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         body: data,
         secure: true,
         type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Auth
+     * @name AuthUsersCreate
+     * @request POST:/api/auth/users
+     * @secure
+     */
+    authUsersCreate: (params: RequestParams = {}) =>
+      this.request<UserInfo[], any>({
+        path: `/api/auth/users`,
+        method: "POST",
+        secure: true,
+        format: "json",
         ...params,
       }),
 

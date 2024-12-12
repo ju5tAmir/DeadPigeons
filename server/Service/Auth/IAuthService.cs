@@ -38,6 +38,5 @@ public interface IAuthService
 
     Task<IResult> Activate(UserManager<User> userManager, IValidator<ActivateRequest> validator, ActivateRequest data);
     
-    Task<List<UserInfo>> GetAllUsers(UserManager<User> userManager);
 
 }
