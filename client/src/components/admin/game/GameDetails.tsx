@@ -23,7 +23,7 @@ function GameDetails({game} : {game: GameLwResponse}) {
         navigate("finish")
     };
     const handleUpdateOfflinesClick = () => {
-        navigate("update/offline")
+        navigate("update")
     };
 
     return (

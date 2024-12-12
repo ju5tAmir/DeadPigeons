@@ -15,6 +15,7 @@ import ViewUser from "./components/admin/users/ViewUser.tsx";
 import EditUser from "./components/admin/users/EditUser.tsx";
 import UserManager from "./components/admin/users/UserManager.tsx";
 import CreateUser from "./components/admin/users/CreateUser.tsx";
+import UpdateOfflineProperties from "./components/admin/game/UpdateOfflineProperties.tsx";
 
 function AdminRoutes() {
     return (
@@ -33,6 +34,7 @@ function AdminRoutes() {
                                 <Route path=":id" element={<GameManager/>}/>
                                 <Route path=":id">
                                     <Route path="finish" element={<FinishGame/>}/>
+                                    <Route path="update" element={<UpdateOfflineProperties/>}/>
                                 </Route>
                             </Route>
                             <Route path={RoutePath.users} element={<UsersOverview/>}/>

@@ -248,6 +248,21 @@ export interface TransactionResponse {
   transactionDate?: string | null;
 }
 
+export interface UpdateOfflineProperties {
+  /** @format int32 */
+  players?: number;
+  /** @format int32 */
+  winningPlayers?: number;
+  /** @format int32 */
+  boards?: number;
+  /** @format int32 */
+  winningBoards?: number;
+  /** @format double */
+  income?: number;
+  /** @format double */
+  payouts?: number;
+}
+
 export interface UpdateUserRequest {
   firstName?: string | null;
   lastName?: string | null;
@@ -738,6 +753,25 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/api/game/${id}`,
         method: "GET",
         secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Game
+     * @name GameUpdateOfflineUpdate
+     * @request PUT:/api/game/{id}/update-offline
+     * @secure
+     */
+    gameUpdateOfflineUpdate: (id: string, data: UpdateOfflineProperties, params: RequestParams = {}) =>
+      this.request<GameLwResponse, any>({
+        path: `/api/game/${id}/update-offline`,
+        method: "PUT",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
         format: "json",
         ...params,
       }),
