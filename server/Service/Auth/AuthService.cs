@@ -95,7 +95,7 @@ public class AuthService(
         return Results.Ok();
     }
 
-    public async Task<UserInfoResponse> UserInfo(UserManager<User> userManager, ClaimsPrincipal principal)
+    public async Task<UserInfo> UserInfo(UserManager<User> userManager, ClaimsPrincipal principal)
     {
         var username = principal.Identity?.Name;
         if (string.IsNullOrEmpty(username))
@@ -109,8 +109,7 @@ public class AuthService(
             throw new AuthenticationError();
         }
 
-        var role = (await userManager.GetRolesAsync(user)).First();
-
+        var roles = string.Join(", ", (await userManager.GetRolesAsync(user)));
         var preference = (await preferenceRepository
                 .Query()
                 .Where(p => p.UserId == user.Id)
@@ -122,7 +121,7 @@ public class AuthService(
             throw new NotFoundError(nameof(Preference), new { Id = "" });
         }
 
-        return UserInfoMapper.ToResponse(user, role, preference);
+        return UserInfoMapper.ToResponse(user, roles);
     }
 
     public async Task<ConfirmResponse> Confirm(UserManager<User> userManager, string token, string email)

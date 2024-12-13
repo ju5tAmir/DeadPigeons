@@ -29,7 +29,7 @@ public interface IAuthService
 
     Task<IResult> Logout(SignInManager<User> signInManager);
 
-    Task<UserInfoResponse> UserInfo(UserManager<User> userManager, ClaimsPrincipal principal);
+    Task<UserInfo> UserInfo(UserManager<User> userManager, ClaimsPrincipal principal);
 
     Task<ConfirmResponse> Confirm(
         UserManager<User> userManager,
