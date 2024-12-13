@@ -4,5 +4,6 @@ export const RoutePath = {
     boards: "/boards",
     lab: "/lab",
     login: "/login",
-    profile: "/profile"
+    profile: "/profile",
+    logout: "/logout"
 }
