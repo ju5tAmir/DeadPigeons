@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { atom, useAtom } from "jotai";
-import { UserInfoResponse } from "../api";
+import {UserInfo, UserInfoResponse} from "../api";
 import { http } from "../http";
 import { atomWithStorage, createJSONStorage } from "jotai/utils";
 
@@ -12,7 +12,7 @@ export const tokenStorage = createJSONStorage<string | null>(
 
 const jwtAtom = atomWithStorage<string | null>(TOKEN_KEY, null, tokenStorage);
 
-const userInfoAtom = atom(async (get) => {
+export const userInfoAtom = atom(async (get) => {
   // Create a dependency on 'token' atom
   const token = get(jwtAtom);
   if (!token) return null;

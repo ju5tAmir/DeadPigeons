@@ -35,7 +35,9 @@ const PlayGame = () => {
             }),
             {
                 loading: "Sending data ...",
-                success: "Play was successful!",
+                success: () => {
+                    setTimeout(() => {window.location.reload();}, 1000)
+                    return "Play was successful!"},
                 error: (err) => {
                     // Safely access the error message
                     const message = err?.response?.data?.error || "Failed to play.";

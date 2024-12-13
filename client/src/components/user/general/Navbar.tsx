@@ -1,5 +1,5 @@
 import DropdownMenu from "./DropdownMenu.tsx";
-import Logo from "../../../public/logo.png";
+import Logo from "../../../../public/logo.png";
 
 const Navbar = () => {
 
@@ -10,7 +10,7 @@ const Navbar = () => {
         },
         {
             title: "Games",
-            path: "/game"
+            path: "/games"
         },
         {
             title: "Boards",

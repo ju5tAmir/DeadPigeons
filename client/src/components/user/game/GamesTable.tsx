@@ -1,7 +1,15 @@
 import {GameResponse} from "../../../api.ts";
 import {toDanishTimeFormat} from "../../../utils/TimeUtils.ts";
+import {useNavigate} from "react-router-dom";
+import {RoutePath} from "../../../utils/user/RoutePath.ts";
 
 function    GamesTable({ data }: { data: GameResponse[] }) {
+    const navigate = useNavigate();
+
+    const handleClickOnGame = (gameId: string) => {
+        navigate(`${RoutePath.games}/${gameId}`)
+    }
+
     return (
         <table className="min-w-full border-collapse border border-gray-300">
             {/* Table Header */}
@@ -23,35 +31,30 @@ function    GamesTable({ data }: { data: GameResponse[] }) {
             {/* Table Body */}
             <tbody>
             {data.map ((row, index) => (
-                <tr key={index} className="hover:bg-gray-50">
-                    <td className="border border-gray-300 px-4 py-2 flex justify-between items-center">
-                        {/* Center the Week Number */}
-                        <span className="flex-1 text-center">{row.weekNumber}</span>
-                        {/* Position the Icon to the Right */}
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            strokeWidth={1.5}
-                            stroke="currentColor"
-                            className="w-4 h-4 text-blue-500 cursor-pointer hover:text-blue-700"
-                        >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-3a2.25 2.25 0 00-2.25 2.25V9m-1.5 0h9m-10.5 0A2.25 2.25 0 003 11.25v6A2.25 2.25 0 005.25 19.5h13.5A2.25 2.25 0 0021 17.25v-6A2.25 2.25 0 0018.75 9m-10.5 0V5.25m0 13.5h6"
-                            />
-                        </svg>
+                <tr
+                    key={index}
+                    className="hover:bg-gray-50 cursor-pointer"
+                    onClick={() => handleClickOnGame (row.gameId!)}
+                >
+                    <td className="border border-gray-300 px-4 py-2 text-center">
+                        <span>{row.weekNumber}</span>
                     </td>
-                    <td className="border border-gray-300 px-4 py-2">{toDanishTimeFormat(row.validFromDate!)}</td>
-                    <td className="border border-gray-300 px-4 py-2">{toDanishTimeFormat(row.validUntilDate!)}</td>
-                    <td className="border border-gray-300 px-4 py-2">{row.finishedAt == null ? "Ongoing" : toDanishTimeFormat(row.finishedAt)}</td>
-                    {/*<td className="border border-gray-300 px-4 py-2">{row.boards}</td>*/}
-                    <td className="border border-gray-300 px-4 py-2">{row.status}</td>
-
+                    <td className="border border-gray-300 px-4 py-2 text-center">
+                        {toDanishTimeFormat (row.validFromDate!)}
+                    </td>
+                    <td className="border border-gray-300 px-4 py-2 text-center">
+                        {toDanishTimeFormat (row.validUntilDate!)}
+                    </td>
+                    <td className="border border-gray-300 px-4 py-2 text-center">
+                        {row.finishedAt == null ? "Ongoing" : toDanishTimeFormat (row.finishedAt)}
+                    </td>
+                    <td className="border border-gray-300 px-4 py-2 text-center">
+                        {row.status}
+                    </td>
                 </tr>
             ))}
             </tbody>
+
         </table>
     );
 }

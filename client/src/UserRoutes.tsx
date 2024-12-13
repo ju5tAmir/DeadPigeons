@@ -7,6 +7,8 @@ import Footer from "./components/general/Footer.tsx";
 import GamesOverview from "./components/user/game/GamesOverview.tsx";
 import PlayGame from "./components/user/game/PlayGame.tsx";
 import BoardsOverview from "./components/user/board/BoardsOverview.tsx";
+import Login from "./pages/auth/Login.tsx";
+import GameDetails from "./components/user/game/GameDetails.tsx";
 
 function UserRoutes() {
     return (
@@ -20,11 +22,12 @@ function UserRoutes() {
                     <BrowserRouter>
                         <Routes>
                             <Route path={RoutePath.lab} element={<Lab/>}/>
-                            <Route path={RoutePath.game} element={<GamesOverview/>}/>
-                            <Route path={RoutePath.game}>
-                                <Route path=":id" element={<PlayGame />} />
+                            <Route path={RoutePath.games} element={<GamesOverview/>}/>
+                            <Route path={RoutePath.games}>
+                                <Route path=":id" element={<GameDetails />} />
                             </Route>
                             <Route path={RoutePath.boards} element={<BoardsOverview/>}/>
+                            <Route path={RoutePath.login} element={<Login/>}/>
                         </Routes>
                     </BrowserRouter>
                     <Toaster
