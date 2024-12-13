@@ -9,6 +9,7 @@ import PlayGame from "./components/user/game/PlayGame.tsx";
 import BoardsOverview from "./components/user/board/BoardsOverview.tsx";
 import Login from "./pages/auth/Login.tsx";
 import GameDetails from "./components/user/game/GameDetails.tsx";
+import UserProfile from "./components/user/account/UserProfile.tsx";
 
 function UserRoutes() {
     return (
@@ -28,6 +29,7 @@ function UserRoutes() {
                             </Route>
                             <Route path={RoutePath.boards} element={<BoardsOverview/>}/>
                             <Route path={RoutePath.login} element={<Login/>}/>
+                            <Route path={RoutePath.profile} element={<UserProfile/>}/>
                         </Routes>
                     </BrowserRouter>
                     <Toaster

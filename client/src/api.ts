@@ -288,11 +288,6 @@ export interface UserInfo {
   registerationDate?: string;
 }
 
-export interface UserInfoResponse {
-  userInfo?: UserInfo;
-  userPreference?: PreferenceResponse;
-}
-
 export interface Winners {
   playerDetails?: PlayerDetails;
   boardDetails?: BoardDetails[] | null;
@@ -533,7 +528,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     authUserinfoList: (params: RequestParams = {}) =>
-      this.request<UserInfoResponse, any>({
+      this.request<UserInfo, any>({
         path: `/api/auth/userinfo`,
         method: "GET",
         secure: true,

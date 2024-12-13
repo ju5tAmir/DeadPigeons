@@ -3,5 +3,6 @@ export const RoutePath = {
     games: "/games",
     boards: "/boards",
     lab: "/lab",
-    login: "/login"
+    login: "/login",
+    profile: "/profile"
 }
