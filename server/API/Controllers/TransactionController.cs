@@ -35,6 +35,13 @@ public class TransactionController(ITransactionService service): ControllerBase
       return await service.ApproveTransactionById(id, amount);
    } 
 
+   [HttpGet]
+   [Route("decline/{id}")]
+   [AllowAnonymous]
+   public async Task<TransactionResponse> DeclineTransaction(Guid id)
+   {
+      return await service.DeclineTransactionById(id);
+   } 
 
 
 }

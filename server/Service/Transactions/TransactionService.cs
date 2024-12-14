@@ -67,10 +67,23 @@ public class TransactionService( // Note: Implement proper access control for ad
         {
             throw new NotFoundError(nameof(Transaction), new { Id = paymentId });
         }
+
+        if (payment.Status == TransactionStatus.Complete)
+        {
+            throw new PaymentAlreadyCompleted();
+        }
         
         payment.Amount = amount;
         payment.Status = TransactionStatus.Complete;
+        
+        // fetch user to add balance
+        var user = await userRepository
+            .Query()
+            .Where(u => u.Id == payment.UserId)
+            .FirstOrDefaultAsync() ?? throw new NotFoundError(nameof(User), new { Id = payment.UserId});
 
+        user.Balance += payment.Amount;
+        
         var manualInfo = await manualPaymentRepository
             .Query()
             .Where(p => p.TransactionId == paymentId)
@@ -78,8 +91,38 @@ public class TransactionService( // Note: Implement proper access control for ad
         
         await transactionRepository
             .Update(payment);
+        await userRepository
+            .Update(user);
 
         return TransactionMapper.ToResponse(payment, manualInfo);
+    }
+
+    public async Task<TransactionResponse> DeclineTransactionById(Guid paymentId)
+    {
+        var payment = await transactionRepository
+            .Query()
+            .Where(p => p.TransactionId == paymentId)
+            .FirstOrDefaultAsync();
+
+        if (payment == null)
+        {
+            throw new NotFoundError(nameof(Transaction), new { Id = paymentId });
+        }
+
+        if (payment.Status == TransactionStatus.Declined)
+        {
+            throw new PaymentAlreadyDeclined();
+        }
+        
+        payment.Status = TransactionStatus.Declined;
+
+        var manualInfo = await manualPaymentRepository
+            .Query()
+            .Where(p => p.TransactionId == paymentId)
+            .FirstOrDefaultAsync();
+
+        return TransactionMapper.ToResponse(payment, manualInfo);
+
     }
 
     private async Task<TransactionResponse> ProcessCreateManualTransaction(ClaimsPrincipal principal, CreateTransactionRequest data)
