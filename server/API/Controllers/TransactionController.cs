@@ -19,5 +19,13 @@ public class TransactionController(ITransactionService service): ControllerBase
       return await service.Create(HttpContext.User, data);
    } 
    
+   [HttpGet]
+   [Route("all")]
+   [AllowAnonymous]
+   public async Task<List<TransactionResponse>> GetTransactions()
+   {
+      return await service.GetTransactions();
+   } 
+
 
 }

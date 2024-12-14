@@ -2,6 +2,7 @@ using System.Net.Http.Headers;
 using System.Security.Claims;
 using DataAccess.Entities;
 using FluentValidation;
+using Google.Apis.Util;
 using Microsoft.EntityFrameworkCore;
 using Service.Auth;
 using Service.Authorization;
@@ -35,6 +36,24 @@ public class TransactionService( // Note: Implement proper access control for ad
         }
         return await ProcessCreateManualTransaction(principal, data);
 
+    }
+
+    public async Task<List<TransactionResponse>> GetTransactions()
+    {
+        return await transactionRepository
+            .Query()
+            .GroupJoin(
+                manualPaymentRepository.Query(), 
+                transaction => transaction.TransactionId, 
+                manual => manual.TransactionId, 
+                (transaction, manuals) => new { transaction, manuals }
+            )
+            .SelectMany(
+                x => x.manuals.DefaultIfEmpty(), // Handle cases where no manual payment exists
+                (x, manual) => new { x.transaction, manual }
+            )
+            .Select(x => TransactionMapper.ToResponse(x.transaction, x.manual))
+            .ToListAsync();
     }
 
     private async Task<TransactionResponse> ProcessCreateManualTransaction(ClaimsPrincipal principal, CreateTransactionRequest data)
