@@ -196,7 +196,7 @@ public class TransactionService( // Note: Implement proper access control for ad
         var manual = new ManualPayment()
         {
             TransactionId = transaction.TransactionId,
-            ImagePath = "",
+            ImagePath = null,
             Note = data.Note
         };
         

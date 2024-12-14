@@ -20,6 +20,7 @@ import PlayGame from "../components/user/game/PlayGame.tsx";
 import TileSelection from "../components/user/game/TileSelection.tsx";
 import {FinishGame} from "../components/admin/game/FinishGame.tsx";
 import DeleteConfirmationModal from "../components/admin/users/DeleteConfirmationModal.tsx";
+import Upload from "../components/user/general/Upload.tsx";
 
 function Lab() {
 
@@ -356,7 +357,7 @@ function Lab() {
 
             {/*<FinishGame/>*/}
 
-
+            <Upload/>
         </>
     )
 }

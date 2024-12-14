@@ -13,7 +13,7 @@ public partial class ManualPayment
     public Guid TransactionId { get; set; }
 
     [StringLength(200)]
-    public string ImagePath { get; set; } = null!;
+    public string? ImagePath { get; set; }
 
     [StringLength(500)]
     public string? Note { get; set; }

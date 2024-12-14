@@ -272,6 +272,11 @@ export interface UpdateUserRequest {
   isAutoplay?: boolean;
 }
 
+export interface UploadResponse {
+  title?: string | null;
+  url?: string | null;
+}
+
 export interface UserInfo {
   userId?: string | null;
   firstName?: string | null;
@@ -1049,6 +1054,31 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         body: data,
         secure: true,
         type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Upload
+     * @name UploadCreate
+     * @request POST:/api/upload
+     * @secure
+     */
+    uploadCreate: (
+      data: {
+        /** @format binary */
+        file?: File;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<UploadResponse, any>({
+        path: `/api/upload`,
+        method: "POST",
+        body: data,
+        secure: true,
+        type: ContentType.FormData,
         format: "json",
         ...params,
       }),
