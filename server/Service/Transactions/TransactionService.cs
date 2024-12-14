@@ -20,7 +20,8 @@ public class TransactionService( // Note: Implement proper access control for ad
         IRepository<Transaction> transactionRepository,
         IRepository<ManualPayment> manualPaymentRepository,
         IUploadService uploadService,
-        IValidator<CreateTransactionRequest> validator,
+        IValidator<CreateTransactionRequest> createTransactionValidator,
+        IValidator<ApproveTransactionRequest> approveTransactionValidator,
         IValidator<SystemTransactionRequest> systemValidator,
         IAuthority authority,
         IRepository<User> userRepository
@@ -29,7 +30,7 @@ public class TransactionService( // Note: Implement proper access control for ad
 {
     public async Task<TransactionResponse> Create(ClaimsPrincipal principal, CreateTransactionRequest data)
     {
-        await validator.ValidateAndThrowAsync(data);
+        await createTransactionValidator.ValidateAndThrowAsync(data);
         // await authority.AuthorizeAndThrowAsync(principal);
         
         return await ProcessCreateManualTransaction(principal, data);
@@ -53,8 +54,10 @@ public class TransactionService( // Note: Implement proper access control for ad
             .ToListAsync();
     }
 
-    public async Task<TransactionResponse> ApproveTransactionById(Guid paymentId, decimal amount)
+    public async Task<TransactionResponse> ApproveTransactionById(Guid paymentId, ApproveTransactionRequest data)
     {
+        await approveTransactionValidator.ValidateAndThrowAsync(data);
+        
         var payment = await transactionRepository
             .Query()
             .Where(p => p.TransactionId == paymentId)
@@ -70,7 +73,7 @@ public class TransactionService( // Note: Implement proper access control for ad
             throw new PaymentAlreadyCompleted();
         }
         
-        payment.Amount = amount;
+        payment.Amount = data.Amount;
         payment.Status = TransactionStatus.Complete;
         
         // fetch user to add balance

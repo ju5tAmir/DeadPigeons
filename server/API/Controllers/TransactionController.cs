@@ -64,9 +64,9 @@ public class TransactionController(ITransactionService service): ControllerBase
    [HttpPost]
    [Route("approve/{id}")]
    [AllowAnonymous]
-   public async Task<TransactionResponse> ApproveTransaction(Guid id, [FromBody] decimal amount )
+   public async Task<TransactionResponse> ApproveTransaction(Guid id, [FromBody] ApproveTransactionRequest data )
    {
-      return await service.ApproveTransactionById(id, amount);
+      return await service.ApproveTransactionById(id, data);
    } 
 
    [HttpGet]

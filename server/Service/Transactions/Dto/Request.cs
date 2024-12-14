@@ -17,6 +17,11 @@ public record SystemTransactionRequest(
     string? Note
 );
 
+public record ApproveTransactionRequest(
+    decimal Amount
+);
+
+
 public class SystemTransactionRequestValidator : AbstractValidator<SystemTransactionRequest>
 {
     public SystemTransactionRequestValidator()
@@ -60,5 +65,14 @@ public class CreateTransactionRequestValidator : AbstractValidator<CreateTransac
         
         RuleFor(x => x.Note)
             .MaximumLength(300).WithMessage("Note content cannot exceed 300 characters.");
+    }
+}
+
+public class ApproveTransactionRequestValidator : AbstractValidator<ApproveTransactionRequest>
+{
+    public ApproveTransactionRequestValidator()
+    {
+        RuleFor(x => x.Amount)
+            .GreaterThan(0).WithMessage("Amount must be greater than 0.");
     }
 }

@@ -7,7 +7,7 @@ public interface ITransactionService
 {
     Task<TransactionResponse> Create(ClaimsPrincipal principal, CreateTransactionRequest data);
     Task<List<TransactionResponse>> GetTransactions();
-    Task<TransactionResponse> ApproveTransactionById(Guid paymentId, decimal amount);
+    Task<TransactionResponse> ApproveTransactionById(Guid paymentId, ApproveTransactionRequest data);
     Task<TransactionResponse> DeclineTransactionById(Guid paymentId);
     Task<TransactionResponse> GetTransactionById(Guid id);
     Task<List<TransactionResponse>> GetTransactionForUser(Guid userId);
