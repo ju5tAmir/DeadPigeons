@@ -60,6 +60,18 @@ public class BoardService(
         return BoardMapper.ToResponse(board, game, package);
     }
 
+    public async Task<List<BoardResponse>> GetBoardsForUser(Guid userId)
+    {
+        return await boardRepository
+            .Query()
+            .Where(b => b.PlayerId == userId.ToString())
+            .Include(b => b.Package)
+            .Include(b => b.Game)
+            .Select(b => BoardMapper.ToResponse(b, b.Game, b.Package))
+            .ToListAsync();
+
+    }
+
     public async Task<List<BoardResponse>> GetAll(ClaimsPrincipal principal)
     {
         await authority.AuthorizeAndThrowAsync(principal);

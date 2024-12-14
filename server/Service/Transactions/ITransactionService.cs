@@ -6,6 +6,11 @@ namespace Service.Transactions;
 public interface ITransactionService
 {
     Task<TransactionResponse> Create(ClaimsPrincipal principal, CreateTransactionRequest data);
-    Task<TransactionResponse> GetTransactionById(ClaimsPrincipal principal, Guid transactionId);
-    Task<List<TransactionResponse>> GetAllTransactions(ClaimsPrincipal principal);
+    Task<List<TransactionResponse>> GetTransactions();
+    Task<TransactionResponse> ApproveTransactionById(Guid paymentId, ApproveTransactionRequest data);
+    Task<TransactionResponse> DeclineTransactionById(Guid paymentId);
+    Task<TransactionResponse> GetTransactionById(Guid id);
+    Task<List<TransactionResponse>> GetTransactionForUser(Guid userId);
+    Task<TransactionResponse> SystemTransactionsProcess(SystemTransactionRequest data);
+    Task<List<TransactionResponse>> GetMyTransactions(ClaimsPrincipal principal);
 }

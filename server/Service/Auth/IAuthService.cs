@@ -3,6 +3,7 @@ using DataAccess.Entities;
 using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Service.Auth.Dto;
 using Service.Security;
@@ -14,6 +15,7 @@ public interface IAuthService
     Task<RegisterResponse> Register(
         IOptions<AppOptions> options,
         UserManager<User> userManager,
+        IEmailSender<User> emailSender,
         IValidator<RegisterRequest> validator,
         RegisterRequest data
     );
@@ -27,5 +29,14 @@ public interface IAuthService
 
     Task<IResult> Logout(SignInManager<User> signInManager);
 
-    Task<UserInfoResponse> UserInfo(UserManager<User> userManager, ClaimsPrincipal principal);
+    Task<UserInfo> UserInfo(UserManager<User> userManager, ClaimsPrincipal principal);
+
+    Task<ConfirmResponse> Confirm(
+        UserManager<User> userManager,
+        string token,
+        string email);
+
+    Task<IResult> Activate(UserManager<User> userManager, IValidator<ActivateRequest> validator, ActivateRequest data);
+    
+
 }

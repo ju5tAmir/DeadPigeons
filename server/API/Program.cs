@@ -17,6 +17,8 @@ using Service.Preference;
 using Service.Repositories;
 using Service.Security;
 using Service.Transactions;
+using Service.Upload;
+using Service.Users;
 using Service.Winner;
 
 namespace Api;
@@ -50,7 +52,7 @@ public class Program
         builder.Services.AddScoped<IRepository<Package>, PackageRepository>();
         builder.Services.AddScoped<IRepository<Winner>, WinnerRepository>();
         builder.Services.AddScoped<IRepository<Transaction>, TransactionRepository>();
-        builder.Services.AddScoped<IRepository<MobilePayPayment>, MobilePayRepository>();
+        builder.Services.AddScoped<IRepository<ManualPayment>, ManualPaymentRepository>();
         #endregion
 
         #region Security
@@ -80,6 +82,7 @@ public class Program
                 .Build();
         });
         builder.Services.AddScoped<ITokenClaimsService, JwtTokenClaimService>();
+        builder.Services.AddSingleton<IEmailSender<User>, AppEmailSender>();
         #endregion
 
         #region Services
@@ -92,6 +95,8 @@ public class Program
         builder.Services.AddScoped<IAuthService, AuthService>();
         builder.Services.AddScoped<IWinnerService, WinnerService>();
         builder.Services.AddScoped<ITransactionService, TransactionService>();
+        builder.Services.AddScoped<IUserService, UserService>();
+        builder.Services.AddScoped<IUploadService, UploadService>();
         #endregion
 
         #region Swagger
@@ -129,6 +134,7 @@ public class Program
                     }
                 }
             );
+            c.OperationFilter<FileUploadOperationFilter>();
         });
         #endregion
 
@@ -163,10 +169,15 @@ public class Program
 
         app.UseHttpsRedirection();
 
+
+        app.MapControllers();
+        app.UseCors( opts => {
+            opts.AllowAnyOrigin();
+            opts.AllowAnyMethod();
+            opts.AllowAnyHeader();
+        });
         app.UseAuthentication();
         app.UseAuthorization();
-        app.MapControllers();
-
         app.Run();
     }
 }

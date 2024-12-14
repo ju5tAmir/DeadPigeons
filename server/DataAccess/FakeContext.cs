@@ -28,7 +28,7 @@ public partial class FakeContext : DbContext
 
     public virtual DbSet<Game> Games { get; set; }
 
-    public virtual DbSet<MobilePayPayment> MobilePayPayments { get; set; }
+    public virtual DbSet<ManualPayment> ManualPayments { get; set; }
 
     public virtual DbSet<Package> Packages { get; set; }
 
@@ -66,7 +66,9 @@ public partial class FakeContext : DbContext
             entity.Property(e => e.BoardId).ValueGeneratedNever();
             entity.Property(e => e.PlayDate).HasDefaultValueSql("CURRENT_TIMESTAMP");
 
-            entity.HasOne(d => d.Game).WithMany(p => p.Boards).HasConstraintName("Boards_GameId_fkey");
+            entity.HasOne(d => d.Game).WithMany(p => p.Boards)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("boards_games_gameid_fk");
 
             entity.HasOne(d => d.Package).WithMany(p => p.Boards).HasConstraintName("Boards_PackageId_fkey");
 
@@ -78,15 +80,23 @@ public partial class FakeContext : DbContext
             entity.HasKey(e => e.GameId).HasName("Games_pkey");
 
             entity.Property(e => e.GameId).ValueGeneratedNever();
+            entity.Property(e => e.OfflineBoards).HasDefaultValue(0);
+            entity.Property(e => e.OfflinePlayers).HasDefaultValue(0);
+            entity.Property(e => e.OfflineWinningBoards).HasDefaultValue(0);
+            entity.Property(e => e.OfflineWinningPlayers).HasDefaultValue(0);
+            entity.Property(e => e.OnlineBoards).HasDefaultValue(0);
+            entity.Property(e => e.OnlinePlayers).HasDefaultValue(0);
+            entity.Property(e => e.OnlineWinningBoards).HasDefaultValue(0);
+            entity.Property(e => e.OnlineWinningPlayers).HasDefaultValue(0);
         });
 
-        modelBuilder.Entity<MobilePayPayment>(entity =>
+        modelBuilder.Entity<ManualPayment>(entity =>
         {
-            entity.HasKey(e => e.PaymentId).HasName("MobilePayPayments_pkey");
+            entity.HasKey(e => e.TransactionId).HasName("ManualPayment_pkey");
 
-            entity.Property(e => e.PaymentId).ValueGeneratedNever();
+            entity.Property(e => e.TransactionId).ValueGeneratedNever();
 
-            entity.HasOne(d => d.Transaction).WithMany(p => p.MobilePayPayments).HasConstraintName("MobilePayPayments_TransactionId_fkey");
+            entity.HasOne(d => d.Transaction).WithOne(p => p.ManualPayment).HasConstraintName("ManualPayment_TransactionId_fkey");
         });
 
         modelBuilder.Entity<Package>(entity =>
@@ -124,8 +134,6 @@ public partial class FakeContext : DbContext
             entity.Property(e => e.WinningRecordId).ValueGeneratedNever();
 
             entity.HasOne(d => d.Board).WithMany(p => p.Winners).HasConstraintName("Winners_BoardId_fkey");
-
-            entity.HasOne(d => d.Game).WithMany(p => p.Winners).HasConstraintName("Winners_GameId_fkey");
 
             entity.HasOne(d => d.Player).WithMany(p => p.Winners).HasConstraintName("Winners_PlayerId_fkey");
         });

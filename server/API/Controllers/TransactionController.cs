@@ -11,27 +11,71 @@ namespace API.Controllers;
 [AllowAnonymous]
 public class TransactionController(ITransactionService service): ControllerBase
 {
+   
    [HttpGet]
-   [Route("{id}")]
+   [Route("")]
    [AllowAnonymous]
-   public async Task<TransactionResponse> GetTransactionById(Guid id)
+   public async Task<List<TransactionResponse>> GetMyTransactions()
    {
-      return await service.GetTransactionById(HttpContext.User, id);
+      return await service.GetMyTransactions(HttpContext.User);
    } 
    
    [HttpGet]
+   [Route("{id}")]
+   [AllowAnonymous]
+   public async Task<TransactionResponse> GetTransactions(Guid id)
+   {
+      return await service.GetTransactionById(id);
+   } 
+   
+   [HttpGet]
+   [Route("user/{id}")]
+   [AllowAnonymous]
+   public async Task<List<TransactionResponse>> GetUserTransactions(Guid id)
+   {
+      return await service.GetTransactionForUser(id);
+   } 
+
+   [HttpGet]
    [Route("all")]
    [AllowAnonymous]
-   public async Task<List<TransactionResponse>> GetAllTransactions()
+   public async Task<List<TransactionResponse>> GetTransactions()
    {
-      return await service.GetAllTransactions(HttpContext.User);
+      return await service.GetTransactions();
    } 
+   
    
    [HttpPost]
    [Route("create")]
    [AllowAnonymous]
-   public async Task<TransactionResponse> MakeTransaction([FromBody] CreateTransactionRequest data)
+   public async Task<TransactionResponse> MakeTransaction([FromForm] CreateTransactionRequest data)
    {
       return await service.Create(HttpContext.User, data);
    } 
+
+   [HttpPost]
+   [Route("system")]
+   [AllowAnonymous]
+   public async Task<TransactionResponse> MakeTransaction([FromBody] SystemTransactionRequest data)
+   {
+      return await service.SystemTransactionsProcess(data);
+   } 
+   
+   [HttpPost]
+   [Route("approve/{id}")]
+   [AllowAnonymous]
+   public async Task<TransactionResponse> ApproveTransaction(Guid id, [FromBody] ApproveTransactionRequest data )
+   {
+      return await service.ApproveTransactionById(id, data);
+   } 
+
+   [HttpGet]
+   [Route("decline/{id}")]
+   [AllowAnonymous]
+   public async Task<TransactionResponse> DeclineTransaction(Guid id)
+   {
+      return await service.DeclineTransactionById(id);
+   } 
+
+
 }

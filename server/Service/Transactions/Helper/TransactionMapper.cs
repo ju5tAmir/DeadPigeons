@@ -5,14 +5,16 @@ namespace Service.Transactions.Helper;
 
 public class TransactionMapper
 {
-    public static TransactionResponse ToResponse(Transaction transaction)
+    public static TransactionResponse ToResponse(Transaction transaction, ManualPayment manual)
     {
         return new TransactionResponse(
             transaction.TransactionId,
+            Guid.Parse(transaction.UserId),
             transaction.PaymentMethod,
-            transaction.Type,
             transaction.Amount,
             transaction.Status,
+            manual.ImagePath,
+            manual.Note,
             transaction.TransactionDate
             );
     }

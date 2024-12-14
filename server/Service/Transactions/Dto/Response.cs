@@ -2,9 +2,11 @@ namespace Service.Transactions.Dto;
 
 public record TransactionResponse(
     Guid TransactionId,
+    Guid UserId,
     string PaymentMethod,
-    string TransactionType,
     decimal Amount,
     string Status,
-    DateTime? TransactionDate  
+    string? ImageUrl,
+    string? Note,
+    DateTime TransactionDate 
 );

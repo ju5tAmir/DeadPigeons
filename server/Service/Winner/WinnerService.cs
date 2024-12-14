@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Service.Game;
 using Service.Package.Utils;
 using Service.Repositories;
+using Service.Utils;
 using Service.Winner.Dto;
 using Service.Winner.Utils;
 
@@ -48,7 +49,7 @@ public class WinnerService( // Question: At this point IDK if I should go with r
 
         if (game.Status != GameStatus.Finished)
         {
-            throw new GameHasFinished();
+            throw new GameIsNotFinished();
         }
 
         // Fetch all boards with the matching game ID and winning sequence
@@ -119,6 +120,7 @@ public class WinnerService( // Question: At this point IDK if I should go with r
                     board.BoardId,
                     PackageMapper.ToResponse(board.Package),
                     board.PlaySequence,
+                    TimeUtils.ToCet(board.PlayDate ?? DateTime.MaxValue),
                     boardPrize
                 ));
             }
@@ -129,13 +131,13 @@ public class WinnerService( // Question: At this point IDK if I should go with r
                 boardDetailsList,
                 totalWin
             );
-
             winners.Add(winner);
         }
 
+        
 
         // Return the mapped response
         return WinnersMapper.ToResponse(game, winners);
 
-            }
+    }
 }
