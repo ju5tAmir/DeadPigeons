@@ -11,4 +11,5 @@ public interface ITransactionService
     Task<TransactionResponse> DeclineTransactionById(Guid paymentId);
     Task<TransactionResponse> GetTransactionById(Guid id);
     Task<List<TransactionResponse>> GetTransactionForUser(Guid userId);
+    Task<TransactionResponse> SystemTransactionsProcess(SystemTransactionRequest data);
 }

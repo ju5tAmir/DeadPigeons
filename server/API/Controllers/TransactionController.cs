@@ -46,6 +46,14 @@ public class TransactionController(ITransactionService service): ControllerBase
    } 
 
    [HttpPost]
+   [Route("system")]
+   [AllowAnonymous]
+   public async Task<TransactionResponse> MakeTransaction([FromBody] SystemTransactionRequest data)
+   {
+      return await service.SystemTransactionsProcess(data);
+   } 
+   
+   [HttpPost]
    [Route("approve/{id}")]
    [AllowAnonymous]
    public async Task<TransactionResponse> ApproveTransaction(Guid id, [FromBody] decimal amount )

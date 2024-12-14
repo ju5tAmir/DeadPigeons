@@ -9,6 +9,7 @@ using Service.Authorization;
 using Service.Repositories;
 using Service.Security;
 using Service.Transactions.Dto;
+using Service.Transactions.Enums;
 using Service.Transactions.Helper;
 using Service.Transactions.Utils;
 using Service.Upload;
@@ -20,6 +21,7 @@ public class TransactionService( // Note: Implement proper access control for ad
         IRepository<ManualPayment> manualPaymentRepository,
         IUploadService uploadService,
         IValidator<CreateTransactionRequest> validator,
+        IValidator<SystemTransactionRequest> systemValidator,
         IAuthority authority,
         IRepository<User> userRepository
         )
@@ -167,6 +169,56 @@ public class TransactionService( // Note: Implement proper access control for ad
             )
             .Select(x => TransactionMapper.ToResponse(x.transaction, x.manual))
             .ToListAsync();
+    }
+
+    public async Task<TransactionResponse> SystemTransactionsProcess(SystemTransactionRequest data)
+    {
+        await systemValidator.ValidateAndThrowAsync(data);
+        var user = await userRepository
+            .Query()
+            .Where(u => u.Id == data.UserId.ToString())
+            .FirstOrDefaultAsync();
+
+        if (user == null)
+        {
+            throw new NotFoundError(nameof(User), new { Id = data.UserId });
+        }
+        
+        var transaction = new Transaction()
+        {
+            TransactionId = Guid.NewGuid(),
+            PaymentMethod = PaymentMethod.System,
+            Status = TransactionStatus.Complete,
+            UserId = data.UserId.ToString(),
+            TransactionDate = DateTime.UtcNow
+        };
+
+        var manual = new ManualPayment()
+        {
+            TransactionId = transaction.TransactionId,
+            ImagePath = "",
+            Note = data.Note
+        };
+        
+        if (data.Operation == SystemOperation.Add)
+        {
+            user.Balance += data.Amount;
+            transaction.Amount = data.Amount;
+        }
+        if (data.Operation == SystemOperation.Remove)
+        {
+            user.Balance -= data.Amount;
+            transaction.Amount = -data.Amount;
+        }
+
+        await userRepository
+            .Update(user);
+        await transactionRepository
+            .Add(transaction);
+        await manualPaymentRepository
+            .Add(manual);
+
+        return TransactionMapper.ToResponse(transaction, manual);
     }
 
     private async Task<TransactionResponse> ProcessCreateManualTransaction(ClaimsPrincipal principal, CreateTransactionRequest data)
