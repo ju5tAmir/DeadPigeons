@@ -144,8 +144,6 @@ public class TransactionService( // Note: Implement proper access control for ad
         {
             throw new PaymentAlreadyDeclined();
         }
-        
-        payment.Status = TransactionStatus.Declined;
 
         var manualInfo = await manualPaymentRepository
             .Query()

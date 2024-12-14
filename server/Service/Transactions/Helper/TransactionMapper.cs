@@ -9,6 +9,7 @@ public class TransactionMapper
     {
         return new TransactionResponse(
             transaction.TransactionId,
+            Guid.Parse(transaction.UserId),
             transaction.PaymentMethod,
             transaction.Amount,
             transaction.Status,
