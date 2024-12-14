@@ -221,6 +221,27 @@ public class TransactionService( // Note: Implement proper access control for ad
         return TransactionMapper.ToResponse(transaction, manual);
     }
 
+    public async Task<List<TransactionResponse>> GetMyTransactions(ClaimsPrincipal principal)
+    {
+        await authority.AuthorizeAndThrowAsync(principal);
+        
+        return await transactionRepository
+            .Query()
+            .Where(t => t.UserId == principal.GetUserId())
+            .GroupJoin(
+                manualPaymentRepository.Query(), 
+                transaction => transaction.TransactionId, 
+                manual => manual.TransactionId, 
+                (transaction, manuals) => new { transaction, manuals }
+            )
+            .SelectMany(
+                x => x.manuals.DefaultIfEmpty(),
+                (x, manual) => new { x.transaction, manual }
+            )
+            .Select(x => TransactionMapper.ToResponse(x.transaction, x.manual))
+            .ToListAsync();
+    }
+
     private async Task<TransactionResponse> ProcessCreateManualTransaction(ClaimsPrincipal principal, CreateTransactionRequest data)
     {
         var file = await uploadService.Upload(data.ImageFile);

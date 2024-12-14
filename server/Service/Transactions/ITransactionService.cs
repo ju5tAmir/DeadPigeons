@@ -12,4 +12,5 @@ public interface ITransactionService
     Task<TransactionResponse> GetTransactionById(Guid id);
     Task<List<TransactionResponse>> GetTransactionForUser(Guid userId);
     Task<TransactionResponse> SystemTransactionsProcess(SystemTransactionRequest data);
+    Task<List<TransactionResponse>> GetMyTransactions(ClaimsPrincipal principal);
 }
