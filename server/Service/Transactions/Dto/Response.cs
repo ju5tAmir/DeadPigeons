@@ -3,8 +3,9 @@ namespace Service.Transactions.Dto;
 public record TransactionResponse(
     Guid TransactionId,
     string PaymentMethod,
-    string TransactionType,
     decimal Amount,
     string Status,
-    DateTime? TransactionDate  
+    string? ImageUrl,
+    string? Note,
+    DateTime TransactionDate 
 );

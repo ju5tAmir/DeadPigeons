@@ -16,19 +16,16 @@ public partial class Transaction
     [StringLength(50)]
     public string PaymentMethod { get; set; } = null!;
 
-    [StringLength(50)]
-    public string Type { get; set; } = null!;
-
     [Precision(10, 2)]
     public decimal Amount { get; set; }
 
     [StringLength(50)]
     public string? Status { get; set; }
 
-    public DateTime? TransactionDate { get; set; }
+    public DateTime TransactionDate { get; set; }
 
     [InverseProperty("Transaction")]
-    public virtual ICollection<MobilePayPayment> MobilePayPayments { get; set; } = new List<MobilePayPayment>();
+    public virtual ManualPayment? ManualPayment { get; set; }
 
     [ForeignKey("UserId")]
     [InverseProperty("Transactions")]

@@ -11,27 +11,13 @@ namespace API.Controllers;
 [AllowAnonymous]
 public class TransactionController(ITransactionService service): ControllerBase
 {
-   [HttpGet]
-   [Route("{id}")]
-   [AllowAnonymous]
-   public async Task<TransactionResponse> GetTransactionById(Guid id)
-   {
-      return await service.GetTransactionById(HttpContext.User, id);
-   } 
-   
-   [HttpGet]
-   [Route("all")]
-   [AllowAnonymous]
-   public async Task<List<TransactionResponse>> GetAllTransactions()
-   {
-      return await service.GetAllTransactions(HttpContext.User);
-   } 
-   
    [HttpPost]
    [Route("create")]
    [AllowAnonymous]
-   public async Task<TransactionResponse> MakeTransaction([FromBody] CreateTransactionRequest data)
+   public async Task<TransactionResponse> MakeTransaction([FromForm] CreateTransactionRequest data)
    {
       return await service.Create(HttpContext.User, data);
    } 
+   
+
 }

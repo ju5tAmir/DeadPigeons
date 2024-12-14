@@ -6,19 +6,19 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess.Entities;
 
-public partial class MobilePayPayment
+[Table("ManualPayment")]
+public partial class ManualPayment
 {
     [Key]
-    public Guid PaymentId { get; set; }
-
     public Guid TransactionId { get; set; }
 
-    [StringLength(50)]
-    public string PaymentPhone { get; set; } = null!;
+    [StringLength(200)]
+    public string ImagePath { get; set; } = null!;
 
-    public string CustomerName { get; set; } = null!;
+    [StringLength(500)]
+    public string? Note { get; set; }
 
     [ForeignKey("TransactionId")]
-    [InverseProperty("MobilePayPayments")]
+    [InverseProperty("ManualPayment")]
     public virtual Transaction Transaction { get; set; } = null!;
 }

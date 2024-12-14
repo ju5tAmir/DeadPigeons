@@ -28,7 +28,7 @@ public partial class FakeContext : DbContext
 
     public virtual DbSet<Game> Games { get; set; }
 
-    public virtual DbSet<MobilePayPayment> MobilePayPayments { get; set; }
+    public virtual DbSet<ManualPayment> ManualPayments { get; set; }
 
     public virtual DbSet<Package> Packages { get; set; }
 
@@ -90,13 +90,13 @@ public partial class FakeContext : DbContext
             entity.Property(e => e.OnlineWinningPlayers).HasDefaultValue(0);
         });
 
-        modelBuilder.Entity<MobilePayPayment>(entity =>
+        modelBuilder.Entity<ManualPayment>(entity =>
         {
-            entity.HasKey(e => e.PaymentId).HasName("MobilePayPayments_pkey");
+            entity.HasKey(e => e.TransactionId).HasName("ManualPayment_pkey");
 
-            entity.Property(e => e.PaymentId).ValueGeneratedNever();
+            entity.Property(e => e.TransactionId).ValueGeneratedNever();
 
-            entity.HasOne(d => d.Transaction).WithMany(p => p.MobilePayPayments).HasConstraintName("MobilePayPayments_TransactionId_fkey");
+            entity.HasOne(d => d.Transaction).WithOne(p => p.ManualPayment).HasConstraintName("ManualPayment_TransactionId_fkey");
         });
 
         modelBuilder.Entity<Package>(entity =>
