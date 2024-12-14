@@ -56,6 +56,32 @@ public class TransactionService( // Note: Implement proper access control for ad
             .ToListAsync();
     }
 
+    public async Task<TransactionResponse> ApproveTransactionById(Guid paymentId, decimal amount)
+    {
+        var payment = await transactionRepository
+            .Query()
+            .Where(p => p.TransactionId == paymentId)
+            .FirstOrDefaultAsync();
+
+        if (payment == null)
+        {
+            throw new NotFoundError(nameof(Transaction), new { Id = paymentId });
+        }
+        
+        payment.Amount = amount;
+        payment.Status = TransactionStatus.Complete;
+
+        var manualInfo = await manualPaymentRepository
+            .Query()
+            .Where(p => p.TransactionId == paymentId)
+            .FirstOrDefaultAsync();
+        
+        await transactionRepository
+            .Update(payment);
+
+        return TransactionMapper.ToResponse(payment, manualInfo);
+    }
+
     private async Task<TransactionResponse> ProcessCreateManualTransaction(ClaimsPrincipal principal, CreateTransactionRequest data)
     {
         var file = await uploadService.Upload(data.ImageFile);
