@@ -37,6 +37,12 @@ const TransactionsTable = ({ transactions }: { transactions: TransactionResponse
                         scope="col"
                         className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400"
                     >
+                        Note
+                    </th>
+                    <th
+                        scope="col"
+                        className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400"
+                    >
                         Transaction Date
                     </th>
                 </tr>
@@ -66,6 +72,9 @@ const TransactionsTable = ({ transactions }: { transactions: TransactionResponse
                                 >
                                     {transaction.status}
                                 </span>
+                        </td>
+                        <td className="px-4 py-3 text-sm text-gray-500 dark:text-gray-400">
+                            {transaction.note || "-"}
                         </td>
                         <td className="px-4 py-3 text-sm text-gray-500 dark:text-gray-400">
                             {toDanishTimeFormat(transaction.transactionDate)}

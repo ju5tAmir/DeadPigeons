@@ -16,6 +16,10 @@ import EditUser from "./components/admin/users/EditUser.tsx";
 import UserManager from "./components/admin/users/UserManager.tsx";
 import CreateUser from "./components/admin/users/CreateUser.tsx";
 import UpdateOfflineProperties from "./components/admin/game/UpdateOfflineProperties.tsx";
+import Login from "./pages/auth/Login.tsx";
+import UserProfile from "./components/user/account/UserProfile.tsx";
+import Logout from "./components/user/account/Logout.tsx";
+import Transactions from "./components/admin/transactions/Transactions.tsx";
 
 function AdminRoutes() {
     return (
@@ -46,6 +50,10 @@ function AdminRoutes() {
                                     </Route>
                                 </Route>
                             <Route path={RoutePath.boards} element={<BoardsOverview/>}/>
+                            <Route path={RoutePath.login} element={<Login/>}/>
+                            <Route path={RoutePath.profile} element={<UserProfile/>}/>
+                            <Route path={RoutePath.logout} element={<Logout/>}/>
+                            <Route path={RoutePath.transactions} element={<Transactions/>}/>
                         </Routes>
                     </BrowserRouter>
                     <Toaster

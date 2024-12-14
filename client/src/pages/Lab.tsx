@@ -21,7 +21,7 @@ import TileSelection from "../components/user/game/TileSelection.tsx";
 import {FinishGame} from "../components/admin/game/FinishGame.tsx";
 import DeleteConfirmationModal from "../components/admin/users/DeleteConfirmationModal.tsx";
 import CreateTransaction from "../components/user/transactions/CreateTransaction.tsx";
-import Transactions from "../components/user/transactions/Transactions.tsx";
+import Transactions from "../components/admin/transactions/Transactions.tsx";
 
 function Lab() {
 

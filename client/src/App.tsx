@@ -4,8 +4,8 @@ import UserRoutes from "./UserRoutes.tsx";
 function App() {
   return (
       <>
-          {/*<AdminRoutes/>*/}
-          <UserRoutes />
+          <AdminRoutes/>
+          {/*<UserRoutes />*/}
       </>
   )
 }
