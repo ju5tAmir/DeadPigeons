@@ -19,7 +19,6 @@ function TransactionDetails() {
                 return;
             }
             const res = await http.transactionDetail(id);
-            console.log("Transaction fetched:", res.data); // Log the transaction data
             setTransaction(res.data);
         } catch (error) {
             console.error("Error fetching transaction details:", error);
@@ -32,7 +31,6 @@ function TransactionDetails() {
     const fetchUser = async (userId: string) => {
         try {
             const res = await http.userDetail(userId);
-            console.log("User fetched:", res.data); // Log the user data
             setUser(res.data);
         } catch (error) {
             console.error("Error fetching user details:", error);
@@ -46,14 +44,13 @@ function TransactionDetails() {
 
     useEffect(() => {
         if (transaction?.userId) {
-            console.log("Fetching user with ID:", transaction.userId); // Log the userId being used
             fetchUser(transaction.userId);
         }
     }, [transaction]);
 
     return (
-        <div className="min-h-screen bg-gradient-to-r from-indigo-500 to-purple-600 flex items-center justify-center">
-            <div className="w-full max-w-4xl bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg overflow-hidden">
+        <div className="min-h-screen bg-gradient-to-r from-indigo-500 to-purple-600 flex justify-center py-12">
+            <div className="w-full max-w-7xl bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg">
                 <button
                     onClick={() => navigate(-1)}
                     className="mb-6 px-6 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
@@ -66,118 +63,86 @@ function TransactionDetails() {
                         <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-t-indigo-600 border-b-4 border-gray-400"></div>
                     </div>
                 ) : transaction ? (
-                    <div className="space-y-8">
-                        {/* User Details Section */}
-                        {user ? (
-                            <div className="space-y-6">
-                                <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">User Details</h2>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-lg">
+                    <div className="flex flex-col md:flex-row gap-8">
+                        {/* Left Section - User Details */}
+                        <div className="w-full md:w-1/2 space-y-6">
+                            <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">User Details</h2>
+                            {user ? (
+                                <div className="space-y-4">
                                     <div className="text-gray-700 dark:text-gray-300">
-                                        <span className="font-semibold text-indigo-700 dark:text-indigo-400">
-                                            User ID:
-                                        </span>
+                                        <span className="font-semibold text-indigo-700 dark:text-indigo-400">User ID:</span>
                                         <p className="mt-1">{user.userId}</p>
                                     </div>
-
                                     <div className="text-gray-700 dark:text-gray-300">
-                                        <span className="font-semibold text-indigo-700 dark:text-indigo-400">
-                                            Name:
-                                        </span>
+                                        <span className="font-semibold text-indigo-700 dark:text-indigo-400">Name:</span>
                                         <p className="mt-1">{user.firstName} {user.lastName}</p>
                                     </div>
-
                                     <div className="text-gray-700 dark:text-gray-300">
-                                        <span className="font-semibold text-indigo-700 dark:text-indigo-400">
-                                            Email:
-                                        </span>
+                                        <span className="font-semibold text-indigo-700 dark:text-indigo-400">Email:</span>
                                         <p className="mt-1">{user.email}</p>
                                     </div>
-
                                     <div className="text-gray-700 dark:text-gray-300">
-                                        <span className="font-semibold text-indigo-700 dark:text-indigo-400">
-                                            Role:
-                                        </span>
+                                        <span className="font-semibold text-indigo-700 dark:text-indigo-400">Role:</span>
                                         <p className="mt-1">{user.role}</p>
                                     </div>
                                 </div>
-                            </div>
-                        ) : (
-                            <div className="text-center text-gray-500 dark:text-gray-400">
-                                User not found.
-                            </div>
-                        )}
-
-                        {/* Transaction Details Section */}
-                        <div>
-                            <h1 className="text-3xl font-bold text-gray-900 dark:text-white text-center">
-                                Transaction Details
-                            </h1>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-lg mt-8">
-                                <div className="text-gray-700 dark:text-gray-300">
-                                    <span className="font-semibold text-indigo-700 dark:text-indigo-400">
-                                        Transaction ID:
-                                    </span>
-                                    <p className="mt-1">{transaction.transactionId}</p>
-                                </div>
-
-                                <div className="text-gray-700 dark:text-gray-300">
-                                    <span className="font-semibold text-indigo-700 dark:text-indigo-400">
-                                        Payment Method:
-                                    </span>
-                                    <p className="mt-1">{transaction.paymentMethod}</p>
-                                </div>
-
-                                <div className="text-gray-700 dark:text-gray-300">
-                                    <span className="font-semibold text-indigo-700 dark:text-indigo-400">
-                                        Amount:
-                                    </span>
-                                    <p className="mt-1 text-xl font-semibold text-indigo-600 dark:text-indigo-300">
-                                        ${transaction.amount.toFixed(2)}
-                                    </p>
-                                </div>
-
-                                <div className="text-gray-700 dark:text-gray-300">
-                                    <span className="font-semibold text-indigo-700 dark:text-indigo-400">
-                                        Status:
-                                    </span>
-                                    <p className="mt-1">{transaction.status}</p>
-                                </div>
-
-                                <div className="text-gray-700 dark:text-gray-300">
-                                    <span className="font-semibold text-indigo-700 dark:text-indigo-400">
-                                        Transaction Date:
-                                    </span>
-                                    <p className="mt-1">{toDanishTimeFormat(transaction.transactionDate)}</p>
-                                </div>
-
-                                <div className="col-span-2 text-gray-700 dark:text-gray-300">
-                                    <span className="font-semibold text-indigo-700 dark:text-indigo-400">
-                                        Note:
-                                    </span>
-                                    <p className="mt-1">{transaction.note || "No note provided."}</p>
-                                </div>
-                            </div>
+                            ) : (
+                                <div className="text-center text-gray-500 dark:text-gray-400">User not found.</div>
+                            )}
                         </div>
 
-                        {/* Transaction Image Section */}
-                        {transaction.imageUrl && (
-                            <div className="mt-8">
-                                <span className="font-semibold text-indigo-700 dark:text-indigo-400">
-                                    Transaction Image:
-                                </span>
-                                <div className="mt-2 flex justify-center">
-                                    <img
-                                        src={transaction.imageUrl}
-                                        alt="Transaction"
-                                        className="w-96 h-auto rounded-lg shadow-md"
-                                    />
+                        {/* Right Section - Transaction Details */}
+                        <div className="w-full md:w-1/2 space-y-6">
+                            <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">Transaction Details</h2>
+                            {transaction ? (
+                                <div className="space-y-4">
+                                    <div className="text-gray-700 dark:text-gray-300">
+                                        <span className="font-semibold text-indigo-700 dark:text-indigo-400">Transaction ID:</span>
+                                        <p className="mt-1">{transaction.transactionId}</p>
+                                    </div>
+                                    <div className="text-gray-700 dark:text-gray-300">
+                                        <span className="font-semibold text-indigo-700 dark:text-indigo-400">Payment Method:</span>
+                                        <p className="mt-1">{transaction.paymentMethod}</p>
+                                    </div>
+                                    <div className="text-gray-700 dark:text-gray-300">
+                                        <span className="font-semibold text-indigo-700 dark:text-indigo-400">Amount:</span>
+                                        <p className="mt-1 text-xl font-semibold text-indigo-600 dark:text-indigo-300">
+                                            ${transaction.amount.toFixed(2)}
+                                        </p>
+                                    </div>
+                                    <div className="text-gray-700 dark:text-gray-300">
+                                        <span className="font-semibold text-indigo-700 dark:text-indigo-400">Status:</span>
+                                        <p className="mt-1">{transaction.status}</p>
+                                    </div>
+                                    <div className="text-gray-700 dark:text-gray-300">
+                                        <span className="font-semibold text-indigo-700 dark:text-indigo-400">Transaction Date:</span>
+                                        <p className="mt-1">{toDanishTimeFormat(transaction.transactionDate)}</p>
+                                    </div>
+                                    <div className="text-gray-700 dark:text-gray-300">
+                                        <span className="font-semibold text-indigo-700 dark:text-indigo-400">Note:</span>
+                                        <p className="mt-1">{transaction.note || "No note provided."}</p>
+                                    </div>
                                 </div>
-                            </div>
-                        )}
+                            ) : (
+                                <div className="text-center text-gray-500 dark:text-gray-400">Transaction not found.</div>
+                            )}
+                        </div>
                     </div>
                 ) : (
-                    <div className="text-center text-gray-500 dark:text-gray-400">
-                        Transaction not found.
+                    <div className="text-center text-gray-500 dark:text-gray-400">Transaction not found.</div>
+                )}
+
+                {/* Transaction Image Section */}
+                {transaction?.imageUrl && (
+                    <div className="mt-8">
+                        <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Transaction Image</h3>
+                        <div className="mt-2 flex justify-center">
+                            <img
+                                src={transaction.imageUrl}
+                                alt="Transaction"
+                                className="w-full max-w-2xl h-auto rounded-lg shadow-md"
+                            />
+                        </div>
                     </div>
                 )}
             </div>
