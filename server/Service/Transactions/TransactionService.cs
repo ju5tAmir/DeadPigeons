@@ -29,13 +29,8 @@ public class TransactionService( // Note: Implement proper access control for ad
     {
         await validator.ValidateAndThrowAsync(data);
         // await authority.AuthorizeAndThrowAsync(principal);
-    
-        if (data.PaymentMethod == PaymentMethod.Manual)
-        {
-            // Complete later
-        }
+        
         return await ProcessCreateManualTransaction(principal, data);
-
     }
 
     public async Task<List<TransactionResponse>> GetTransactions()
@@ -121,6 +116,9 @@ public class TransactionService( // Note: Implement proper access control for ad
             .Where(p => p.TransactionId == paymentId)
             .FirstOrDefaultAsync();
 
+        await transactionRepository
+            .Update(payment);
+        
         return TransactionMapper.ToResponse(payment, manualInfo);
 
     }
@@ -150,6 +148,25 @@ public class TransactionService( // Note: Implement proper access control for ad
             .FirstOrDefaultAsync();
 
         return TransactionMapper.ToResponse(payment, manualInfo);
+    }
+
+    public async Task<List<TransactionResponse>> GetTransactionForUser(Guid userId)
+    {
+        return await transactionRepository
+            .Query()
+            .Where(t => t.UserId == userId.ToString())
+            .GroupJoin(
+                manualPaymentRepository.Query(), 
+                transaction => transaction.TransactionId, 
+                manual => manual.TransactionId, 
+                (transaction, manuals) => new { transaction, manuals }
+            )
+            .SelectMany(
+                x => x.manuals.DefaultIfEmpty(), // Handle cases where no manual payment exists
+                (x, manual) => new { x.transaction, manual }
+            )
+            .Select(x => TransactionMapper.ToResponse(x.transaction, x.manual))
+            .ToListAsync();
     }
 
     private async Task<TransactionResponse> ProcessCreateManualTransaction(ClaimsPrincipal principal, CreateTransactionRequest data)

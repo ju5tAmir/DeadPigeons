@@ -21,6 +21,14 @@ public class TransactionController(ITransactionService service): ControllerBase
    } 
    
    [HttpGet]
+   [Route("user/{id}")]
+   [AllowAnonymous]
+   public async Task<List<TransactionResponse>> GetUserTransactions(Guid id)
+   {
+      return await service.GetTransactionForUser(id);
+   } 
+
+   [HttpGet]
    [Route("all")]
    [AllowAnonymous]
    public async Task<List<TransactionResponse>> GetTransactions()

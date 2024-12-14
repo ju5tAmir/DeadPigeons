@@ -5,7 +5,6 @@ using Service.Transactions.Utils;
 namespace Service.Transactions.Dto;
 
 public record CreateTransactionRequest(
-    string PaymentMethod,
     IFormFile ImageFile,
     string? Note
     );
@@ -14,11 +13,6 @@ public class CreateTransactionRequestValidator : AbstractValidator<CreateTransac
 {
     public CreateTransactionRequestValidator()
     {
-        RuleFor(x => x.PaymentMethod)
-            .NotEmpty().WithMessage("PaymentMethod is required.")
-            .Must(BeAValidPaymentMethod)
-            .WithMessage($"PaymentMethod must be one of: {string.Join(", ", GetValidPaymentMethods())}");
-        
         RuleFor(x => x.ImageFile)
             .NotEmpty().WithMessage("Image file cannot be empty");
 
