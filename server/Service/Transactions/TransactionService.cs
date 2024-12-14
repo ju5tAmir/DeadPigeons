@@ -125,6 +125,33 @@ public class TransactionService( // Note: Implement proper access control for ad
 
     }
 
+    public async Task<TransactionResponse> GetTransactionById(Guid id)
+    {
+        var payment = await transactionRepository
+            .Query()
+            .Where(p => p.TransactionId == id)
+            .FirstOrDefaultAsync();
+
+        if (payment == null)
+        {
+            throw new NotFoundError(nameof(Transaction), new { Id = id });
+        }
+
+        if (payment.Status == TransactionStatus.Declined)
+        {
+            throw new PaymentAlreadyDeclined();
+        }
+        
+        payment.Status = TransactionStatus.Declined;
+
+        var manualInfo = await manualPaymentRepository
+            .Query()
+            .Where(p => p.TransactionId == id)
+            .FirstOrDefaultAsync();
+
+        return TransactionMapper.ToResponse(payment, manualInfo);
+    }
+
     private async Task<TransactionResponse> ProcessCreateManualTransaction(ClaimsPrincipal principal, CreateTransactionRequest data)
     {
         var file = await uploadService.Upload(data.ImageFile);

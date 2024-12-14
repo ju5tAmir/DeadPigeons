@@ -9,4 +9,5 @@ public interface ITransactionService
     Task<List<TransactionResponse>> GetTransactions();
     Task<TransactionResponse> ApproveTransactionById(Guid paymentId, decimal amount);
     Task<TransactionResponse> DeclineTransactionById(Guid paymentId);
+    Task<TransactionResponse> GetTransactionById(Guid id);
 }
