@@ -244,6 +244,8 @@ export interface TimeFrame {
 export interface TransactionResponse {
   /** @format uuid */
   transactionId?: string;
+  /** @format uuid */
+  userId?: string;
   paymentMethod?: string | null;
   /** @format double */
   amount?: number;

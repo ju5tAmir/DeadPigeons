@@ -20,6 +20,7 @@ import Login from "./pages/auth/Login.tsx";
 import UserProfile from "./components/user/account/UserProfile.tsx";
 import Logout from "./components/user/account/Logout.tsx";
 import Transactions from "./components/admin/transactions/Transactions.tsx";
+import TransactionDetails from "./components/admin/transactions/TransactionDetails.tsx";
 
 function AdminRoutes() {
     return (
@@ -54,6 +55,9 @@ function AdminRoutes() {
                             <Route path={RoutePath.profile} element={<UserProfile/>}/>
                             <Route path={RoutePath.logout} element={<Logout/>}/>
                             <Route path={RoutePath.transactions} element={<Transactions/>}/>
+                            <Route path={RoutePath.transactions}>
+                                <Route path={":id"} element={<TransactionDetails/>}/>
+                            </Route>
                         </Routes>
                     </BrowserRouter>
                     <Toaster
