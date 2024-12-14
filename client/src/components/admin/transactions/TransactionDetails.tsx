@@ -10,6 +10,8 @@ function TransactionDetails() {
     const [transaction, setTransaction] = useState<TransactionResponse | null>(null);
     const [user, setUser] = useState<UserInfo | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [newBalance, setNewBalance] = useState<number | string>(0);
+    const [transactionStatusUpdated, setTransactionStatusUpdated] = useState<boolean>(false); // Track if status has been updated
     const navigate = useNavigate();
 
     const fetchTransactionDetails = async () => {
@@ -20,6 +22,8 @@ function TransactionDetails() {
             }
             const res = await http.transactionDetail(id);
             setTransaction(res.data);
+            setNewBalance(res.data.amount); // Set the initial balance to the fetched amount
+            setTransactionStatusUpdated(false); // Reset status update flag
         } catch (error) {
             console.error("Error fetching transaction details:", error);
             toast.error("Failed to fetch transaction details.");
@@ -36,6 +40,30 @@ function TransactionDetails() {
             console.error("Error fetching user details:", error);
             toast.error("Failed to fetch user details.");
         }
+    };
+
+    const handleApprove = async () => {
+        toast.promise(http.transactionApproveCreate(transaction.transactionId, { amount: newBalance }), {
+            success: "Transaction approved.",
+            loading: "Approving...",
+            error: "Failed to approve transaction."
+        });
+
+        // After approve, re-fetch transaction details
+        await fetchTransactionDetails();
+        setTransactionStatusUpdated(true); // Flag that status has been updated
+    };
+
+    const handleDecline = async () => {
+        toast.promise(http.transactionDeclineDetail(transaction.transactionId), {
+            success: "Transaction declined.",
+            loading: "Declining...",
+            error: "Failed to decline transaction."
+        });
+
+        // After decline, re-fetch transaction details
+        await fetchTransactionDetails();
+        setTransactionStatusUpdated(true); // Flag that status has been updated
     };
 
     useEffect(() => {
@@ -106,9 +134,20 @@ function TransactionDetails() {
                                     </div>
                                     <div className="text-gray-700 dark:text-gray-300">
                                         <span className="font-semibold text-indigo-700 dark:text-indigo-400">Amount:</span>
-                                        <p className="mt-1 text-xl font-semibold text-indigo-600 dark:text-indigo-300">
-                                            ${transaction.amount.toFixed(2)}
-                                        </p>
+                                        <div className="mt-1 flex items-center space-x-2">
+                                            {transaction.status === "Pending" ? (
+                                                <input
+                                                    type="number"
+                                                    value={newBalance}
+                                                    onChange={(e) => setNewBalance(e.target.value)}
+                                                    className="w-32 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                                />
+                                            ) : (
+                                                <span className="text-xl font-semibold text-indigo-600 dark:text-indigo-300">
+                                                    ${transaction.amount}
+                                                </span>
+                                            )}
+                                        </div>
                                     </div>
                                     <div className="text-gray-700 dark:text-gray-300">
                                         <span className="font-semibold text-indigo-700 dark:text-indigo-400">Status:</span>
@@ -122,6 +161,24 @@ function TransactionDetails() {
                                         <span className="font-semibold text-indigo-700 dark:text-indigo-400">Note:</span>
                                         <p className="mt-1">{transaction.note || "No note provided."}</p>
                                     </div>
+
+                                    {/* Hide buttons if status is not 'Pending' */}
+                                    {transaction.status === "Pending" && !transactionStatusUpdated && (
+                                        <div className="flex space-x-4 mt-6">
+                                            <button
+                                                onClick={handleApprove}
+                                                className="w-full py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+                                            >
+                                                Approve
+                                            </button>
+                                            <button
+                                                onClick={handleDecline}
+                                                className="w-full py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"
+                                            >
+                                                Decline
+                                            </button>
+                                        </div>
+                                    )}
                                 </div>
                             ) : (
                                 <div className="text-center text-gray-500 dark:text-gray-400">Transaction not found.</div>

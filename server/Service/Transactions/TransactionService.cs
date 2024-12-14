@@ -140,11 +140,6 @@ public class TransactionService( // Note: Implement proper access control for ad
             throw new NotFoundError(nameof(Transaction), new { Id = id });
         }
 
-        if (payment.Status == TransactionStatus.Declined)
-        {
-            throw new PaymentAlreadyDeclined();
-        }
-
         var manualInfo = await manualPaymentRepository
             .Query()
             .Where(p => p.TransactionId == id)
