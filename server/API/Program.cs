@@ -17,6 +17,7 @@ using Service.Preference;
 using Service.Repositories;
 using Service.Security;
 using Service.Transactions;
+using Service.Upload;
 using Service.Users;
 using Service.Winner;
 
@@ -95,6 +96,7 @@ public class Program
         builder.Services.AddScoped<IWinnerService, WinnerService>();
         builder.Services.AddScoped<ITransactionService, TransactionService>();
         builder.Services.AddScoped<IUserService, UserService>();
+        builder.Services.AddScoped<IUploadService, UploadService>();
         #endregion
 
         #region Swagger
@@ -132,6 +134,7 @@ public class Program
                     }
                 }
             );
+            c.OperationFilter<FileUploadOperationFilter>();
         });
         #endregion
 

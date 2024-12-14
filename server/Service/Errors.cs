@@ -26,6 +26,7 @@ public class InsufficientBalance() : AppError("Insufficient balance.") { }
 public class IllegalMove(int allowedNumber) : AppError($"Illegal move. Number of allowed moves is {allowedNumber} for this package.") { }
 public class UpdateError() : AppError($"Update failed because the new item and old one is the same.") { }
 public class UserDisabled() : AppError("User disabled.") { }
+public class UploadException() : AppError("An error occurred while uploading the file.") { }
 
 public class ValidationError(IDictionary<string, string[]> Errors) : AppError("Validation failed!")
 {
