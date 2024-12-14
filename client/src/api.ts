@@ -15,6 +15,11 @@ export interface ActivateRequest {
   password?: string | null;
 }
 
+export interface ApproveTransactionRequest {
+  /** @format double */
+  amount?: number;
+}
+
 export interface BoardDetails {
   /** @format uuid */
   boardId?: string;
@@ -57,15 +62,6 @@ export interface BoardsLw {
 
 export interface ConfirmResponse {
   passwordToken?: string | null;
-}
-
-export interface CreateTransactionRequest {
-  /** @format uuid */
-  userId?: string;
-  paymentMethod?: string | null;
-  transactionType?: string | null;
-  /** @format double */
-  amount?: number;
 }
 
 export interface FinishGameRequest {
@@ -221,6 +217,15 @@ export interface StartGameRequest {
   week?: number;
 }
 
+export interface SystemTransactionRequest {
+  /** @format uuid */
+  userId?: string;
+  operation?: string | null;
+  /** @format double */
+  amount?: number;
+  note?: string | null;
+}
+
 export interface TimeFrame {
   /** @format int32 */
   year?: number;
@@ -240,12 +245,13 @@ export interface TransactionResponse {
   /** @format uuid */
   transactionId?: string;
   paymentMethod?: string | null;
-  transactionType?: string | null;
   /** @format double */
   amount?: number;
   status?: string | null;
+  imageUrl?: string | null;
+  note?: string | null;
   /** @format date-time */
-  transactionDate?: string | null;
+  transactionDate?: string;
 }
 
 export interface UpdateOfflineProperties {
@@ -270,11 +276,6 @@ export interface UpdateUserRequest {
   phoneNumber?: string | null;
   isActive?: boolean;
   isAutoplay?: boolean;
-}
-
-export interface UploadResponse {
-  title?: string | null;
-  url?: string | null;
 }
 
 export interface UserInfo {
@@ -1009,6 +1010,23 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * No description
      *
      * @tags Transaction
+     * @name TransactionList
+     * @request GET:/api/transaction
+     * @secure
+     */
+    transactionList: (params: RequestParams = {}) =>
+      this.request<TransactionResponse[], any>({
+        path: `/api/transaction`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Transaction
      * @name TransactionDetail
      * @request GET:/api/transaction/{id}
      * @secure
@@ -1016,6 +1034,23 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     transactionDetail: (id: string, params: RequestParams = {}) =>
       this.request<TransactionResponse, any>({
         path: `/api/transaction/${id}`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Transaction
+     * @name TransactionUserDetail
+     * @request GET:/api/transaction/user/{id}
+     * @secure
+     */
+    transactionUserDetail: (id: string, params: RequestParams = {}) =>
+      this.request<TransactionResponse[], any>({
+        path: `/api/transaction/user/${id}`,
         method: "GET",
         secure: true,
         format: "json",
@@ -1047,9 +1082,35 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request POST:/api/transaction/create
      * @secure
      */
-    transactionCreateCreate: (data: CreateTransactionRequest, params: RequestParams = {}) =>
+    transactionCreateCreate: (
+      data: {
+        /** @format binary */
+        ImageFile?: File;
+        Note?: string;
+      },
+      params: RequestParams = {},
+    ) =>
       this.request<TransactionResponse, any>({
         path: `/api/transaction/create`,
+        method: "POST",
+        body: data,
+        secure: true,
+        type: ContentType.FormData,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Transaction
+     * @name TransactionSystemCreate
+     * @request POST:/api/transaction/system
+     * @secure
+     */
+    transactionSystemCreate: (data: SystemTransactionRequest, params: RequestParams = {}) =>
+      this.request<TransactionResponse, any>({
+        path: `/api/transaction/system`,
         method: "POST",
         body: data,
         secure: true,
@@ -1061,24 +1122,35 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
-     * @tags Upload
-     * @name UploadCreate
-     * @request POST:/api/upload
+     * @tags Transaction
+     * @name TransactionApproveCreate
+     * @request POST:/api/transaction/approve/{id}
      * @secure
      */
-    uploadCreate: (
-      data: {
-        /** @format binary */
-        file?: File;
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<UploadResponse, any>({
-        path: `/api/upload`,
+    transactionApproveCreate: (id: string, data: ApproveTransactionRequest, params: RequestParams = {}) =>
+      this.request<TransactionResponse, any>({
+        path: `/api/transaction/approve/${id}`,
         method: "POST",
         body: data,
         secure: true,
-        type: ContentType.FormData,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Transaction
+     * @name TransactionDeclineDetail
+     * @request GET:/api/transaction/decline/{id}
+     * @secure
+     */
+    transactionDeclineDetail: (id: string, params: RequestParams = {}) =>
+      this.request<TransactionResponse, any>({
+        path: `/api/transaction/decline/${id}`,
+        method: "GET",
+        secure: true,
         format: "json",
         ...params,
       }),
