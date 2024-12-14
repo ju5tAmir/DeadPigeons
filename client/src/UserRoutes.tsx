@@ -13,6 +13,7 @@ import UserProfile from "./components/user/account/UserProfile.tsx";
 import Logout from "./components/user/account/Logout.tsx";
 import Transactions from "./components/user/transactions/Transactions.tsx";
 import CreateTransaction from "./components/user/transactions/CreateTransaction.tsx";
+import TransactionDetails from "./components/user/transactions/TransactionDetails.tsx";
 
 function UserRoutes() {
     return (
@@ -37,7 +38,7 @@ function UserRoutes() {
                             <Route path={RoutePath.transactions} element={<Transactions/>}/>
                             <Route path={RoutePath.transactions}>
                                 <Route path={"create"} element={<CreateTransaction/>}/>
-                                <Route path={":id"} element={<CreateTransaction/>}/>
+                                <Route path={":id"} element={<TransactionDetails/>}/>
                             </Route>
                         </Routes>
                     </BrowserRouter>

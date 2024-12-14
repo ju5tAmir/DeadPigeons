@@ -1,7 +1,14 @@
 import React from "react";
 import {TransactionResponse} from "../../../api.ts";
+import {useNavigate, useNavigation} from "react-router-dom";
 
 const TransactionsTable = ({ transactions }: {transactions: TransactionResponse[]}) => {
+    const navigate = useNavigate();
+
+    function handleClick(transactionId: string) {
+        navigate(transactionId);
+    }
+
     return (
         <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
@@ -47,7 +54,11 @@ const TransactionsTable = ({ transactions }: {transactions: TransactionResponse[
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200 dark:bg-gray-900 dark:divide-gray-700">
                 {transactions.map((transaction) => (
-                    <tr key={transaction.transactionId}>
+                    <tr
+                        key={transaction.transactionId}
+                        onClick={() => handleClick(transaction.transactionId)}
+                    >
+
                         <td className="px-6 py-4 text-sm text-gray-900 dark:text-white break-words">
                             {transaction.transactionId}
                         </td>
