@@ -1,6 +1,6 @@
-using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Service;
 using Service.Transactions;
 using Service.Transactions.Dto;
 
@@ -8,13 +8,12 @@ namespace API.Controllers;
 
 [ApiController]
 [Route("/api/transaction/")]
-[AllowAnonymous]
 public class TransactionController(ITransactionService service): ControllerBase
 {
    
    [HttpGet]
    [Route("")]
-   [AllowAnonymous]
+   [Authorize]
    public async Task<List<TransactionResponse>> GetMyTransactions()
    {
       return await service.GetMyTransactions(HttpContext.User);
@@ -22,48 +21,47 @@ public class TransactionController(ITransactionService service): ControllerBase
    
    [HttpGet]
    [Route("{id}")]
-   [AllowAnonymous]
-   public async Task<TransactionResponse> GetTransactions(Guid id)
+   [Authorize]
+   public async Task<TransactionResponse> GetTransactionById(Guid id)
    {
-      return await service.GetTransactionById(id);
+      return await service.GetTransactionById(HttpContext.User, id);
    } 
    
    [HttpGet]
    [Route("user/{id}")]
-   [AllowAnonymous]
-   public async Task<List<TransactionResponse>> GetUserTransactions(Guid id)
+   [Authorize(Roles = Role.Admin)]
+   public async Task<List<TransactionResponse>> GetTransactionsByUserId(Guid id)
    {
-      return await service.GetTransactionForUser(id);
+      return await service.GetTransactionsByUserId(id);
    } 
 
    [HttpGet]
    [Route("all")]
-   [AllowAnonymous]
+   [Authorize(Roles = Role.Admin)]
    public async Task<List<TransactionResponse>> GetTransactions()
    {
       return await service.GetTransactions();
    } 
    
-   
    [HttpPost]
    [Route("create")]
-   [AllowAnonymous]
-   public async Task<TransactionResponse> MakeTransaction([FromForm] CreateTransactionRequest data)
+   [Authorize]
+   public async Task<TransactionResponse> CreateManualTransactions([FromForm] CreateTransactionRequest data)
    {
-      return await service.Create(HttpContext.User, data);
+      return await service.CreateManualTransactions(HttpContext.User, data);
    } 
 
    [HttpPost]
    [Route("system")]
-   [AllowAnonymous]
-   public async Task<TransactionResponse> MakeTransaction([FromBody] SystemTransactionRequest data)
+   [Authorize(Roles = Role.Admin)]
+   public async Task<TransactionResponse> SystemTransactionsProcess([FromBody] SystemTransactionRequest data)
    {
       return await service.SystemTransactionsProcess(data);
    } 
    
    [HttpPost]
    [Route("approve/{id}")]
-   [AllowAnonymous]
+   [Authorize(Roles = Role.Admin)]
    public async Task<TransactionResponse> ApproveTransaction(Guid id, [FromBody] ApproveTransactionRequest data )
    {
       return await service.ApproveTransactionById(id, data);
@@ -71,11 +69,9 @@ public class TransactionController(ITransactionService service): ControllerBase
 
    [HttpGet]
    [Route("decline/{id}")]
-   [AllowAnonymous]
+   [Authorize(Roles = Role.Admin)]
    public async Task<TransactionResponse> DeclineTransaction(Guid id)
    {
       return await service.DeclineTransactionById(id);
    } 
-
-
 }

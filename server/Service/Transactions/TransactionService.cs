@@ -16,7 +16,7 @@ using Service.Upload;
 
 namespace Service.Transactions;
 
-public class TransactionService( // Note: Implement proper access control for admin
+public class TransactionService( 
         IRepository<Transaction> transactionRepository,
         IRepository<ManualPayment> manualPaymentRepository,
         IUploadService uploadService,
@@ -28,10 +28,9 @@ public class TransactionService( // Note: Implement proper access control for ad
         )
     : ITransactionService
 {
-    public async Task<TransactionResponse> Create(ClaimsPrincipal principal, CreateTransactionRequest data)
+    public async Task<TransactionResponse> CreateManualTransactions(ClaimsPrincipal principal, CreateTransactionRequest data)
     {
         await createTransactionValidator.ValidateAndThrowAsync(data);
-        // await authority.AuthorizeAndThrowAsync(principal);
         
         return await ProcessCreateManualTransaction(principal, data);
     }
@@ -47,7 +46,7 @@ public class TransactionService( // Note: Implement proper access control for ad
                 (transaction, manuals) => new { transaction, manuals }
             )
             .SelectMany(
-                x => x.manuals.DefaultIfEmpty(), // Handle cases where no manual payment exists
+                x => x.manuals.DefaultIfEmpty(), 
                 (x, manual) => new { x.transaction, manual }
             )
             .Select(x => TransactionMapper.ToResponse(x.transaction, x.manual))
@@ -128,7 +127,7 @@ public class TransactionService( // Note: Implement proper access control for ad
 
     }
 
-    public async Task<TransactionResponse> GetTransactionById(Guid id)
+    public async Task<TransactionResponse> GetTransactionById(ClaimsPrincipal principal, Guid id)
     {
         var payment = await transactionRepository
             .Query()
@@ -140,6 +139,8 @@ public class TransactionService( // Note: Implement proper access control for ad
             throw new NotFoundError(nameof(Transaction), new { Id = id });
         }
 
+        authority.AuthorizeAccessAndThrow(principal, Guid.Parse(payment.UserId));
+        
         var manualInfo = await manualPaymentRepository
             .Query()
             .Where(p => p.TransactionId == id)
@@ -148,7 +149,7 @@ public class TransactionService( // Note: Implement proper access control for ad
         return TransactionMapper.ToResponse(payment, manualInfo);
     }
 
-    public async Task<List<TransactionResponse>> GetTransactionForUser(Guid userId)
+    public async Task<List<TransactionResponse>> GetTransactionsByUserId(Guid userId)
     {
         return await transactionRepository
             .Query()
@@ -160,7 +161,7 @@ public class TransactionService( // Note: Implement proper access control for ad
                 (transaction, manuals) => new { transaction, manuals }
             )
             .SelectMany(
-                x => x.manuals.DefaultIfEmpty(), // Handle cases where no manual payment exists
+                x => x.manuals.DefaultIfEmpty(), 
                 (x, manual) => new { x.transaction, manual }
             )
             .Select(x => TransactionMapper.ToResponse(x.transaction, x.manual))
