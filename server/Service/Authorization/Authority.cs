@@ -21,5 +21,10 @@ public class Authority: IAuthority
         {
             throw new AuthenticationError();
         }
+
+        if (principal.IsInRole(Role.Admin))
+        {
+            Console.WriteLine("admin confirmed");
+        };
     }
 }

@@ -19,11 +19,10 @@ public class BoardService(
     IValidator<BoardRequest> validator
     ): IBoardService
 {
-    public async Task<BoardResponse> Get(ClaimsPrincipal principal, Guid boardId)
+    public async Task<BoardResponse> GetBoardById(ClaimsPrincipal principal, Guid boardId)
     {
         await authority.AuthorizeAndThrowAsync(principal);
-
-        // Get the board
+        
         var board = await boardRepository
             .Query()
             .Where(b => b.PlayerId == principal.GetUserId())
@@ -35,7 +34,6 @@ public class BoardService(
             throw new NotFoundError(nameof(Board), new { Id = boardId });
         }
         
-        // Get the Game
         var game = await gameRepository
             .Query()
             .Where(g => g.GameId == board.GameId)
@@ -46,7 +44,6 @@ public class BoardService(
             throw new  NotFoundError(nameof(DataAccess.Entities.Game), new { Id = board.GameId });
         }
         
-        // Get the package
         var package = await packageRepository
             .Query()
             .Where(p => p.PackageId == board.PackageId)
@@ -60,7 +57,7 @@ public class BoardService(
         return BoardMapper.ToResponse(board, game, package);
     }
 
-    public async Task<List<BoardResponse>> GetBoardsForUser(Guid userId)
+    public async Task<List<BoardResponse>> GetBoardsByUserId(Guid userId)
     {
         return await boardRepository
             .Query()
@@ -69,54 +66,35 @@ public class BoardService(
             .Include(b => b.Game)
             .Select(b => BoardMapper.ToResponse(b, b.Game, b.Package))
             .ToListAsync();
-
     }
 
-    public async Task<List<BoardResponse>> GetAll(ClaimsPrincipal principal)
+    public async Task<List<BoardResponse>> GetAllBoardsForPlayer(ClaimsPrincipal principal)
     {
-        await authority.AuthorizeAndThrowAsync(principal);
-        List<BoardResponse> boardResponses = new List<BoardResponse>();
-
-        // Get the boards
-        var boardsList = await boardRepository
+        return await boardRepository
             .Query()
             .Where(b => b.PlayerId == principal.GetUserId())
+            .Include(b => b.Game)
+            .Include(b => b.Package)
+            .Select(b => BoardMapper.ToResponse(b, b.Game, b.Package))
             .ToListAsync();
-        
-        foreach (var board in boardsList)
-        {
-            boardResponses.Add(await Get(principal, board.BoardId));
-        }
-
-        return boardResponses;
     }
 
-    public async Task<List<BoardResponse>> GetAllForGame(ClaimsPrincipal principal, Guid gameId)
+    public async Task<List<BoardResponse>> GetBoardsByGameId(ClaimsPrincipal principal, Guid gameId)
     {
-        await authority.AuthorizeAndThrowAsync(principal);
-        List<BoardResponse> boardResponses = new List<BoardResponse>();
-
-        // Get the boards
-        var boardsList = await boardRepository
+        return await boardRepository
             .Query()
             .Where(b => b.PlayerId == principal.GetUserId())
             .Where(b => b.GameId == gameId)
+            .Include(b => b.Game)
+            .Include(b => b.Package)
+            .Select(b => BoardMapper.ToResponse(b, b.Game, b.Package))
             .ToListAsync();
-        
-        foreach (var board in boardsList)
-        {
-            boardResponses.Add(await Get(principal, board.BoardId));
-        }
-
-        return boardResponses;
     }
 
     public async Task<BoardResponse> Play(ClaimsPrincipal principal, BoardRequest data)
     {
         await validator.ValidateAndThrowAsync(data);
-        await authority.AuthorizeAndThrowAsync(principal);
 
-        // Get the Game
         var game = await gameRepository
             .Query()
             .Where(g => g.GameId == data.GameId)
@@ -132,7 +110,6 @@ public class BoardService(
             throw new GameHasFinished();
         }
         
-        // Get the user
         var user = await userRepository
             .Query()
             .Where(u => u.Id == principal.GetUserId())
@@ -143,13 +120,11 @@ public class BoardService(
             throw new  NotFoundError(nameof(DataAccess.Entities.User), new { Id = principal.GetUserId() });
         }
 
-        // If the user is disabled 
         if (!user.IsActive)
         {
             throw new UserDisabled();
         }
         
-        // Get the package
         var package = await packageRepository
             .Query()
             .Where(p => p.PackageId == data.PackageId)
@@ -165,17 +140,17 @@ public class BoardService(
         {
             throw new IllegalMove(package.NumberOfFields);
         }
-
         
-        // Check balance
         if (package.Price > user.Balance)
         {
             throw new InsufficientBalance();
         }
-
-        user.Balance -= package.Price;
         
-
+        user.Balance -= package.Price;
+        game.OnlineBoards += 1;
+        game.OnlinePlayers += 1;
+        game.OnlineIncome += package.Price;
+        
         var board = new DataAccess.Entities.Board()
         {
             BoardId = Guid.NewGuid(),
@@ -185,7 +160,6 @@ public class BoardService(
             PlaySequence = data.PlaySequence.ToList(),
             PlayDate = DateTime.UtcNow
         };
-
         
         await boardRepository
             .Add(board);
@@ -197,8 +171,6 @@ public class BoardService(
 
     public async Task<bool> Delete(ClaimsPrincipal principal, Guid boardId)
     {
-        await authority.AuthorizeAndThrowAsync(principal);
-
         var board = await boardRepository
             .Query()
             .Where(b => b.BoardId == boardId)
@@ -230,7 +202,6 @@ public class BoardService(
             throw new GameHasFinished();
         }
         
-        // Get the user
         var user = await userRepository
             .Query()
             .Where(u => u.Id == principal.GetUserId())
@@ -241,13 +212,11 @@ public class BoardService(
             throw new  NotFoundError(nameof(DataAccess.Entities.User), new { Id = principal.GetUserId() });
         }
 
-        // If the user is disabled 
         if (!user.IsActive)
         {
             throw new UserDisabled();
         }
         
-        // Get the old ass package
         var package = await boardRepository
             .Query()
             .Where(b => b.BoardId == boardId)
@@ -260,13 +229,17 @@ public class BoardService(
             throw new NotFoundError(nameof(Package), new { Id = board.PackageId });
         }
 
-        // Return the money to the user's acc
-        user.Balance += package.Price;  
+        user.Balance += package.Price; 
+        game.OnlineBoards -= 1;
+        game.OnlinePlayers -= 1;
+        game.OnlineIncome -= package.Price;
         
         await boardRepository
             .Delete(board);
         await userRepository
             .Update(user);
+        await gameRepository
+            .Update(game);
         
         return true;
     }
@@ -370,7 +343,6 @@ public class BoardService(
             throw new InsufficientBalance();
         }
         
-        // Update the board with new package and moves
         board.PackageId = newPackage.PackageId;
         board.PlaySequence = data.PlaySequence.ToList();
 
