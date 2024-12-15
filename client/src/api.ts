@@ -191,18 +191,6 @@ export interface PlayersLw {
   totalPlayers?: number;
 }
 
-export interface PreferenceResponse {
-  ifBalanceIsNegative?: boolean | null;
-  ifPlayerWon?: boolean | null;
-  notificationType?: string | null;
-}
-
-export interface PreferenceUpdateRequest {
-  ifBalanceIsNegative?: boolean;
-  ifPlayerWon?: boolean;
-  notificationType?: string | null;
-}
-
 export interface RegisterRequest {
   firstName?: string | null;
   lastName?: string | null;
@@ -968,42 +956,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       this.request<PackageResponse, any>({
         path: `/api/package`,
         method: "POST",
-        body: data,
-        secure: true,
-        type: ContentType.Json,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags Preference
-     * @name PreferencesDetail
-     * @request GET:/api/preferences/{userId}
-     * @secure
-     */
-    preferencesDetail: (userId: string, params: RequestParams = {}) =>
-      this.request<PreferenceResponse, any>({
-        path: `/api/preferences/${userId}`,
-        method: "GET",
-        secure: true,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags Preference
-     * @name PreferencesUpdate
-     * @request PUT:/api/preferences/{userId}
-     * @secure
-     */
-    preferencesUpdate: (userId: string, data: PreferenceUpdateRequest, params: RequestParams = {}) =>
-      this.request<PreferenceResponse, any>({
-        path: `/api/preferences/${userId}`,
-        method: "PUT",
         body: data,
         secure: true,
         type: ContentType.Json,

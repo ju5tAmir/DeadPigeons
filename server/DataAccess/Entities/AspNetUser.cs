@@ -73,9 +73,6 @@ public partial class AspNetUser
     public virtual ICollection<Board> Boards { get; set; } = new List<Board>();
 
     [InverseProperty("User")]
-    public virtual Preference? Preference { get; set; }
-
-    [InverseProperty("User")]
     public virtual ICollection<Transaction> Transactions { get; set; } = new List<Transaction>();
 
     [InverseProperty("Player")]

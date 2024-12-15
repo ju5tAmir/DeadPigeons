@@ -24,6 +24,10 @@ public partial class Winner
     [InverseProperty("Winners")]
     public virtual Board Board { get; set; } = null!;
 
+    [ForeignKey("GameId")]
+    [InverseProperty("Winners")]
+    public virtual Game Game { get; set; } = null!;
+
     [ForeignKey("PlayerId")]
     [InverseProperty("Winners")]
     public virtual AspNetUser Player { get; set; } = null!;
