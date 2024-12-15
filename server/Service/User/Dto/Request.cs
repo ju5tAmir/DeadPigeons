@@ -12,6 +12,9 @@ public record UpdateUserRequest
     bool IsAutoplay
 );
 
+public record FetchUserRequest(
+    string Recipient
+);
 
 public class UpdateUserRequestValidator : AbstractValidator<UpdateUserRequest>
 {

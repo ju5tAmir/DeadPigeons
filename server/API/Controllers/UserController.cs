@@ -1,13 +1,9 @@
 using DataAccess.Entities;
-using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 using Service;
-using Service.Auth;
 using Service.Auth.Dto;
-using Service.Security;
 using Service.Users;
 using Service.Users.Dto;
 
@@ -19,7 +15,7 @@ public class UserController(IUserService service): ControllerBase
 {
     [HttpGet]
     [Route("{id}")]
-    [AllowAnonymous]
+    [Authorize(Roles = Role.Admin)]
     public async Task<UserInfo> GetUserById(
         [FromServices] UserManager<User> userManager,
         Guid id
@@ -28,9 +24,20 @@ public class UserController(IUserService service): ControllerBase
         return await service.GetUserById(userManager, id);
     }
     
+    [HttpPost]
+    [Route("")]
+    [Authorize(Roles = Role.Admin)]
+    public async Task<UserInfo> GetUserV2(
+        [FromServices] UserManager<User> userManager,
+        [FromBody] FetchUserRequest data
+    )
+    {
+        return await service.GetUserV2(userManager, data);
+    }
+    
     [HttpGet]
     [Route("all")]
-    [AllowAnonymous]
+    [Authorize(Roles = Role.Admin)]
     public async Task<List<UserInfo>> GetAllUsers(
         [FromServices] UserManager<User> userManager
     )
@@ -40,7 +47,7 @@ public class UserController(IUserService service): ControllerBase
     
     [HttpPut]
     [Route("{id}")]
-    [AllowAnonymous]
+    [Authorize(Roles = Role.Admin)]
     public async Task<bool> UpdateUser(
         [FromBody] UpdateUserRequest user, Guid id
     )
@@ -50,13 +57,11 @@ public class UserController(IUserService service): ControllerBase
     
     [HttpDelete]
     [Route("{id}")]
-    [AllowAnonymous]
+    [Authorize(Roles = Role.Admin)]
     public async Task<bool> DeleteUser(
         Guid id
     )
     {
         return await service.DeleteUser(id);
     }
-
-    
 }

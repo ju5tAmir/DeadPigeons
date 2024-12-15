@@ -10,15 +10,12 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Service.Auth.Dto;
 using Service.Auth.Utils;
-using Service.Preference.Utils;
 using Service.Repositories;
 using Service.Security;
 
 namespace Service.Auth;
 
-public class AuthService(
-    IRepository<DataAccess.Entities.Preference> preferenceRepository): IAuthService
-{
+public class AuthService : IAuthService{
     public async Task<RegisterResponse> Register(IOptions<AppOptions> options, UserManager<User> userManager, IEmailSender<User> emailSender , IValidator<RegisterRequest> validator, RegisterRequest data)
     {
         await validator.ValidateAndThrowAsync(data);
@@ -39,11 +36,6 @@ public class AuthService(
             );
         }
         await userManager.AddToRoleAsync(user, Role.Player);
-
-        var preferences = PreferenceMapper.GetDefaultPreferences(user);
-
-        await preferenceRepository
-            .Add(preferences);
         
         var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
         
@@ -110,16 +102,6 @@ public class AuthService(
         }
 
         var roles = string.Join(", ", (await userManager.GetRolesAsync(user)));
-        var preference = (await preferenceRepository
-                .Query()
-                .Where(p => p.UserId == user.Id)
-                .FirstOrDefaultAsync()
-            );
-
-        if (preference == null)
-        {
-            throw new NotFoundError(nameof(Preference), new { Id = "" });
-        }
 
         return UserInfoMapper.ToResponse(user, roles);
     }

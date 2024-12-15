@@ -360,7 +360,9 @@ function Lab() {
 
             {/*<CreateTransaction/>*/}
 
-            <Transactions/>
+            {/*<Transactions/>*/}
+
+            <TransferMoney/>
 
         </>
     )

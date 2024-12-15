@@ -8,6 +8,7 @@ namespace Service.Users;
 public interface IUserService
 {
     Task<UserInfo> GetUserById(UserManager<User> userManager, Guid id);
+    Task<UserInfo> GetUserV2(UserManager<User> userManager, FetchUserRequest data);
     Task<List<UserInfo>> GetAllUsers(UserManager<User> userManager);
 
     Task<bool> UpdateUser(Guid id, UpdateUserRequest user);

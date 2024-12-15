@@ -18,7 +18,7 @@ public class AuthController(IAuthService service): ControllerBase
 
     [HttpPost]
     [Route("register")]
-    [AllowAnonymous]
+    [Authorize(Roles = Role.Admin)]
     public async Task<RegisterResponse> Register(
         IOptions<AppOptions> options,
         [FromServices] UserManager<User> userManager,
@@ -50,10 +50,11 @@ public class AuthController(IAuthService service): ControllerBase
             validator,
             tokenClaimsService,
             data);
-    }
+    }   
 
     [HttpGet]
     [Route("logout")]
+    [Authorize]
     public async Task<IResult> Logout([FromServices] SignInManager<User> signInManager)
     {
         return await service.Logout(signInManager);
@@ -61,6 +62,7 @@ public class AuthController(IAuthService service): ControllerBase
 
     [HttpGet]
     [Route("userinfo")]
+    [Authorize]
     public async Task<UserInfo> UserInfo([FromServices] UserManager<User> userManager)
     {
         return await service.UserInfo(userManager, HttpContext.User);

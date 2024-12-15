@@ -13,7 +13,7 @@ public interface IGameService
     Task<List<GameLwResponse>> GetGamesLightWeightResponse(int year);
     Task<List<int>> GetYears();
     Task<GameLwResponse> GetLightWeightGameById(Guid id);
-    Task<List<GamePlayerDetails>> GetPlayersForGame(Guid id);
-    Task<List<GameBoardsDetails>> GetGameBoards(Guid id);
+    Task<List<GamePlayerDetails>> GetGamePlayersByGameId(Guid id);
+    Task<List<GameBoardsDetails>> GetGameBoardsByGameId(Guid id);
     Task<GameLwResponse> UpdateGameOfflineProperties(Guid id, UpdateOfflineProperties data);
 }

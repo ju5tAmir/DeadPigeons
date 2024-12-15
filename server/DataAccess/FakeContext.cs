@@ -32,8 +32,6 @@ public partial class FakeContext : DbContext
 
     public virtual DbSet<Package> Packages { get; set; }
 
-    public virtual DbSet<Preference> Preferences { get; set; }
-
     public virtual DbSet<Transaction> Transactions { get; set; }
 
     public virtual DbSet<Winner> Winners { get; set; }
@@ -66,9 +64,7 @@ public partial class FakeContext : DbContext
             entity.Property(e => e.BoardId).ValueGeneratedNever();
             entity.Property(e => e.PlayDate).HasDefaultValueSql("CURRENT_TIMESTAMP");
 
-            entity.HasOne(d => d.Game).WithMany(p => p.Boards)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("boards_games_gameid_fk");
+            entity.HasOne(d => d.Game).WithMany(p => p.Boards).HasConstraintName("Boards_GameId_fkey");
 
             entity.HasOne(d => d.Package).WithMany(p => p.Boards).HasConstraintName("Boards_PackageId_fkey");
 
@@ -106,16 +102,6 @@ public partial class FakeContext : DbContext
             entity.Property(e => e.PackageId).ValueGeneratedNever();
         });
 
-        modelBuilder.Entity<Preference>(entity =>
-        {
-            entity.HasKey(e => e.UserSettingsId).HasName("Preferences_pkey");
-
-            entity.Property(e => e.IfBalanceIsNegative).HasDefaultValue(true);
-            entity.Property(e => e.IfPlayerWon).HasDefaultValue(true);
-
-            entity.HasOne(d => d.User).WithOne(p => p.Preference).HasConstraintName("Preferences_UserId_fkey");
-        });
-
         modelBuilder.Entity<Transaction>(entity =>
         {
             entity.HasKey(e => e.TransactionId).HasName("Transactions_pkey");
@@ -134,6 +120,8 @@ public partial class FakeContext : DbContext
             entity.Property(e => e.WinningRecordId).ValueGeneratedNever();
 
             entity.HasOne(d => d.Board).WithMany(p => p.Winners).HasConstraintName("Winners_BoardId_fkey");
+
+            entity.HasOne(d => d.Game).WithMany(p => p.Winners).HasConstraintName("Winners_GameId_fkey");
 
             entity.HasOne(d => d.Player).WithMany(p => p.Winners).HasConstraintName("Winners_PlayerId_fkey");
         });

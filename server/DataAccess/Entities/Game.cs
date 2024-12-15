@@ -58,4 +58,7 @@ public partial class Game
 
     [InverseProperty("Game")]
     public virtual ICollection<Board> Boards { get; set; } = new List<Board>();
+
+    [InverseProperty("Game")]
+    public virtual ICollection<Winner> Winners { get; set; } = new List<Winner>();
 }

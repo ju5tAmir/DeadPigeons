@@ -13,7 +13,6 @@ using Service.Authorization;
 using Service.Board;
 using Service.Game;
 using Service.Package;
-using Service.Preference;
 using Service.Repositories;
 using Service.Security;
 using Service.Transactions;
@@ -46,7 +45,6 @@ public class Program
         );
         builder.Services.AddScoped<DbSeeder>();
         builder.Services.AddScoped<IRepository<User>, UserRepository>();
-        builder.Services.AddScoped<IRepository<Preference>, PreferenceRepository>();
         builder.Services.AddScoped<IRepository<Game>, GameRepository>();
         builder.Services.AddScoped<IRepository<Board>, BoardRepository>();
         builder.Services.AddScoped<IRepository<Package>, PackageRepository>();
@@ -87,7 +85,6 @@ public class Program
 
         #region Services
         builder.Services.AddValidatorsFromAssemblyContaining<ServiceAssembly>();
-        builder.Services.AddScoped<IPreferenceService, PreferenceService>();
         builder.Services.AddScoped<IAuthority, Authority>();
         builder.Services.AddScoped<IGameService, GameService>();
         builder.Services.AddScoped<IBoardService, BoardService>();

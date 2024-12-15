@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { BoardResponse, UserInfo } from "../../../api.ts";
+import {BoardResponse, TransactionResponse, UserInfo} from "../../../api.ts";
 import { http } from "../../../http.ts";
 import ViewUser from "./ViewUser.tsx";
 import UserBoards from "./UserBoards.tsx";
+import UserTransactions from "./UserTransactions.tsx";
 
 function UserManager() {
     const { id } = useParams<{ id: string }>();
     const [user, setUser] = useState<UserInfo | null>(null);
     const [userBoards, setUserBoards] = useState<BoardResponse[] | null>(null);
+    const [transactions, setTransactions] = useState<TransactionResponse[] | null>(null);
 
     // Fetch user details
     const fetchUser = async (userId: string) => {
@@ -25,6 +27,16 @@ function UserManager() {
         try {
             const res = await http.boardUserDetail(userId);
             setUserBoards(res.data);
+        } catch (error) {
+            console.error("Failed to fetch user boards:", error);
+        }
+    };
+
+    // Fetch user transactions
+    const fetchUserTransactions = async (userId: string) => {
+        try {
+            const res = await http.transactionUserDetail(userId);
+            setTransactions(res.data);
         } catch (error) {
             console.error("Failed to fetch user boards:", error);
         }
@@ -76,6 +88,31 @@ function UserManager() {
                     )}
                 </div>
             </details>
+
+
+            {/* Transactions Details */}
+            <details
+                className="border border-gray-300 rounded-lg mt-4"
+                onToggle={(e) => {
+                    if ((e.target as HTMLDetailsElement).open && id) {
+                        fetchUserTransactions(id);
+                    }
+                }}
+            >
+                <summary
+                    className="cursor-pointer px-6 py-4 text-gray-800 font-semibold bg-gray-100 rounded-t-lg hover:bg-gray-200"
+                >
+                    Transactions
+                </summary>
+                <div className="px-6 py-4 bg-white border-t border-gray-300">
+                    {transactions ? (
+                        <UserTransactions transactions={transactions} />
+                    ) : (
+                        <p>Loading Transactions...</p>
+                    )}
+                </div>
+            </details>
+
 
             {/* Back Button */}
             <div className="mt-6">

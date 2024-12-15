@@ -9,11 +9,6 @@ public class UserRepository(AppDbContext context) : BaseRepository<User>(context
     protected override DbSet<User> Set => Context.Users;
 }
 
-public class PreferenceRepository(AppDbContext context) : BaseRepository<DataAccess.Entities.Preference>(context)
-{
-    protected override DbSet<DataAccess.Entities.Preference> Set => Context.Preferences;
-}
-
 public class GameRepository(AppDbContext context) : BaseRepository<DataAccess.Entities.Game>(context)
 {
     protected override DbSet<DataAccess.Entities.Game> Set => Context.Games;

@@ -64,6 +64,10 @@ export interface ConfirmResponse {
   passwordToken?: string | null;
 }
 
+export interface FetchUserRequest {
+  recipient?: string | null;
+}
+
 export interface FinishGameRequest {
   /** @format uuid */
   gameId?: string;
@@ -187,18 +191,6 @@ export interface PlayersLw {
   totalPlayers?: number;
 }
 
-export interface PreferenceResponse {
-  ifBalanceIsNegative?: boolean | null;
-  ifPlayerWon?: boolean | null;
-  notificationType?: string | null;
-}
-
-export interface PreferenceUpdateRequest {
-  ifBalanceIsNegative?: boolean;
-  ifPlayerWon?: boolean;
-  notificationType?: string | null;
-}
-
 export interface RegisterRequest {
   firstName?: string | null;
   lastName?: string | null;
@@ -218,8 +210,7 @@ export interface StartGameRequest {
 }
 
 export interface SystemTransactionRequest {
-  /** @format uuid */
-  userId?: string;
+  recipiant?: string | null;
   operation?: string | null;
   /** @format double */
   amount?: number;
@@ -975,42 +966,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
-     * @tags Preference
-     * @name PreferencesDetail
-     * @request GET:/api/preferences/{userId}
-     * @secure
-     */
-    preferencesDetail: (userId: string, params: RequestParams = {}) =>
-      this.request<PreferenceResponse, any>({
-        path: `/api/preferences/${userId}`,
-        method: "GET",
-        secure: true,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags Preference
-     * @name PreferencesUpdate
-     * @request PUT:/api/preferences/{userId}
-     * @secure
-     */
-    preferencesUpdate: (userId: string, data: PreferenceUpdateRequest, params: RequestParams = {}) =>
-      this.request<PreferenceResponse, any>({
-        path: `/api/preferences/${userId}`,
-        method: "PUT",
-        body: data,
-        secure: true,
-        type: ContentType.Json,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
      * @tags Transaction
      * @name TransactionList
      * @request GET:/api/transaction
@@ -1206,6 +1161,25 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/api/user/${id}`,
         method: "DELETE",
         secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags User
+     * @name UserCreate
+     * @request POST:/api/user
+     * @secure
+     */
+    userCreate: (data: FetchUserRequest, params: RequestParams = {}) =>
+      this.request<UserInfo, any>({
+        path: `/api/user`,
+        method: "POST",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
         format: "json",
         ...params,
       }),

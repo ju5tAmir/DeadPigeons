@@ -21,6 +21,7 @@ import UserProfile from "./components/user/account/UserProfile.tsx";
 import Logout from "./components/user/account/Logout.tsx";
 import Transactions from "./components/admin/transactions/Transactions.tsx";
 import TransactionDetails from "./components/admin/transactions/TransactionDetails.tsx";
+import TransferMoney from "./components/admin/transactions/TransferMoney.tsx";
 
 function AdminRoutes() {
     return (
@@ -57,6 +58,7 @@ function AdminRoutes() {
                             <Route path={RoutePath.transactions} element={<Transactions/>}/>
                             <Route path={RoutePath.transactions}>
                                 <Route path={":id"} element={<TransactionDetails/>}/>
+                                <Route path={"transfer"} element={<TransferMoney/>}/>
                             </Route>
                         </Routes>
                     </BrowserRouter>
