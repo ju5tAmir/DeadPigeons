@@ -64,6 +64,10 @@ export interface ConfirmResponse {
   passwordToken?: string | null;
 }
 
+export interface FetchUserRequest {
+  recipient?: string | null;
+}
+
 export interface FinishGameRequest {
   /** @format uuid */
   gameId?: string;
@@ -218,8 +222,7 @@ export interface StartGameRequest {
 }
 
 export interface SystemTransactionRequest {
-  /** @format uuid */
-  userId?: string;
+  recipiant?: string | null;
   operation?: string | null;
   /** @format double */
   amount?: number;
@@ -1206,6 +1209,25 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/api/user/${id}`,
         method: "DELETE",
         secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags User
+     * @name UserCreate
+     * @request POST:/api/user
+     * @secure
+     */
+    userCreate: (data: FetchUserRequest, params: RequestParams = {}) =>
+      this.request<UserInfo, any>({
+        path: `/api/user`,
+        method: "POST",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
         format: "json",
         ...params,
       }),

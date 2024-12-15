@@ -33,7 +33,7 @@ public class UserController(IUserService service): ControllerBase
     [AllowAnonymous]
     public async Task<UserInfo> GetUserV2(
         [FromServices] UserManager<User> userManager,
-        [FromBody] string data
+        [FromBody] FetchUserRequest data
     )
     {
         return await service.GetUserV2(userManager, data);

@@ -35,17 +35,17 @@ public class UserService(
         return userInfo;
     }
 
-    public async Task<UserInfo> GetUserV2(UserManager<User> userManager, string data)
+    public async Task<UserInfo> GetUserV2(UserManager<User> userManager, FetchUserRequest data)
     {
-        bool isEmail = data.Contains("@");
-        bool isGuid = data.Contains("-");
+        bool isEmail = data.Recipient.Contains("@");
+        bool isGuid = data.Recipient.Contains("-");
 
         var user = await userRepository
             .Query()
             .Where(u => 
-                (isEmail && u.Email == data) || 
-                (!isEmail && !isGuid && u.PhoneNumber == data) || 
-                (isGuid && u.Id == data))
+                (isEmail && u.Email == data.Recipient) || 
+                (!isEmail && !isGuid && u.PhoneNumber == data.Recipient) || 
+                (isGuid && u.Id == data.Recipient))
             .FirstOrDefaultAsync();
 
         if (user == null)

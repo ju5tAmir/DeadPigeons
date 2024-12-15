@@ -18,6 +18,7 @@ const UsersTable: React.FC<UsersTableProps> = ({ userList, handleView, handleEdi
             <tr>
                 <th className="border border-gray-300 px-4 py-2 text-left">Name</th>
                 <th className="border border-gray-300 px-4 py-2 text-left">Username</th>
+                <th className="border border-gray-300 px-4 py-2 text-left">Username</th>
                 <th className="border border-gray-300 px-4 py-2 text-left">Email</th>
                 <th className="border border-gray-300 px-4 py-2 text-left">Phone</th>
                 <th className="border border-gray-300 px-4 py-2 text-center">Role</th>
@@ -32,6 +33,7 @@ const UsersTable: React.FC<UsersTableProps> = ({ userList, handleView, handleEdi
                 <tr key={player.userId} className="hover:bg-gray-50">
                     <td className="border border-gray-300 px-4 py-2">{player.firstName} {player.lastName}</td>
                     <td className="border border-gray-300 px-4 py-2">{player.username}</td>
+                    <td className="border border-gray-300 px-4 py-2 text-center">{player.balance} kr</td>
                     <td className="border border-gray-300 px-4 py-2">{player.email}</td>
                     <td className="border border-gray-300 px-4 py-2">{player.phoneNumber}</td>
                     <td className="border border-gray-300 px-4 py-2 text-center">{player.role}</td>
