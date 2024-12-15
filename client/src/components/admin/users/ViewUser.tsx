@@ -8,6 +8,12 @@ function ViewUser({ user }: { user: UserInfo }) {
                 <h2 className="text-2xl font-semibold text-gray-800 mb-6">User Details</h2>
                 <div className="space-y-6">
                     <div className="flex items-center space-x-4">
+                        <label className="w-1/3 text-gray-600 font-medium">User ID:</label>
+                        <div className="flex-1 px-4 py-2 bg-gray-100 rounded-md text-gray-700">
+                            {user?.userId || "N/A"}
+                        </div>
+                    </div>
+                    <div className="flex items-center space-x-4">
                         <label className="w-1/3 text-gray-600 font-medium">First Name:</label>
                         <div className="flex-1 px-4 py-2 bg-gray-100 rounded-md text-gray-700">
                             {user?.firstName || "N/A"}
@@ -17,6 +23,12 @@ function ViewUser({ user }: { user: UserInfo }) {
                         <label className="w-1/3 text-gray-600 font-medium">Last Name:</label>
                         <div className="flex-1 px-4 py-2 bg-gray-100 rounded-md text-gray-700">
                             {user?.lastName || "N/A"}
+                        </div>
+                    </div>
+                    <div className="flex items-center space-x-4">
+                        <label className="w-1/3 text-gray-600 font-medium">Balance:</label>
+                        <div className="flex-1 px-4 py-2 bg-gray-100 rounded-md text-gray-700">
+                            {`${user?.balance} kr` || "N/A"}
                         </div>
                     </div>
                     <div className="flex items-center space-x-4">
