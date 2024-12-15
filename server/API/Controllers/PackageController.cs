@@ -10,11 +10,11 @@ namespace API.Controllers;
 [ApiController]
 [Route("/api/package/")]
 [AllowAnonymous]
-public class PackageController(IPackageService service)
-    : ControllerBase
+public class PackageController(IPackageService service) : ControllerBase
 {
     [HttpGet]
     [Route("all")]
+    [Authorize]
     public async Task<List<PackageResponse>> GetAllPackages()
     {
         return await service.GetAllPackages();
@@ -22,6 +22,7 @@ public class PackageController(IPackageService service)
     
     [HttpGet]
     [Route("{id}")]
+    [Authorize]
     public async Task<PackageResponse> Get(Guid id)
     {
         return await service.GetPackageById(id);
