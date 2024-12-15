@@ -2,7 +2,6 @@ using DataAccess.Entities;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Service.Game.Dto;
-using Service.Package.Utils;
 using Service.Repositories;
 using Service.Utils;
 using Service.Winner;
@@ -50,7 +49,6 @@ public class GameService(
         int currentYear = DateTime.Now.Year;
         int currentWeek = TimeUtils.GetCurrentWeekNumber();
         
-        // Check if the week game is already started
         var isAlreadyStarted = await gameRepository
             .Query()
             .Where(g => g.Year == y && g.WeekNumber == w)
@@ -165,7 +163,7 @@ public class GameService(
         return game;
     }
 
-    public async Task<List<GamePlayerDetails>> GetPlayersForGame(Guid gameId)
+    public async Task<List<GamePlayerDetails>> GetGamePlayersByGameId(Guid gameId)
     {
         return await userRepository
             .Query()
@@ -180,7 +178,7 @@ public class GameService(
             .ToListAsync();
     }
 
-    public async Task<List<GameBoardsDetails>> GetGameBoards(Guid id)
+    public async Task<List<GameBoardsDetails>> GetGameBoardsByGameId(Guid id)
     {
         return await userRepository // UserRepository? because AspNetUser is not User :(  
             .Query()

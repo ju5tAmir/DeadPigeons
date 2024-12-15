@@ -10,10 +10,9 @@ namespace API.Controllers;
 [Route("/api/game")]
 public class GameController(IGameService service): ControllerBase
 {
-       
        [HttpGet]
        [Route("")]
-       [AllowAnonymous]
+       [Authorize]
        public async Task<GameResponse> GetCurrentGame()
        {
               return await service.GetCurrentGame();
@@ -21,16 +20,15 @@ public class GameController(IGameService service): ControllerBase
        
        [HttpGet]
        [Route("years")]
-       [AllowAnonymous]
+       [Authorize]
        public async Task<List<int>> GetAvailableYears()
        {
               return await service.GetYears();
        }
        
-       
        [HttpGet]
        [Route("{id}")]
-       [AllowAnonymous]
+       [Authorize]
        public async Task<GameResponse> GetGameById(Guid id)
        {
               return await service.GetGameById(id);
@@ -38,15 +36,15 @@ public class GameController(IGameService service): ControllerBase
 
        [HttpPut]
        [Route("{id}/update-offline")]
-       [AllowAnonymous]
-       public async Task<GameLwResponse> GetLightWeightGameById(Guid id, UpdateOfflineProperties data)
+       [Authorize(Roles = Role.Admin)]
+       public async Task<GameLwResponse> UpdateGameOfflineProperties(Guid id, UpdateOfflineProperties data)
        {
               return await service.UpdateGameOfflineProperties(id, data);
        }
        
        [HttpGet]
        [Route("{id}/lw")]
-       [AllowAnonymous]
+       [Authorize(Roles = Role.Admin)]
        public async Task<GameLwResponse> GetLightWeightGameById(Guid id)
        {
               return await service.GetLightWeightGameById(id);
@@ -54,50 +52,47 @@ public class GameController(IGameService service): ControllerBase
 
        [HttpGet]
        [Route("{id}/players")]
-       [AllowAnonymous]
+       [Authorize(Roles = Role.Admin)]
        public async Task<List<GamePlayerDetails>> GetGamePlayersByGameId(Guid id)
        {
-              return await service.GetPlayersForGame(id);
+              return await service.GetGamePlayersByGameId(id);
        }
        
        [HttpGet]
        [Route("{id}/boards")]
-       [AllowAnonymous]
-       public async Task<List<GameBoardsDetails>> GetGameBoards(Guid id)
+       [Authorize(Roles = Role.Admin)]
+       public async Task<List<GameBoardsDetails>> GetGameBoardsByGameId(Guid id)
        {
-              return await service.GetGameBoards(id);
+              return await service.GetGameBoardsByGameId(id);
        }
-       
        
        [HttpGet]
        [Route("year/{year}")]
-       [AllowAnonymous]
+       [Authorize]
        public async Task<List<GameResponse>> GetAllGamesByYear(int year)
        {
               return await service.GetAllGamesByYear(year);
        }
        
        [HttpGet]
-       [Route("year/{year}/lw")] // Note: Change it to query
-       [AllowAnonymous] // Note : Admin only
-       public async Task<List<GameLwResponse>> GetGamesLightWeight(int year)
+       [Route("year/{year}/lw")] 
+       [Authorize(Roles = Role.Admin)]
+       public async Task<List<GameLwResponse>> GetGamesLightWeightResponse(int year)
        {
               return await service.GetGamesLightWeightResponse(year);
        }
        
        [HttpPost]
        [Route("start")]
-       // [Authorize(Roles = Role.Admin)]
-       [AllowAnonymous]
-       public async Task<GameResponse> CreateGame([FromBody] StartGameRequest data)
+       [Authorize(Roles = Role.Admin)]
+       public async Task<GameResponse> StartGame([FromBody] StartGameRequest data)
        {
               return await service.StartGame(data);
        }
        
        [HttpPost]
        [Route("finish")]
-       [AllowAnonymous] // NOTE: Change
-       // [Authorize(Roles = Role.Admin)]
+       [Authorize(Roles = Role.Admin)]
        public async Task<GameResponse> FinishGame([FromBody] FinishGameRequest data)
        {
               return await service.FinishGame(data);
