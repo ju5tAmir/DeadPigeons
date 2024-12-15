@@ -35,6 +35,30 @@ public class UserService(
         return userInfo;
     }
 
+    public async Task<UserInfo> GetUserV2(UserManager<User> userManager, string data)
+    {
+        bool isEmail = data.Contains("@");
+        bool isGuid = data.Contains("-");
+
+        var user = await userRepository
+            .Query()
+            .Where(u => 
+                (isEmail && u.Email == data) || 
+                (!isEmail && !isGuid && u.PhoneNumber == data) || 
+                (isGuid && u.Id == data))
+            .FirstOrDefaultAsync();
+
+        if (user == null)
+        {
+            throw new NotFoundError(nameof(User), new { Id = data });
+        }
+        
+        var roles = await userManager.GetRolesAsync(user); 
+        var userInfo = UserInfoMapper.ToResponse(user, string.Join(", ", roles));
+
+        return userInfo;
+    }
+
 
     public async Task<List<UserInfo>> GetAllUsers(UserManager<User> userManager)
     {

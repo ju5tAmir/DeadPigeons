@@ -28,6 +28,17 @@ public class UserController(IUserService service): ControllerBase
         return await service.GetUserById(userManager, id);
     }
     
+    [HttpPost]
+    [Route("")]
+    [AllowAnonymous]
+    public async Task<UserInfo> GetUserV2(
+        [FromServices] UserManager<User> userManager,
+        [FromBody] string data
+    )
+    {
+        return await service.GetUserV2(userManager, data);
+    }
+    
     [HttpGet]
     [Route("all")]
     [AllowAnonymous]

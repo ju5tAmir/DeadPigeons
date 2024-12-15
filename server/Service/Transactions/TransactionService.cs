@@ -170,14 +170,20 @@ public class TransactionService( // Note: Implement proper access control for ad
     public async Task<TransactionResponse> SystemTransactionsProcess(SystemTransactionRequest data)
     {
         await systemValidator.ValidateAndThrowAsync(data);
+        bool isEmail = data.Recipiant.Contains("@");
+        bool isGuid = data.Recipiant.Contains("-");
+
         var user = await userRepository
             .Query()
-            .Where(u => u.Id == data.UserId.ToString())
+            .Where(u => 
+                (isEmail && u.Email == data.Recipiant) || 
+                (!isEmail && !isGuid && u.PhoneNumber == data.Recipiant) || 
+                (isGuid && u.Id == data.Recipiant))
             .FirstOrDefaultAsync();
-
+        
         if (user == null)
         {
-            throw new NotFoundError(nameof(User), new { Id = data.UserId });
+            throw new NotFoundError(nameof(User), new { Recipient = data.Recipiant });
         }
         
         var transaction = new Transaction()
@@ -185,7 +191,7 @@ public class TransactionService( // Note: Implement proper access control for ad
             TransactionId = Guid.NewGuid(),
             PaymentMethod = PaymentMethod.System,
             Status = TransactionStatus.Complete,
-            UserId = data.UserId.ToString(),
+            UserId = user.Id,
             TransactionDate = DateTime.UtcNow
         };
 

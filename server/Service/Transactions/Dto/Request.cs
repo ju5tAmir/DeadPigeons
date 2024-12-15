@@ -11,7 +11,7 @@ public record CreateTransactionRequest(
 );
 
 public record SystemTransactionRequest(
-    Guid UserId,
+    string Recipiant,
     string Operation,
     decimal Amount,
     string? Note
@@ -26,8 +26,8 @@ public class SystemTransactionRequestValidator : AbstractValidator<SystemTransac
 {
     public SystemTransactionRequestValidator()
     {
-        RuleFor(x => x.UserId)
-            .NotEmpty().WithMessage("UserId cannot be empty.");
+        RuleFor(x => x.Recipiant)
+            .NotEmpty().WithMessage("Recipiant cannot be empty.");
         
         RuleFor(x => x.Operation)
             .NotEmpty().WithMessage("Operation is required.")
