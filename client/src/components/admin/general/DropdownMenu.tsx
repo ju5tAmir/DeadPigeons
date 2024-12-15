@@ -14,8 +14,8 @@ const UserDropdown = () => {
                     <ul
                         tabIndex={0}
                         className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 p-2 shadow">
-                        <li><a href={"profile"} >Profile</a></li>
-                        <li><a href={"logout"} >Logout</a></li>
+                        <li><a href={"/profile"} >Profile</a></li>
+                        <li><a href={"/logout"} >Logout</a></li>
                     </ul>
                 </div>
             </div>
