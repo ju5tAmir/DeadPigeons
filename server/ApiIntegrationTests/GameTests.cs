@@ -102,6 +102,60 @@ public class GameTests: ApiTestBase
         // Assert
         Assert.Equal(GameStatus.Finished, response.Result.Status);
     }
+    
+    
+    [Fact(DisplayName = "Admin cannot finish games with numbers out of range from 1 to 16")]
+    public async Task GameFinish_AdminCannotFinishGameWithBadNumbers()
+    {
+        // Arrange
+        var client = new Client(TestHttpAdmin);
+        var game = TestObjects.GetGame();
+        
+        await PgCtxSetup.DbContextInstance.Games.AddAsync(game);
+        await PgCtxSetup.DbContextInstance.SaveChangesAsync();
+        
+        var payload = new FinishGameRequest()
+        {
+            GameId = game.GameId,
+            WinningSequence = [1,2,25]
+        };
+        
+        // Act
+        var exception = await Assert.ThrowsAsync<ApiException>(async () =>
+        {
+            await client.FinishAsync(payload);
+        });
+        
+        Assert.Equal(400, exception.StatusCode);
+        Assert.Contains("All numbers in WinningSequence must be between 1 and 16", exception.Response);
+    }
+    
+    [Fact(DisplayName = "Admin must finish the game with exactly 3 numbers")]
+    public async Task GameFinish_AdminMustFinishGameBy3Numbers()
+    {
+        // Arrange
+        var client = new Client(TestHttpAdmin);
+        var game = TestObjects.GetGame();
+        
+        await PgCtxSetup.DbContextInstance.Games.AddAsync(game);
+        await PgCtxSetup.DbContextInstance.SaveChangesAsync();
+        
+        var payload = new FinishGameRequest()
+        {
+            GameId = game.GameId,
+            WinningSequence = [1,2,3,4]
+        };
+        
+        // Act
+        var exception = await Assert.ThrowsAsync<ApiException>(async () =>
+        {
+            await client.FinishAsync(payload);
+        });
+        
+        
+        Assert.Equal(400, exception.StatusCode);
+        Assert.Contains("must contain exactly 3 unique numbers", exception.Response);
+    }
 
     [Fact(DisplayName = "A regular user cannot finish a game")]
     public async Task GameFinish_UserCannotFinishGame()
@@ -287,7 +341,7 @@ public class GameTests: ApiTestBase
         // Act
         var exception = await Assert.ThrowsAsync<ApiException>(async () =>
         {
-            await client.LwAsync(game.GameId);
+            await client.UpdateOfflineAsync(game.GameId, payload);
         });
         
         // Assert
