@@ -17,4 +17,7 @@ public sealed class AppOptions
     public required string SmtpSenderEmail { get; set; }
     [Required]
     public bool? SmtpEnableSsl { get; set; }
+    [Required] public string DbConnectionString { get; set; }
+    public bool RunInTestContainer { get; set; }
+    public bool Seed { get; set; }
 }
