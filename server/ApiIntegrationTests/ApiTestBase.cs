@@ -11,14 +11,20 @@ using Microsoft.Extensions.Logging;
 using PgCtx;
 using Service;
 using Service.Security;
+using Service.Upload;
+using Service.Users;
+using Xunit.Abstractions;
 using Program = Api.Program;
 
 namespace ApiIntegrationTests;
 
 public class ApiTestBase : WebApplicationFactory<Program>
 {
-    public ApiTestBase()
+    private readonly ITestOutputHelper _outputHelper;
+
+    public ApiTestBase(ITestOutputHelper outputHelper)
     {
+        _outputHelper = outputHelper;
         PgCtxSetup = new PgCtxSetup<AppDbContext>();
         Environment.SetEnvironmentVariable(nameof(AppOptions) + ":" + nameof(AppOptions.DbConnectionString),
             PgCtxSetup._postgres.GetConnectionString());
@@ -100,13 +106,24 @@ public class ApiTestBase : WebApplicationFactory<Program>
                      typeof(DbContextOptions<AppDbContext>));
 
             if (descriptor != null) services.Remove(descriptor);
+            
+            var uploadService = services.SingleOrDefault(
+                d => d.ServiceType == typeof(IUserService));
+            if(uploadService != null) services.Remove(uploadService);
 
             services.AddDbContext<AppDbContext>(opt =>
             {
                 opt.UseNpgsql(PgCtxSetup._postgres.GetConnectionString());
-                opt.EnableSensitiveDataLogging(false);
+                opt.EnableSensitiveDataLogging(true);
                 opt.LogTo(_ => { });
+
             });
+            services.AddScoped<IUploadService, MockUploadService>();
+
+        }).ConfigureLogging(logging =>
+        {
+            logging.ClearProviders();
+            logging.AddXUnit(_outputHelper);
         });
         return base.CreateHost(builder);
     }

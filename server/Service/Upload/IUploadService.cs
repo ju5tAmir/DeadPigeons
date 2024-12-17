@@ -8,3 +8,10 @@ public interface IUploadService
 {
     Task<UploadResponse> Upload(IFormFile file);
 }
+public class MockUploadService : IUploadService 
+{
+    public Task<UploadResponse> Upload(IFormFile file)
+    {
+        return Task.FromResult(new UploadResponse("test", "test"));
+    }
+}

@@ -5,15 +5,9 @@ using Xunit.Abstractions;
 
 namespace ApiIntegrationTests;
 
-public class GameTests: ApiTestBase
+public class GameTests (ITestOutputHelper outputHelper) : ApiTestBase(outputHelper)
 {
-    private readonly ITestOutputHelper _output;
 
-    // Constructor injection for ITestOutputHelper
-    public GameTests(ITestOutputHelper output)
-    {
-        _output = output;
-    }
     
     [Fact(DisplayName = "Admin can start a game")]
     public async Task GameStart_AdminCanStartGame()
