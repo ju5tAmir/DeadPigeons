@@ -20,6 +20,10 @@ jobs:
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: "8.0.x"
+      - name: Set up Google Cloud authentication
+        run: |
+          echo "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}" > $HOME/key.json
+          export GOOGLE_APPLICATION_CREDENTIALS=$HOME/key.json
       - name: Build
         run: dotnet build
       - name: Test
