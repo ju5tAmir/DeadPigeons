@@ -1,30 +1,46 @@
 import { useNavigate } from "react-router-dom";
 import { atom, useAtom } from "jotai";
-import {UserInfo, UserInfoResponse} from "../api";
+import {UserInfo} from "../api";
 import { http } from "../http";
 import { atomWithStorage, createJSONStorage } from "jotai/utils";
+import {getRoleFromJWT} from "../utils/JwtUtils.ts";
 
 // Storage key for JWT
 export const TOKEN_KEY = "token";
 export const tokenStorage = createJSONStorage<string | null>(
     () => sessionStorage,
 );
+export const jwtAtom = atomWithStorage<string | null>(TOKEN_KEY, null, tokenStorage);
 
-const jwtAtom = atomWithStorage<string | null>(TOKEN_KEY, null, tokenStorage);
+export const isAuth = atom<boolean | null>(null);
+
+export const checkAuth = atom((get) => {
+    const token = get(jwtAtom);
+    if (token) {
+      return getRoleFromJWT(token);
+    }
+    return null;
+});
+
 
 export const userInfoAtom = atom(async (get) => {
   // Create a dependency on 'token' atom
   const token = get(jwtAtom);
-  if (!token) return null;
+  if (!token)
+  {
+    get(isAuth)
+    return null;
+  }
   // Fetch user-info
   const response = await http.authUserinfoList();
+  get(isAuth)
   return response.data;
 });
 
 export type Credentials = { email: string; password: string };
 
 type AuthHook = {
-  user: UserInfoResponse | null;
+  user: UserInfo | null;
   login: (credentials: Credentials) => Promise<void>;
   logout: () => void;
 };
@@ -38,7 +54,6 @@ export const useAuth = () => {
     const response = await http.authLoginCreate(credentials);
     const data = response.data;
     setJwt(data.jwt!);
-    navigate("/");
   };
 
   const logout = async () => {
