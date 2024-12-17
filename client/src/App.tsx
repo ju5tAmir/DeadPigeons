@@ -6,12 +6,12 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import ResetPassword from "./pages/auth/ResetPassword.tsx";
 import { RoutePath } from "./utils/user/RoutePath.ts";
 import ChangePassword from "./pages/auth/ChangePassword.tsx";
-import EmailConfirm from "./pages/auth/EmailConfirm.tsx"; // Assuming your RoutePath is exported here
+import EmailConfirm from "./pages/auth/EmailConfirm.tsx";
 
 // Lazy-load the components
 const Login = React.lazy(() => import("./pages/auth/Login.tsx"));
-const UserRoutes = React.lazy(() => import("./UserRoutes.tsx"));
-const AdminRoutes = React.lazy(() => import("./AdminRoutes.tsx"));
+const UserRoutes = React.lazy(() => import("./routes/UserRoutes.tsx"));
+const AdminRoutes = React.lazy(() => import("./routes/AdminRoutes.tsx"));
 
 function App() {
     const [auth] = useAtom(checkAuth);
@@ -19,7 +19,7 @@ function App() {
     return (
         <Suspense fallback={<Loading />}>
             <Routes>
-                {/* Reset Password Route */}
+                {/* Anonymous User Routes */}
                 <Route path={"/password/reset"} element={<ResetPassword />} />
                 <Route path={"/password/change"} element={<ChangePassword />} />
                 <Route path={"/email/confirm"} element={<EmailConfirm />} />
