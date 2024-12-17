@@ -31,10 +31,9 @@ public interface IAuthService
 
     Task<UserInfo> UserInfo(UserManager<User> userManager, ClaimsPrincipal principal);
 
-    Task<ConfirmResponse> Confirm(
+    Task<IResult> Confirm(
         UserManager<User> userManager,
-        string token,
-        string email);
+        ConfirmRequest data);
 
     Task<IResult> Activate(UserManager<User> userManager, IValidator<ActivateRequest> validator, ActivateRequest data);
     

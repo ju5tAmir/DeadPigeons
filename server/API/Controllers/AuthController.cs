@@ -68,16 +68,15 @@ public class AuthController(IAuthService service): ControllerBase
         return await service.UserInfo(userManager, HttpContext.User);
     }
     
-    [HttpGet]
+    [HttpPost]
     [Route("confirm")]
     [AllowAnonymous]
-    public async Task<ConfirmResponse> ConfirmEmail(
+    public async Task<IResult> ConfirmEmail(
         [FromServices] UserManager<User> userManager,
-        string token,
-        string email
+        [FromBody] ConfirmRequest data
     )
     {
-        return await service.Confirm(userManager, token, email);
+        return await service.Confirm(userManager, data);
     }
     
     [HttpPost]

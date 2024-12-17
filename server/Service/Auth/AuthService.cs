@@ -43,7 +43,7 @@ public class AuthService : IAuthService{
         
         var confirmationLink = new UriBuilder(options.Value.Address)
         {
-            Path = "/api/auth/confirm",
+            Path = "/email/confirm",
             Query = QueryString.Create(qs).Value
         }.Uri.ToString();
 
@@ -106,17 +106,22 @@ public class AuthService : IAuthService{
         return UserInfoMapper.ToResponse(user, roles);
     }
 
-    public async Task<ConfirmResponse> Confirm(UserManager<User> userManager, string token, string email)
+    public async Task<IResult> Confirm(UserManager<User> userManager, ConfirmRequest data)
     {
-        var user = await userManager.FindByEmailAsync(email) ?? throw new AuthenticationError();
-        var result = await userManager.ConfirmEmailAsync(user, token);
+        var user = await userManager.FindByEmailAsync(data.Email);
+        if (user == null)
+        {
+            return Results.BadRequest(new {Message = "Failed to confirm your email."});
+        }
+        var result = await userManager.ConfirmEmailAsync(user, data.Token);
         if (!result.Succeeded)
-            throw new AuthenticationError();
+            return Results.BadRequest(new {Message = "Failed to confirm your email."});
         
-        // Return password reset token to set the new password
-        var passwordToken = await userManager.GeneratePasswordResetTokenAsync(user);
+        var confirmation = await userManager.ConfirmEmailAsync(user, data.Token);
+        if (!confirmation.Succeeded) 
+            return Results.BadRequest(new {Message = "Failed to confirm your email."});
         
-        return new ConfirmResponse(passwordToken);
+        return Results.Ok(new {Message = "Success"});
     }
 
     public async Task<IResult> Activate(UserManager<User> userManager, IValidator<ActivateRequest> validator, ActivateRequest data)
