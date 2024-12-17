@@ -14,6 +14,7 @@ public class TestObjects
             .RuleFor(p => p.LastName, f => f.Name.LastName())
             .RuleFor(p => p.Balance, 0)
             .RuleFor(p => p.Email, f => f.Internet.Email())
+            .RuleFor(p => p.UserName, f=> f.Internet.UserName())
             .RuleFor(p => p.PhoneNumber, "123456789")
             .RuleFor(p => p.IsActive, true)
             .RuleFor(p => p.IsAutoPlay, false)

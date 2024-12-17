@@ -46,12 +46,13 @@ public class ApiTestBase : WebApplicationFactory<Program>
 
         await CreateRoles(Role.Admin, Role.Player);
         await CreateUser(firstName: "John", lastName: "TheRipper", email: "mockadmin@example.com", username: "mockadmin", password: "S3cret!", role: Role.Admin, phone: "123123123", isActive: true, isAutoplay: false, registrationDate: DateTime.UtcNow);
-        await CreateUser(firstName: "Beef", lastName: "Steven", email: "mockadmin@example.com", username: "mockuser", password: "S3cret!", role: Role.Player, phone: "321321321", isActive: true, isAutoplay: false, registrationDate: DateTime.UtcNow);
+        await CreateUser(firstName: "Beef", lastName: "Steven", email: "mockuser1@example.com", username: "mockuser1", password: "S3cret!", role: Role.Player, phone: "321321321", isActive: true, isAutoplay: false, registrationDate: DateTime.UtcNow);
+        await CreateUser(firstName: "Pigeon", lastName: "Bradly", email: "mockuser2@example.com", username: "mockuser2", password: "S3cret!", role: Role.Player, phone: "321321321", isActive: true, isAutoplay: false, registrationDate: DateTime.UtcNow);
 
-        AdminJwt = await TokenClaimsService.GetTokenAsync("mockadmin");
-        UserJwt = await TokenClaimsService.GetTokenAsync("mockuser");
-        
         await ctx.SaveChangesAsync();
+        
+        AdminJwt = await TokenClaimsService.GetTokenAsync("mockadmin");
+        UserJwt = await TokenClaimsService.GetTokenAsync("mockuser1");
     }
 
     private async Task CreateRoles(params string[] roles)

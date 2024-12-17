@@ -249,6 +249,11 @@ public class TransactionService(
     {
         var file = await uploadService.Upload(data.ImageFile);
 
+        var user = await userRepository
+            .Query()
+            .Where(u => u.Id == principal.GetUserId())
+            .FirstOrDefaultAsync() ?? throw new NotFoundError(nameof(User), new { Id = principal.GetUserId() });
+        
         var transaction = new Transaction()
         {
             TransactionId = Guid.NewGuid(),
