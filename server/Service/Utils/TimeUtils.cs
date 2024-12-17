@@ -11,6 +11,11 @@ public class TimeUtils
         return culture.Calendar.GetWeekOfYear(DateTime.UtcNow, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
     }
 
+    public static int GetCurrentYear()
+    {
+        return DateTime.Now.Year;
+    }
+    
     public static DateTime GetStartOfWeek(int year, int weekNumber)
     {
         DateTime firstDayOfYear = new DateTime(year, 1, 1);

@@ -9,7 +9,6 @@ namespace API.Controllers;
 
 [ApiController]
 [Route("/api/winner/")]
-[AllowAnonymous]
 public class WinnersController(IWinnerService service)
     : ControllerBase
 {

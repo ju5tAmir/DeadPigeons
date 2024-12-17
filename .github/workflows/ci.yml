@@ -14,7 +14,7 @@ jobs:
     timeout-minutes: 15
     defaults:
       run:
-        working-directory: server/API/
+        working-directory: server/ApiIntegrationTests/
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-dotnet@v4
