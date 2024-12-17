@@ -5,7 +5,8 @@ import Loading from "./components/general/Loading.tsx";
 import { Navigate, Route, Routes } from "react-router-dom";
 import ResetPassword from "./pages/auth/ResetPassword.tsx";
 import { RoutePath } from "./utils/user/RoutePath.ts";
-import ChangePassword from "./pages/auth/ChangePassword.tsx"; // Assuming your RoutePath is exported here
+import ChangePassword from "./pages/auth/ChangePassword.tsx";
+import EmailConfirm from "./pages/auth/EmailConfirm.tsx"; // Assuming your RoutePath is exported here
 
 // Lazy-load the components
 const Login = React.lazy(() => import("./pages/auth/Login.tsx"));
@@ -17,11 +18,11 @@ function App() {
 
     return (
         <Suspense fallback={<Loading />}>
-            {auth}
             <Routes>
                 {/* Reset Password Route */}
                 <Route path={"/password/reset"} element={<ResetPassword />} />
                 <Route path={"/password/change"} element={<ChangePassword />} />
+                <Route path={"/email/confirm"} element={<EmailConfirm />} />
 
                 {/* Auth-based Routes */}
                 {auth === null && (
