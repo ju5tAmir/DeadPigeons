@@ -92,4 +92,22 @@ public class AuthController(IAuthService service): ControllerBase
         return await service.Activate(userManager, validator, data);
     }
     
+    [HttpPost]
+    [Route("reset-password")]
+    [AllowAnonymous]
+    public async Task<IResult> ResetPassword(
+        IOptions<AppOptions> options,
+        [FromServices] UserManager<User> userManager,
+        [FromServices] IEmailSender<User> emailSender,
+        [FromServices] IValidator<ResetPasswordRequest> validator,
+        [FromBody] ResetPasswordRequest data
+    )
+    {
+        return await service.ResetPassword(
+            options,
+            userManager,
+            emailSender,
+            validator,
+            data);
+    }
 }

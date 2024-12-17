@@ -86,3 +86,17 @@ public class ActivateRequestValidator : AbstractValidator<ActivateRequest>
             .WithMessage("Password must contain at least one special character.");
     }
 }
+
+public record ResetPasswordRequest(string Email);
+
+public class ResetPasswordRequestValidator : AbstractValidator<ResetPasswordRequest>
+{
+    public ResetPasswordRequestValidator()
+    {
+        RuleFor(x => x.Email)
+            .NotEmpty()
+            .WithMessage("Email is required.")
+            .EmailAddress()
+            .WithMessage("Email must be a valid email address.");
+    }
+}

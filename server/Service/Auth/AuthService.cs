@@ -129,8 +129,34 @@ public class AuthService : IAuthService{
             throw new AuthenticationError(); // Not using InvalidToken exception due to user enumeration
         }
         
-        return Results.Ok(new {Message = "Password reset successfull."});
+        return Results.Ok(new {Message = "Success"});
     }
 
+    public async Task<IResult> ResetPassword(IOptions<AppOptions> options, UserManager<User> userManager, IEmailSender<User> emailSender, IValidator<ResetPasswordRequest> validator,
+        ResetPasswordRequest data)
+    {
+        await validator.ValidateAndThrowAsync(data);
 
+        var user = await userManager.FindByEmailAsync(data.Email);
+
+        if (user == null)
+        {
+            // Brute force users prevention
+            return Results.Ok(new {Message = "If your email exists in our database, you'll receive password reset link in your inbox."});
+        }
+        
+        var token = await userManager.GeneratePasswordResetTokenAsync(user);
+        
+        var qs = new Dictionary<string, string?> { { "token", token }, { "email", user.Email } };
+        
+        var confirmationLink = new UriBuilder(options.Value.Address)
+        {
+            Path = "/password/change",
+            Query = QueryString.Create(qs).Value
+        }.Uri.ToString();
+
+        await emailSender.SendPasswordResetLinkAsync(user, user.Email, confirmationLink);
+        
+        return Results.Ok(new {Message = "If your email exists in our database, you'll receive password reset link in your inbox."});
+    }
 }

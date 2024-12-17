@@ -168,7 +168,7 @@ public class Program
 
         app.UseHttpsRedirection();
         
-        app.UseDeveloperExceptionPage();
+        // app.UseDeveloperExceptionPage();
    
         app.MapControllers();
         app.UseCors( opts => {

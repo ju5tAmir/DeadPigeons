@@ -38,5 +38,11 @@ public interface IAuthService
 
     Task<IResult> Activate(UserManager<User> userManager, IValidator<ActivateRequest> validator, ActivateRequest data);
     
-
+    Task<IResult> ResetPassword(
+        IOptions<AppOptions> options,
+        UserManager<User> userManager,
+        IEmailSender<User> emailSender,
+        IValidator<ResetPasswordRequest> validator,
+        ResetPasswordRequest data
+    );
 }

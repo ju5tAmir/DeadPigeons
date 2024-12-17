@@ -1,7 +1,11 @@
 import React, { Suspense } from "react";
 import { useAtom } from "jotai";
 import { checkAuth } from "./atoms/auth.ts";
-import Loading from "./components/general/Loading.tsx"; // Assuming your auth atom is exported here
+import Loading from "./components/general/Loading.tsx";
+import { Navigate, Route, Routes } from "react-router-dom";
+import ResetPassword from "./pages/auth/ResetPassword.tsx";
+import { RoutePath } from "./utils/user/RoutePath.ts";
+import ChangePassword from "./pages/auth/ChangePassword.tsx"; // Assuming your RoutePath is exported here
 
 // Lazy-load the components
 const Login = React.lazy(() => import("./pages/auth/Login.tsx"));
@@ -11,22 +15,28 @@ const AdminRoutes = React.lazy(() => import("./AdminRoutes.tsx"));
 function App() {
     const [auth] = useAtom(checkAuth);
 
-    const renderContent = () => {
-        if (auth == null) {
-            return <Login />;
-        }
-        if (auth === "Player") {
-            return <UserRoutes />;
-        }
-        if (auth === "Admin") {
-            return <AdminRoutes />;
-        }
-    };
-
     return (
+        <Suspense fallback={<Loading />}>
+            {auth}
+            <Routes>
+                {/* Reset Password Route */}
+                <Route path={"/password/reset"} element={<ResetPassword />} />
+                <Route path={"/password/change"} element={<ChangePassword />} />
 
-        <Suspense fallback={<Loading/>}>
-            {renderContent()}
+                {/* Auth-based Routes */}
+                {auth === null && (
+                    <Route path="*" element={<Login />} />
+                )}
+                {auth === "Player" && (
+                    <Route path="*" element={<UserRoutes />} />
+                )}
+                {auth === "Admin" && (
+                    <Route path="*" element={<AdminRoutes />} />
+                )}
+
+                {/* Fallback for any invalid route */}
+                <Route path="*" element={<Navigate to={RoutePath.login} replace />} />
+            </Routes>
         </Suspense>
     );
 }
