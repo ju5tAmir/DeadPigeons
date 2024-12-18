@@ -1,8 +1,9 @@
 using Generated;
+using Xunit.Abstractions;
 
 namespace ApiIntegrationTests;
 
-public class AuthTests : ApiTestBase
+public class AuthTests(ITestOutputHelper outputHelper) : ApiTestBase(outputHelper)
 {
     [Fact(DisplayName = "Admin can register new users successfully")]
     public async Task Register_AdminCanRegisterNewUsers()

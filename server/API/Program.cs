@@ -34,6 +34,8 @@ public class Program
             .Bind(builder.Configuration.GetSection(nameof(AppOptions)))
             .ValidateDataAnnotations();
         builder.Services.AddSingleton(_ => TimeProvider.System);
+        var configuration = builder.Configuration;
+        Environment.SetEnvironmentVariable("BUCKET_NAME", configuration["BUCKET_NAME"]);
         #endregion
 
         #region Data Access
@@ -165,8 +167,9 @@ public class Program
         }
 
         app.UseHttpsRedirection();
-
-
+        
+        // app.UseDeveloperExceptionPage();
+   
         app.MapControllers();
         app.UseCors( opts => {
             opts.AllowAnyOrigin();

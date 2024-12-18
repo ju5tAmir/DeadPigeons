@@ -1,8 +1,10 @@
-import {Credentials, useAuth} from "../../atoms/auth.ts";
+import {checkAuth, Credentials, useAuth} from "../../atoms/auth.ts";
 import { useForm, SubmitHandler } from 'react-hook-form';
 import toast from "react-hot-toast";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import {useAtom} from "jotai";
+import {useNavigate, useNavigation} from "react-router-dom";
 
 // Validation schema using Yup
 const schema: yup.ObjectSchema<Credentials> = yup
@@ -14,6 +16,12 @@ const schema: yup.ObjectSchema<Credentials> = yup
 
 export default function Login() {
     const { login } = useAuth();
+    const [ isAuth ] = useAtom(checkAuth)
+    const navigate = useNavigate();
+
+    if (isAuth != null) {
+        navigate("/");
+    }
 
     // Use react-hook-form for form handling
     const {
@@ -76,7 +84,7 @@ export default function Login() {
 
                 <div className="mt-4 text-center">
                     <p className="text-sm text-gray-600">
-                        Don't have an account? <a href="#" className="text-blue-500 hover:underline">Sign up</a>
+                        Forgot your password? <a href="/password/reset" className="text-blue-500 hover:underline">Click here</a>
                     </p>
                 </div>
             </div>

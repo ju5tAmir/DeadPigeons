@@ -494,3 +494,7 @@ server/DataAccess/Migrations/*.cs
 server/DataAccess/Models/*
 
 server/DataAccess/Scaffold.sh
+
+# Secrets
+*.secrets
+.secrets

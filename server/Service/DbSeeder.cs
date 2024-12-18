@@ -35,6 +35,8 @@ public class DbSeeder
         await CreateUser(firstName: "Neo", lastName: "Liza", email: "player1@example.com", username: "player1", password: "S3cret!", role: Role.Player, phone: "1234", isActive:true, isAutoplay:false, registrationDate:DateTime.UtcNow);
         await CreateUser(firstName: "Mads", lastName: "Christian", email: "player2@example.com", username: "player2", password: "S3cret!", role: Role.Player, phone: "5678", isActive:true, isAutoplay:false, registrationDate:DateTime.UtcNow);
         
+        await SeedPackages();
+        
         await context.SaveChangesAsync();
     }
 
@@ -75,5 +77,40 @@ public class DbSeeder
         
     }
     
+    private async Task SeedPackages()
+    {
+        if (!await context.Packages.AnyAsync()) 
+        {
+            var packages = new List<DataAccess.Entities.Package>
+            {
+                new DataAccess.Entities.Package
+                {
+                    PackageId = Guid.NewGuid(),
+                    NumberOfFields = 5,
+                    Price = 20.00M
+                },
+                new DataAccess.Entities.Package
+                {
+                    PackageId = Guid.NewGuid(),
+                    NumberOfFields = 6,
+                    Price = 40.00M
+                },
+                new DataAccess.Entities.Package
+                {
+                    PackageId = Guid.NewGuid(),
+                    NumberOfFields = 7,
+                    Price = 80.00M
+                },
+                new DataAccess.Entities.Package
+                {
+                    PackageId = Guid.NewGuid(),
+                    NumberOfFields = 8,
+                    Price = 160.00M
+                }
+            };
+
+            await context.Packages.AddRangeAsync(packages);
+        }
+    }
 
 }

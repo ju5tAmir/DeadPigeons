@@ -60,9 +60,8 @@ export interface BoardsLw {
   totalBoards?: number;
 }
 
-export interface ConfirmRequest {
-  token?: string | null;
-  email?: string | null;
+export interface ConfirmResponse {
+  passwordToken?: string | null;
 }
 
 export interface FetchUserRequest {
@@ -544,17 +543,23 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * No description
      *
      * @tags Auth
-     * @name AuthConfirmCreate
-     * @request POST:/api/auth/confirm
+     * @name AuthConfirmList
+     * @request GET:/api/auth/confirm
      * @secure
      */
-    authConfirmCreate: (data: ConfirmRequest, params: RequestParams = {}) =>
-      this.request<void, any>({
+    authConfirmList: (
+      query?: {
+        token?: string;
+        email?: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<ConfirmResponse, any>({
         path: `/api/auth/confirm`,
-        method: "POST",
-        body: data,
+        method: "GET",
+        query: query,
         secure: true,
-        type: ContentType.Json,
+        format: "json",
         ...params,
       }),
 

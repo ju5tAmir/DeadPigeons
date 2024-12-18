@@ -5,10 +5,6 @@ const Navbar = () => {
 
     const menuItems = [
         {
-            title: "Home",
-            path: "/"
-        },
-        {
             title: "Games",
             path: "/games"
         },

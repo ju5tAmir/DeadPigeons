@@ -55,6 +55,7 @@ public class LoginRequestValidator : AbstractValidator<LoginRequest>
 }
 
 public record ActivateRequest(string Token, string Email, string Password);
+public record ConfirmRequest(string Token, string Email);
 public class ActivateRequestValidator : AbstractValidator<ActivateRequest>
 {
     public ActivateRequestValidator()
@@ -84,5 +85,36 @@ public class ActivateRequestValidator : AbstractValidator<ActivateRequest>
             .WithMessage("Password must contain at least one digit.")
             .Matches(@"[\W_]")
             .WithMessage("Password must contain at least one special character.");
+    }
+}
+
+public class ConfirmRequestValidator : AbstractValidator<ConfirmRequest>
+{
+    public ConfirmRequestValidator()
+    {
+
+        RuleFor(x => x.Token)
+            .NotEmpty()
+            .WithMessage("Token is required.");
+        
+        RuleFor(x => x.Email)
+            .NotEmpty()
+            .WithMessage("Email is required.")
+            .EmailAddress()
+            .WithMessage("Email must be a valid email address.");
+    }
+}
+
+public record ResetPasswordRequest(string Email);
+
+public class ResetPasswordRequestValidator : AbstractValidator<ResetPasswordRequest>
+{
+    public ResetPasswordRequestValidator()
+    {
+        RuleFor(x => x.Email)
+            .NotEmpty()
+            .WithMessage("Email is required.")
+            .EmailAddress()
+            .WithMessage("Email must be a valid email address.");
     }
 }

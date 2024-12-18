@@ -11,14 +11,20 @@ using Microsoft.Extensions.Logging;
 using PgCtx;
 using Service;
 using Service.Security;
+using Service.Upload;
+using Service.Users;
+using Xunit.Abstractions;
 using Program = Api.Program;
 
 namespace ApiIntegrationTests;
 
 public class ApiTestBase : WebApplicationFactory<Program>
 {
-    public ApiTestBase()
+    private readonly ITestOutputHelper _outputHelper;
+
+    public ApiTestBase(ITestOutputHelper outputHelper)
     {
+        _outputHelper = outputHelper;
         PgCtxSetup = new PgCtxSetup<AppDbContext>();
         Environment.SetEnvironmentVariable(nameof(AppOptions) + ":" + nameof(AppOptions.DbConnectionString),
             PgCtxSetup._postgres.GetConnectionString());
@@ -46,12 +52,13 @@ public class ApiTestBase : WebApplicationFactory<Program>
 
         await CreateRoles(Role.Admin, Role.Player);
         await CreateUser(firstName: "John", lastName: "TheRipper", email: "mockadmin@example.com", username: "mockadmin", password: "S3cret!", role: Role.Admin, phone: "123123123", isActive: true, isAutoplay: false, registrationDate: DateTime.UtcNow);
-        await CreateUser(firstName: "Beef", lastName: "Steven", email: "mockadmin@example.com", username: "mockuser", password: "S3cret!", role: Role.Player, phone: "321321321", isActive: true, isAutoplay: false, registrationDate: DateTime.UtcNow);
+        await CreateUser(firstName: "Beef", lastName: "Steven", email: "mockuser1@example.com", username: "mockuser1", password: "S3cret!", role: Role.Player, phone: "321321321", isActive: true, isAutoplay: false, registrationDate: DateTime.UtcNow);
+        await CreateUser(firstName: "Pigeon", lastName: "Bradly", email: "mockuser2@example.com", username: "mockuser2", password: "S3cret!", role: Role.Player, phone: "321321321", isActive: true, isAutoplay: false, registrationDate: DateTime.UtcNow);
 
-        AdminJwt = await TokenClaimsService.GetTokenAsync("mockadmin");
-        UserJwt = await TokenClaimsService.GetTokenAsync("mockuser");
-        
         await ctx.SaveChangesAsync();
+        
+        AdminJwt = await TokenClaimsService.GetTokenAsync("mockadmin");
+        UserJwt = await TokenClaimsService.GetTokenAsync("mockuser1");
     }
 
     private async Task CreateRoles(params string[] roles)
@@ -99,13 +106,24 @@ public class ApiTestBase : WebApplicationFactory<Program>
                      typeof(DbContextOptions<AppDbContext>));
 
             if (descriptor != null) services.Remove(descriptor);
+            
+            var uploadService = services.SingleOrDefault(
+                d => d.ServiceType == typeof(IUserService));
+            if(uploadService != null) services.Remove(uploadService);
 
             services.AddDbContext<AppDbContext>(opt =>
             {
                 opt.UseNpgsql(PgCtxSetup._postgres.GetConnectionString());
-                opt.EnableSensitiveDataLogging(false);
+                opt.EnableSensitiveDataLogging(true);
                 opt.LogTo(_ => { });
+
             });
+            services.AddScoped<IUploadService, MockUploadService>();
+
+        }).ConfigureLogging(logging =>
+        {
+            logging.ClearProviders();
+            logging.AddXUnit(_outputHelper);
         });
         return base.CreateHost(builder);
     }
