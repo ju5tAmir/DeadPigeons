@@ -120,7 +120,7 @@ public class GameTests (ITestOutputHelper outputHelper) : ApiTestBase(outputHelp
             await client.FinishAsync(payload);
         });
         
-        Assert.Equal(500, exception.StatusCode);
+        Assert.Equal(400, exception.StatusCode);
         Assert.Contains("All numbers in WinningSequence must be between 1 and 16", exception.Response);
     }
     
@@ -147,7 +147,7 @@ public class GameTests (ITestOutputHelper outputHelper) : ApiTestBase(outputHelp
         });
         
         
-        Assert.Equal(500, exception.StatusCode);
+        Assert.Equal(400, exception.StatusCode);
         Assert.Contains("must contain exactly 3 unique numbers", exception.Response);
     }
 
