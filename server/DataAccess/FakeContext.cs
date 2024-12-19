@@ -64,11 +64,7 @@ public partial class FakeContext : DbContext
             entity.Property(e => e.BoardId).ValueGeneratedNever();
             entity.Property(e => e.PlayDate).HasDefaultValueSql("CURRENT_TIMESTAMP");
 
-            entity.HasOne(d => d.Game).WithMany(p => p.Boards).HasConstraintName("Boards_GameId_fkey");
-
-            entity.HasOne(d => d.Package).WithMany(p => p.Boards).HasConstraintName("Boards_PackageId_fkey");
-
-            entity.HasOne(d => d.Player).WithMany(p => p.Boards).HasConstraintName("Boards_PlayerId_fkey");
+            entity.HasOne(d => d.Game).WithMany(p => p.Boards).OnDelete(DeleteBehavior.ClientSetNull);
         });
 
         modelBuilder.Entity<Game>(entity =>
@@ -91,8 +87,6 @@ public partial class FakeContext : DbContext
             entity.HasKey(e => e.TransactionId).HasName("ManualPayment_pkey");
 
             entity.Property(e => e.TransactionId).ValueGeneratedNever();
-
-            entity.HasOne(d => d.Transaction).WithOne(p => p.ManualPayment).HasConstraintName("ManualPayment_TransactionId_fkey");
         });
 
         modelBuilder.Entity<Package>(entity =>
@@ -109,8 +103,6 @@ public partial class FakeContext : DbContext
             entity.Property(e => e.TransactionId).ValueGeneratedNever();
             entity.Property(e => e.Status).HasDefaultValueSql("'Pending'::character varying");
             entity.Property(e => e.TransactionDate).HasDefaultValueSql("CURRENT_TIMESTAMP");
-
-            entity.HasOne(d => d.User).WithMany(p => p.Transactions).HasConstraintName("Transactions_UserId_fkey");
         });
 
         modelBuilder.Entity<Winner>(entity =>
@@ -119,11 +111,7 @@ public partial class FakeContext : DbContext
 
             entity.Property(e => e.WinningRecordId).ValueGeneratedNever();
 
-            entity.HasOne(d => d.Board).WithMany(p => p.Winners).HasConstraintName("Winners_BoardId_fkey");
-
-            entity.HasOne(d => d.Game).WithMany(p => p.Winners).HasConstraintName("Winners_GameId_fkey");
-
-            entity.HasOne(d => d.Player).WithMany(p => p.Winners).HasConstraintName("Winners_PlayerId_fkey");
+            entity.HasOne(d => d.Game).WithMany(p => p.Winners).OnDelete(DeleteBehavior.ClientSetNull);
         });
 
         OnModelCreatingPartial(modelBuilder);

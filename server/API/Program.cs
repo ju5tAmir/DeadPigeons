@@ -4,6 +4,7 @@ using DataAccess.Entities;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -165,10 +166,16 @@ public class Program
                 c.RoutePrefix = "api/swagger";
             });
         }
-
+        
+        app.UseForwardedHeaders(
+            new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            }
+        );
         app.UseHttpsRedirection();
         
-        // app.UseDeveloperExceptionPage();
+        app.UseDeveloperExceptionPage();
    
         app.MapControllers();
         app.UseCors( opts => {
