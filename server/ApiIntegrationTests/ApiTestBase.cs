@@ -1,5 +1,5 @@
 using System.Net.Http.Headers;
-using Api;
+using API;
 using DataAccess;
 using DataAccess.Entities;
 using Microsoft.AspNetCore.Identity;
@@ -14,7 +14,7 @@ using Service.Security;
 using Service.Upload;
 using Service.Users;
 using Xunit.Abstractions;
-using Program = Api.Program;
+using Program = API.Program;
 
 namespace ApiIntegrationTests;
 

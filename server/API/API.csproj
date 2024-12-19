@@ -5,6 +5,7 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <PreserveCompilationContext>true</PreserveCompilationContext>
+        <OutputType>Library</OutputType>
     </PropertyGroup>
 
     <ItemGroup>

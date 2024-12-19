@@ -21,7 +21,7 @@ using Service.Upload;
 using Service.Users;
 using Service.Winner;
 
-namespace Api;
+namespace API;
 
 public class Program
 {
